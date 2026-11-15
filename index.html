@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#090d16">
-<title>Privacy Studio Pro — Mobile Anti-Crash Edition</title>
+<title>Privacy Studio Pro — AI LaMa & Swin2SR Suite</title>
 <style>
   :root {
     --bg: #090d16;
@@ -258,28 +258,29 @@
     </div>
   </section>
 
-  <!-- ==================== TAB 2: ANTI-CRASH TILED AI SUPER-RESOLUTION & RESTORATION ==================== -->
+  <!-- ==================== TAB 2: 3-MODE SUPER-RESOLUTION (ANTI-CRASH SWIN2SR) ==================== -->
   <section id="tab-upscale" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        เพิ่มความชัดภาพเก่า & ฟื้นฟูสีสัน (โหมดกันค้างบนมือถือ)
+        เพิ่มความชัดภาพเก่า 3 โหมด (รวม Swin2SR กัน RAM พัง)
       </h2>
-      <p class="sub">ประมวลผลแบบหั่นบล็อกย่อย (Tiled AI) ไม่กิน RAM เกินพิกัด ไม่เด้งบนมือถือ พร้อมโหมดลงสีภาพขาว-ดำ</p>
+      <p class="sub">ประมวลผลหั่นทีละบล็อก (Tiled Anti-Crash) คืน RAM อัตโนมัติ ไม่ปิดตัวเองบนมือถือ</p>
       <label class="dropzone">
         <input type="file" id="upFileInput" accept="image/*">
         <svg class="ico-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3m0 12v3M3 12h3m12 0h3m-4.2-5.8 2.1-2.1M5.1 18.9l2.1-2.1m0-9.6L5.1 5.1m13.8 13.8-2.1-2.1"/></svg>
         <div class="title">เลือกรูปภาพเก่า ภาพเบลอ หรือภาพขาว-ดำ</div>
-        <div class="hint">ฟื้นฟูรายละเอียด ลบจุดด่างขาว และเร่งมิติแสงเงา</div>
+        <div class="hint">ฟื้นฟูรายละเอียด ลบจุดด่างขาว และลงสีภาพขาว-ดำ</div>
       </label>
       <div id="upStatus" class="status-box"></div>
       <div id="upWorkspace" class="hidden" style="margin-top:12px;">
         <div class="grid-2">
           <div>
-            <label>โหมดประมวลผล</label>
+            <label>โหมดเพิ่มความละเอียด (เลือกได้ 3 โหมด)</label>
             <select id="upEngineMode">
-              <option value="hd_pro">HD Pro Restoration 2x (เร็ว ไม่ค้าง ไม่ใช้เน็ต)</option>
-              <option value="tiled_ai">Tiled AI Neural 2x (หั่นทีละช่อง กันRAMเต็ม)</option>
+              <option value="hd_pro">โหมด 1: HD Pro Restoration 2x (เร็ว ไม่ใช้เน็ต)</option>
+              <option value="tiled_lite">โหมด 2: Tiled AI Lite 2x (Swin2SR-Light Q8)</option>
+              <option value="swin2sr_full">โหมด 3: Deep AI Ultra (Swin2SR ตัวเต็ม หั่นบล็อกกันเด้ง)</option>
             </select>
           </div>
           <div>
@@ -320,30 +321,46 @@
     </div>
   </section>
 
-  <!-- ==================== TAB 3: WATERMARK & OBJECT REMOVER ==================== -->
+  <!-- ==================== TAB 3: AI LAMA INPAINTING (AUTO DETECT + MANUAL) ==================== -->
   <section id="tab-inpaint" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><path d="M20 20H7L3 16c-.6-.6-.6-1.5 0-2.1l10-10c.6-.6 1.5-.6 2.1 0l6 6c.6.6.6 1.5 0 2.1L13 20"/><path d="M6 11l7 7"/></svg>
-        ลบลายน้ำ & วัตถุส่วนเกิน (ซ่อมเฉพาะจุดที่เลือก)
+        ลบลายน้ำ AI LaMa Inpainting (ออโต้คิดเอง & ลากเอง)
       </h2>
-      <p class="sub">ระบายทับตัวหนังสือลายน้ำหรือลากกรอบคลุมโลโก้ พื้นที่นอกเส้นเลือกจะไม่ถูกแตะต้อง 100%</p>
+      <p class="sub">ใช้โมเดล AI LaMa (ONNX) สร้างพื้นผิวใหม่แทนที่ลายน้ำได้อย่างแนบเนียน เลือกได้ทั้งให้ AI ตรวจจับเองหรือลากเลือกจุดเอง</p>
       <label class="dropzone">
         <input type="file" id="wmFileInput" accept="image/*">
         <svg class="ico-lg" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         <div class="title">เลือกรูปภาพที่ต้องการลบลายน้ำหรือวัตถุ</div>
-        <div class="hint">ซูมเข้าไปใกล้ๆ แล้วระบายทับเฉพาะตัวหนังสือลายน้ำ</div>
+        <div class="hint">รองรับโหมดออโต้ตรวจจับลายน้ำ, ลากกรอบ และแปรงระบาย</div>
       </label>
       <div id="wmStatus" class="status-box"></div>
       <div id="wmWorkspace" class="hidden" style="margin-top:12px;">
         <div class="pill-group">
-          <button class="pill active" id="wmToolBrush" onclick="setWmTool('brush')">แปรงระบายทับตัวอักษร</button>
+          <button class="pill active" id="wmToolAuto" onclick="setWmTool('auto')">ออโต้คิดเอง (Auto Detect)</button>
           <button class="pill" id="wmToolBox" onclick="setWmTool('box')">ลากกรอบสี่เหลี่ยมคลุม</button>
+          <button class="pill" id="wmToolBrush" onclick="setWmTool('brush')">แปรงระบายเอง</button>
         </div>
+
+        <!-- Auto Detect Controls -->
+        <div id="wmAutoControls" class="card" style="background:var(--bg);margin-bottom:8px;">
+          <div class="grid-2">
+            <div>
+              <label>ความไวการตรวจจับตัวหนังสือลายน้ำ (<span id="wmSensVal">26</span>)</label>
+              <input type="range" id="wmAutoSens" min="12" max="55" value="26" oninput="document.getElementById('wmSensVal').textContent=this.value">
+            </div>
+            <div style="display:flex;align-items:flex-end;">
+              <button class="btn btn-secondary" onclick="autoDetectWatermarkMask()">สแกนหาลายน้ำอัตโนมัติ (แสดงเส้นแดง)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Brush & Zoom Controls -->
         <div class="grid-2" style="margin-bottom:8px;">
           <div>
-            <label>ขนาดหัวแปรง (<span id="wmBrushVal">12</span> px)</label>
-            <input type="range" id="wmBrushSize" min="3" max="50" value="12" oninput="document.getElementById('wmBrushVal').textContent=this.value">
+            <label>ขนาดหัวแปรงเก็บรายละเอียด (<span id="wmBrushVal">14</span> px)</label>
+            <input type="range" id="wmBrushSize" min="4" max="55" value="14" oninput="document.getElementById('wmBrushVal').textContent=this.value">
           </div>
           <div style="display:flex;align-items:flex-end;gap:6px;">
             <button class="btn-xs" onclick="wmZoom(1.3)">ซูมเข้า (+)</button>
@@ -352,11 +369,12 @@
             <button class="btn-xs danger" onclick="wmClearMask()">ล้างเส้น</button>
           </div>
         </div>
+
         <div class="canvas-wrap" style="overflow:auto;">
           <canvas id="wmCanvas"></canvas>
         </div>
         <div class="grid-3" style="margin-top:10px;">
-          <button class="btn btn-primary" onclick="runProWatermarkRemoval()">ลบลายน้ำที่เลือก</button>
+          <button class="btn btn-primary" onclick="runLamaOnnxInpainting()">ลบลายน้ำด้วย AI LaMa</button>
           <button class="btn btn-secondary" onclick="saveCanvasFile(wmBaseCanvas, 'Clean_Photo.png', 'image/png')">บันทึก</button>
           <button class="btn btn-accent" onclick="shareCanvasFile(wmBaseCanvas, 'Clean_Photo.png', 'image/png')">แชร์</button>
         </div>
@@ -621,19 +639,19 @@
     </div>
   </section>
 
-  <!-- ==================== TAB 7: HIGH-PRECISION THAI/ENG OCR ==================== -->
+  <!-- ==================== TAB 7: PRINTED & HANDWRITING AI OCR ==================== -->
   <section id="tab-ocr" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
-        อ่านข้อความจากภาพ (ไทย + อังกฤษ แม่นยำสูง)
+        อ่านข้อความเอกสาร & AI อ่านลายมือ (ไทย + อังกฤษ)
       </h2>
-      <p class="sub">ลากกรอบสีเขียวคลุมเฉพาะส่วนที่มีตัวหนังสือเพื่อตัดสิ่งรบกวน ทำให้ภาษาไทยแม่นยำสูงสุด</p>
+      <p class="sub">ลากกรอบสีเขียวคลุมข้อความหรือบรรทัดลายมือ รองรับทั้งตัวพิมพ์และโมเดล Transformer อ่านลายมือเขียน</p>
       <label class="dropzone">
         <input type="file" id="ocrFileInput" accept="image/*">
         <svg class="ico-lg" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-        <div class="title">เลือกรูปภาพเอกสาร ป้าย หรือแคปหน้าจอ</div>
-        <div class="hint">รองรับการครอบตัดเฉพาะจุด (Interactive Crop)</div>
+        <div class="title">เลือกรูปภาพเอกสาร แคปหน้าจอ หรือสมุดจดลายมือ</div>
+        <div class="hint">แนะนำให้ลากกรอบสีเขียวคลุมเฉพาะบรรทัดข้อความ</div>
       </label>
       <div id="ocrStatus" class="status-box"></div>
       <div id="ocrWorkspace" class="hidden" style="margin-top:12px;">
@@ -646,15 +664,15 @@
         </div>
         <div class="grid-2" style="margin-top:10px;">
           <div>
-            <label>โหมดปรับภาพก่อนอ่าน</label>
-            <select id="ocrPreprocess">
-              <option value="sauvola">ตัดพื้นหลังอัจฉริยะ (Adaptive Threshold - แนะนำ)</option>
-              <option value="sharpen">ปรับคมชัดสระไทย + ลดเงา</option>
-              <option value="raw">ภาพต้นฉบับ (เหมาะกับภาพแคปหน้าจอ)</option>
+            <label>โหมดเอนจินอ่านข้อความ</label>
+            <select id="ocrEngineMode">
+              <option value="printed_thai">โหมด 1: เอกสารสิ่งพิมพ์ ไทย+อังกฤษ (แม่นยำสูงสุด)</option>
+              <option value="handwriting_thai">โหมด 2: ลายมือภาษาไทย & บันทึกเขียนมือ (เสริมเส้นปากกา)</option>
+              <option value="trocr_handwriting">โหมด 3: AI TrOCR อ่านลายมืออังกฤษ/ตัวเลข (Transformer)</option>
             </select>
           </div>
           <div>
-            <label>ภาษาในภาพ</label>
+            <label>ภาษาในภาพ (สำหรับโหมด 1 และ 2)</label>
             <select id="ocrLang">
               <option value="tha+eng">ไทย + อังกฤษ (Thai + English)</option>
               <option value="tha">ภาษาไทยล้วน (Thai Only)</option>
@@ -662,7 +680,7 @@
             </select>
           </div>
         </div>
-        <button class="btn btn-primary" style="margin-top:10px;" onclick="runHighAccuracyOCR()">เริ่มอ่านข้อความในกรอบ</button>
+        <button class="btn btn-primary" style="margin-top:10px;" onclick="runUniversalOCR()">เริ่มอ่านข้อความในกรอบ</button>
         <div style="margin-top:12px;">
           <label>ผลลัพธ์ข้อความ (แก้ไขเพิ่มเติมได้)</label>
           <textarea id="ocrResultText" rows="8" placeholder="ข้อความที่อ่านได้จะปรากฏที่นี่..."></textarea>
@@ -881,7 +899,7 @@ function getBgExportBlob() {
 async function downloadBgResult() { const { blob, name } = await getBgExportBlob(); triggerDownload(blob, name); }
 async function shareBgResult() { const { blob, name } = await getBgExportBlob(); triggerShareOrSave(blob, name); }
 
-// ==================== 3. ANTI-CRASH TILED AI SUPER-RESOLUTION & RESTORATION ====================
+// ==================== 3. 3-MODE SUPER-RESOLUTION (INCLUDING ANTI-CRASH FULL SWIN2SR) ====================
 let upOrigImg = null, upOutCanvas = document.createElement('canvas');
 document.getElementById('upFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if (!file) return;
@@ -897,8 +915,8 @@ async function processSafeUpscale() {
   const sharpAmt = parseInt(document.getElementById('upSharp').value) / 100;
   const denoiseAmt = parseInt(document.getElementById('upDenoise').value) / 100;
 
-  // Safe max dimensions so mobile browser RAM never overflows
-  const maxIn = engine === 'tiled_ai' ? 512 : 1280;
+  // Strict memory-safe input cap for Transformer models (384px for Full Swin2SR, 512px for Lite, 1280px for HD Pro)
+  const maxIn = engine === 'swin2sr_full' ? 384 : (engine === 'tiled_lite' ? 512 : 1280);
   const inScale = upOrigImg.naturalWidth > maxIn ? (maxIn / upOrigImg.naturalWidth) : 1;
   const inW = Math.round(upOrigImg.naturalWidth * inScale);
   const inH = Math.round(upOrigImg.naturalHeight * inScale);
@@ -910,15 +928,16 @@ async function processSafeUpscale() {
   upOutCanvas.height = inH * 2;
   const outCtx = upOutCanvas.getContext('2d');
 
-  if (engine === 'tiled_ai') {
-    showStatus('upStatus', 'กำลังโหลดโมเดล AI รุ่นเบาพิเศษ (Quantized Q8) แบบหั่นบล็อกป้องกันเด้ง...');
+  if (engine === 'tiled_lite' || engine === 'swin2sr_full') {
+    const modelId = engine === 'swin2sr_full' ? 'Xenova/swin2SR-classical-sr-x2-64' : 'Xenova/swin2SR-lightweight-x2-64';
+    const tileSize = engine === 'swin2sr_full' ? 96 : 128; // Smaller 96x96 tiles for Full Swin2SR prevents RAM crash
+    showStatus('upStatus', `กำลังโหลดโมเดล ${engine === 'swin2sr_full' ? 'Swin2SR ตัวเต็ม' : 'Swin2SR Lite'} แบบหั่นบล็อกกันเด้ง...`);
+
     let upscaler = null;
     try {
       const { pipeline, RawImage } = await import('https://esm.sh/@huggingface/transformers@3.0.2');
-      upscaler = await pipeline('image-to-image', 'Xenova/swin2SR-lightweight-x2-64', { dtype: 'q8' });
+      upscaler = await pipeline('image-to-image', modelId, engine === 'tiled_lite' ? { dtype: 'q8' } : {});
 
-      // Process in 128x128 tiles with 8px overlap so RAM stays under 100MB
-      const tileSize = 128;
       const cols = Math.ceil(inW / tileSize);
       const rows = Math.ceil(inH / tileSize);
       const totalTiles = cols * rows;
@@ -940,13 +959,13 @@ async function processSafeUpscale() {
 
           outCtx.drawImage(outTileCanvas, sx * 2, sy * 2, sw * 2, sh * 2);
           done++;
-          showStatus('upStatus', `AI กำลังประมวลผลทีละบล็อกป้องกันเครื่องค้าง... ${Math.round((done / totalTiles) * 100)}%`);
-          await new Promise(res => setTimeout(res, 15)); // Yield to UI thread so Safari/Chrome never freezes
+          showStatus('upStatus', `AI กำลังสร้างรายละเอียดทีละบล็อกป้องกัน RAM เต็ม... ${Math.round((done / totalTiles) * 100)}%`);
+          await new Promise(res => setTimeout(res, 25)); // Yield to garbage collector
         }
       }
       if (upscaler && upscaler.dispose) await upscaler.dispose();
     } catch (err) {
-      showStatus('upStatus', 'สลับใช้เอนจิน HD Pro อัตโนมัติ (ไม่กิน RAM): ' + err.message);
+      showStatus('upStatus', 'สลับใช้เอนจิน HD Pro อัตโนมัติ: ' + err.message);
       outCtx.imageSmoothingEnabled = true; outCtx.imageSmoothingQuality = 'high';
       outCtx.drawImage(srcC, 0, 0, upOutCanvas.width, upOutCanvas.height);
     }
@@ -1021,9 +1040,9 @@ function slideCompare(val) {
   img.style.width = box.offsetWidth + 'px';
 }
 
-// ==================== 4. WATERMARK & OBJECT REMOVER ====================
+// ==================== 4. AI LAMA INPAINTING (AUTO DETECT + MANUAL BOX/BRUSH) ====================
 let wmOrigImg = null, wmBaseCanvas = document.createElement('canvas'), wmMaskCanvas = document.createElement('canvas');
-let wmScale = 1, wmTool = 'brush', wmDrawing = false, wmBoxStart = null, wmHistory = [];
+let wmScale = 1, wmTool = 'auto', wmDrawing = false, wmBoxStart = null, wmHistory = [];
 
 document.getElementById('wmFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if (!file) return;
@@ -1041,8 +1060,10 @@ document.getElementById('wmFileInput').addEventListener('change', async (e) => {
 
 function setWmTool(t) {
   wmTool = t;
-  document.getElementById('wmToolBrush').classList.toggle('active', t === 'brush');
+  document.getElementById('wmToolAuto').classList.toggle('active', t === 'auto');
   document.getElementById('wmToolBox').classList.toggle('active', t === 'box');
+  document.getElementById('wmToolBrush').classList.toggle('active', t === 'brush');
+  document.getElementById('wmAutoControls').classList.toggle('hidden', t !== 'auto');
 }
 
 function wmZoom(f) { wmScale = Math.max(0.5, Math.min(4.5, wmScale * f)); redrawWmDisplay(); }
@@ -1061,7 +1082,58 @@ function redrawWmDisplay() {
   disp.style.width = (wmBaseCanvas.width * wmScale > 340 ? (340 * wmScale) + 'px' : '100%');
   const ctx = disp.getContext('2d');
   ctx.drawImage(wmBaseCanvas, 0, 0);
-  ctx.globalAlpha = 0.55; ctx.drawImage(wmMaskCanvas, 0, 0); ctx.globalAlpha = 1;
+  ctx.globalAlpha = 0.6; ctx.drawImage(wmMaskCanvas, 0, 0); ctx.globalAlpha = 1;
+}
+
+// Auto-Detect Watermark Text/Logos and build Mask for LaMa
+function autoDetectWatermarkMask() {
+  const w = wmBaseCanvas.width, h = wmBaseCanvas.height;
+  const imgData = wmBaseCanvas.getContext('2d').getImageData(0, 0, w, h).data;
+  const mctx = wmMaskCanvas.getContext('2d');
+  const maskImg = mctx.createImageData(w, h);
+  const md = maskImg.data;
+  const sens = parseInt(document.getElementById('wmAutoSens').value);
+
+  const lums = new Float32Array(w * h);
+  const sats = new Float32Array(w * h);
+  for (let i = 0, p = 0; i < imgData.length; i += 4, p++) {
+    const r = imgData[i], g = imgData[i+1], b = imgData[i+2];
+    lums[p] = 0.299 * r + 0.587 * g + 0.114 * b;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    sats[p] = max === 0 ? 0 : (max - min) / max;
+  }
+
+  // Detect semi-transparent neutral watermark overlays (low saturation + sharp step edge)
+  const r = 10;
+  const rawMask = new Uint8Array(w * h);
+  for (let y = r; y < h - r; y++) {
+    for (let x = r; x < w - r; x++) {
+      const p = y * w + x;
+      const localAvg = (lums[p - r] + lums[p + r] + lums[p - r*w] + lums[p + r*w]) * 0.25;
+      const diff = Math.abs(lums[p] - localAvg);
+      if (diff > sens && diff < 110 && sats[p] < 0.35) {
+        rawMask[p] = 1;
+      }
+    }
+  }
+
+  // Dilate mask by 3px so LaMa covers watermark edges cleanly
+  for (let y = 3; y < h - 3; y++) {
+    for (let x = 3; x < w - 3; x++) {
+      let hit = false;
+      for (let dy = -3; dy <= 3 && !hit; dy++) {
+        for (let dx = -3; dx <= 3; dx++) {
+          if (rawMask[(y + dy) * w + (x + dx)] === 1) hit = true;
+        }
+      }
+      if (hit) {
+        const idx = (y * w + x) * 4;
+        md[idx] = 239; md[idx + 1] = 68; md[idx + 2] = 68; md[idx + 3] = 255;
+      }
+    }
+  }
+  mctx.putImageData(maskImg, 0, 0);
+  redrawWmDisplay();
 }
 
 const wmDispEl = document.getElementById('wmCanvas');
@@ -1083,7 +1155,7 @@ wmDispEl.addEventListener('pointerdown', (e) => {
     const mctx = wmMaskCanvas.getContext('2d');
     mctx.fillStyle = '#ef4444'; mctx.beginPath(); mctx.arc(p.x, p.y, r, 0, Math.PI * 2); mctx.fill();
     redrawWmDisplay();
-  } else {
+  } else if (wmTool === 'box') {
     wmBoxStart = p;
   }
 });
@@ -1096,7 +1168,7 @@ wmDispEl.addEventListener('pointermove', (e) => {
     const mctx = wmMaskCanvas.getContext('2d');
     mctx.fillStyle = '#ef4444'; mctx.beginPath(); mctx.arc(p.x, p.y, r, 0, Math.PI * 2); mctx.fill();
     redrawWmDisplay();
-  } else if (wmBoxStart) {
+  } else if (wmTool === 'box' && wmBoxStart) {
     redrawWmDisplay();
     const ctx = wmDispEl.getContext('2d');
     ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 3;
@@ -1116,68 +1188,86 @@ wmDispEl.addEventListener('pointerup', (e) => {
   wmDrawing = false;
 });
 
-async function runProWatermarkRemoval() {
+async function runLamaOnnxInpainting() {
   const w = wmBaseCanvas.width, h = wmBaseCanvas.height;
   const bctx = wmBaseCanvas.getContext('2d');
-  const origImgData = bctx.getImageData(0, 0, w, h);
-  const mData = wmMaskCanvas.getContext('2d').getImageData(0, 0, w, h).data;
+  let mData = wmMaskCanvas.getContext('2d').getImageData(0, 0, w, h).data;
 
-  const mask = new Uint8Array(w * h);
+  // If in Auto mode and no mask generated yet, auto-detect first!
   let hasMask = false;
-  for (let i = 0; i < w * h; i++) {
-    if (mData[i * 4 + 3] > 25) { mask[i] = 1; hasMask = true; }
+  for (let i = 0; i < w * h; i++) if (mData[i * 4 + 3] > 25) { hasMask = true; break; }
+  if (!hasMask && wmTool === 'auto') {
+    autoDetectWatermarkMask();
+    mData = wmMaskCanvas.getContext('2d').getImageData(0, 0, w, h).data;
+    for (let i = 0; i < w * h; i++) if (mData[i * 4 + 3] > 25) { hasMask = true; break; }
   }
-  if (!hasMask) return alert('กรุณาระบายทับลายน้ำ หรือลากกรอบสี่เหลี่ยมคลุมจุดที่ต้องการลบก่อนครับ');
+  if (!hasMask) return alert('กรุณากดสแกนหาลายน้ำ หรือลากกรอบ/ระบายจุดที่ต้องการลบก่อนครับ');
 
-  showStatus('wmStatus', 'กำลังซ่อมแซมเฉพาะจุดที่เลือก (ไม่แตะต้องพื้นที่นอกเส้นสีแดง)...');
-  await new Promise(res => setTimeout(res, 20));
-  runTeleaGuidedInpaint(origImgData, mask, w, h);
-  bctx.putImageData(origImgData, 0, 0);
+  const origImgData = bctx.getImageData(0, 0, w, h);
+  const mask = new Uint8Array(w * h);
+  for (let i = 0; i < w * h; i++) if (mData[i * 4 + 3] > 25) mask[i] = 1;
+
+  showStatus('wmStatus', 'กำลังประมวลผลด้วย AI LaMa Inpainting (ONNX)...');
+  let session = null;
+  try {
+    await loadLib('https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.1/dist/ort.min.js');
+    const sz = 512;
+    const tmpImg = document.createElement('canvas'); tmpImg.width = sz; tmpImg.height = sz;
+    tmpImg.getContext('2d').drawImage(wmBaseCanvas, 0, 0, sz, sz);
+    const tmpMask = document.createElement('canvas'); tmpMask.width = sz; tmpMask.height = sz;
+    tmpMask.getContext('2d').drawImage(wmMaskCanvas, 0, 0, sz, sz);
+
+    const iPx = tmpImg.getContext('2d').getImageData(0, 0, sz, sz).data;
+    const mPx = tmpMask.getContext('2d').getImageData(0, 0, sz, sz).data;
+    const imgTensorData = new Float32Array(3 * sz * sz);
+    const maskTensorData = new Float32Array(1 * sz * sz);
+
+    for (let i = 0; i < sz * sz; i++) {
+      imgTensorData[i] = iPx[i * 4] / 255.0;
+      imgTensorData[sz * sz + i] = iPx[i * 4 + 1] / 255.0;
+      imgTensorData[2 * sz * sz + i] = iPx[i * 4 + 2] / 255.0;
+      maskTensorData[i] = mPx[i * 4 + 3] > 25 ? 1.0 : 0.0;
+    }
+
+    session = await ort.InferenceSession.create('https://huggingface.co/Carve/LaMa-ONNX/resolve/main/lama_fp32.onnx', { executionProviders: ['wasm'] });
+    const feeds = {
+      image: new ort.Tensor('float32', imgTensorData, [1, 3, sz, sz]),
+      mask: new ort.Tensor('float32', maskTensorData, [1, 1, sz, sz])
+    };
+    const results = await session.run(feeds);
+    const outTensor = results.output.data;
+
+    const out512 = document.createElement('canvas'); out512.width = sz; out512.height = sz;
+    const octx = out512.getContext('2d');
+    const outImgData = octx.createImageData(sz, sz);
+    for (let i = 0; i < sz * sz; i++) {
+      outImgData.data[i * 4] = Math.max(0, Math.min(255, outTensor[i]));
+      outImgData.data[i * 4 + 1] = Math.max(0, Math.min(255, outTensor[sz * sz + i]));
+      outImgData.data[i * 4 + 2] = Math.max(0, Math.min(255, outTensor[2 * sz * sz + i]));
+      outImgData.data[i * 4 + 3] = 255;
+    }
+    octx.putImageData(outImgData, 0, 0);
+
+    const fullAiCanvas = document.createElement('canvas'); fullAiCanvas.width = w; fullAiCanvas.height = h;
+    fullAiCanvas.getContext('2d').drawImage(out512, 0, 0, w, h);
+    const aiPx = fullAiCanvas.getContext('2d').getImageData(0, 0, w, h).data;
+
+    for (let i = 0; i < w * h; i++) {
+      if (mask[i] === 1) {
+        origImgData.data[i * 4] = aiPx[i * 4];
+        origImgData.data[i * 4 + 1] = aiPx[i * 4 + 1];
+        origImgData.data[i * 4 + 2] = aiPx[i * 4 + 2];
+      }
+    }
+    bctx.putImageData(origImgData, 0, 0);
+    if (session && session.release) await session.release();
+  } catch (err) {
+    showStatus('wmStatus', 'เกิดข้อผิดพลาดในการโหลด AI LaMa: ' + err.message);
+  }
 
   document.getElementById('wmStatus').classList.remove('show');
   wmHistory.push(bctx.getImageData(0, 0, w, h));
   wmClearMask();
-}
-
-function runTeleaGuidedInpaint(imgData, mask, w, h) {
-  const d = imgData.data;
-  let remaining = 0;
-  for (let i = 0; i < w * h; i++) if (mask[i] === 1) remaining++;
-  let guard = 0;
-  while (remaining > 0 && guard++ < 250) {
-    const nextMask = new Uint8Array(mask);
-    for (let y = 1; y < h - 1; y++) {
-      for (let x = 1; x < w - 1; x++) {
-        const idx = y * w + x;
-        if (mask[idx] === 1) {
-          let r = 0, g = 0, b = 0, wSum = 0;
-          for (let dy = -2; dy <= 2; dy++) {
-            for (let dx = -2; dx <= 2; dx++) {
-              const nx = x + dx, ny = y + dy;
-              if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
-                const nIdx = ny * w + nx;
-                if (mask[nIdx] === 0) {
-                  const weight = 1.0 / (dx * dx + dy * dy);
-                  r += d[nIdx * 4] * weight;
-                  g += d[nIdx * 4 + 1] * weight;
-                  b += d[nIdx * 4 + 2] * weight;
-                  wSum += weight;
-                }
-              }
-            }
-          }
-          if (wSum > 0) {
-            d[idx * 4] = r / wSum;
-            d[idx * 4 + 1] = g / wSum;
-            d[idx * 4 + 2] = b / wSum;
-            nextMask[idx] = 0;
-            remaining--;
-          }
-        }
-      }
-    }
-    mask.set(nextMask);
-  }
 }
 
 // ==================== 5. INTERACTIVE SCANNER, E-SIGN & MULTI-FORMAT EXPORT ====================
@@ -1702,7 +1792,7 @@ async function executeUniversalConvert() {
   }
 }
 
-// ==================== 8. HIGH-PRECISION THAI/ENG OCR WITH INTERACTIVE CROP BOX ====================
+// ==================== 8. PRINTED & HANDWRITING AI OCR (TESSERACT + TROCR HANDWRITTEN) ====================
 let ocrOrigImg = null, ocrCrop = { x: 0, y: 0, w: 0, h: 0 }, ocrDragging = false, ocrStart = { x: 0, y: 0 };
 const ocrCropCanvas = document.getElementById('ocrCropCanvas');
 
@@ -1758,12 +1848,9 @@ ocrCropCanvas.addEventListener('pointermove', (e) => {
 });
 window.addEventListener('pointerup', () => ocrDragging = false);
 
-async function runHighAccuracyOCR() {
+async function runUniversalOCR() {
   if (!ocrOrigImg) return;
-  showStatus('ocrStatus', 'กำลังโหลดโมเดลภาษาไทย (tessdata_best) และประมวลผลกรอบที่เลือก...');
-  await loadLib('https://cdn.jsdelivr.net/npm/tesseract.js@5.0.5/dist/tesseract.min.js');
-
-  const mode = document.getElementById('ocrPreprocess').value;
+  const engineMode = document.getElementById('ocrEngineMode').value;
   const lang = document.getElementById('ocrLang').value;
 
   const scale = ocrCrop.w < 1000 ? 2.0 : 1.0;
@@ -1774,37 +1861,73 @@ async function runHighAccuracyOCR() {
   ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(ocrOrigImg, ocrCrop.x, ocrCrop.y, ocrCrop.w, ocrCrop.h, 0, 0, c.width, c.height);
 
-  if (mode !== 'raw') {
-    const imgData = ctx.getImageData(0, 0, c.width, c.height);
-    const d = imgData.data;
-    const hist = new Array(256).fill(0);
-    const grays = new Uint8Array(c.width * c.height);
-    for (let i = 0, p = 0; i < d.length; i += 4, p++) {
-      const g = Math.round(0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2]);
-      grays[p] = g; hist[g]++;
+  // Mode 3: Microsoft TrOCR Transformer for English/Numeric Handwriting
+  if (engineMode === 'trocr_handwriting') {
+    showStatus('ocrStatus', 'กำลังโหลดโมเดล AI TrOCR (Transformer อ่านลายมือเขียน)...');
+    let reader = null;
+    try {
+      const { pipeline } = await import('https://esm.sh/@huggingface/transformers@3.0.2');
+      reader = await pipeline('image-to-text', 'Xenova/trocr-base-handwritten', { dtype: 'q8' });
+      showStatus('ocrStatus', 'AI กำลังถอดความลายมือในกรอบ...');
+      const out = await reader(c.toDataURL('image/png'));
+      document.getElementById('ocrResultText').value = (out && out[0] && out[0].generated_text) ? out[0].generated_text : '';
+      if (reader && reader.dispose) await reader.dispose();
+      document.getElementById('ocrStatus').classList.remove('show');
+      return;
+    } catch (err) {
+      showStatus('ocrStatus', 'เกิดข้อผิดพลาดในการโหลด TrOCR: ' + err.message);
+      return;
     }
-    let total = grays.length, sum = 0;
-    for (let t = 0; t < 256; t++) sum += t * hist[t];
-    let sumB = 0, wB = 0, maxVar = 0, thresh = 128;
-    for (let t = 0; t < 256; t++) {
-      wB += hist[t]; if (!wB) continue;
-      const wF = total - wB; if (!wF) break;
-      sumB += t * hist[t];
-      const mB = sumB / wB, mF = (sum - sumB) / wF;
-      const v = wB * wF * (mB - mF) * (mB - mF);
-      if (v > maxVar) { maxVar = v; thresh = t; }
-    }
-    for (let i = 0, p = 0; i < d.length; i += 4, p++) {
-      let val = grays[p];
-      if (mode === 'sauvola') {
-        val = val > thresh - 8 ? 255 : 0;
-      } else {
-        val = val > thresh + 15 ? 255 : Math.max(0, (val - thresh * 0.4) * 1.35);
-      }
-      d[i] = d[i+1] = d[i+2] = Math.min(255, Math.max(0, val));
-    }
-    ctx.putImageData(imgData, 0, 0);
   }
+
+  // Modes 1 & 2: Printed Thai/Eng & Handwriting Thai Stroke-Thickening
+  showStatus('ocrStatus', 'กำลังโหลดโมเดลภาษาไทย (tessdata_best) และปรับความคมเส้น...');
+  await loadLib('https://cdn.jsdelivr.net/npm/tesseract.js@5.0.5/dist/tesseract.min.js');
+
+  const imgData = ctx.getImageData(0, 0, c.width, c.height);
+  const d = imgData.data;
+  const hist = new Array(256).fill(0);
+  const grays = new Uint8Array(c.width * c.height);
+  for (let i = 0, p = 0; i < d.length; i += 4, p++) {
+    const g = Math.round(0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2]);
+    grays[p] = g; hist[g]++;
+  }
+  let total = grays.length, sum = 0;
+  for (let t = 0; t < 256; t++) sum += t * hist[t];
+  let sumB = 0, wB = 0, maxVar = 0, thresh = 128;
+  for (let t = 0; t < 256; t++) {
+    wB += hist[t]; if (!wB) continue;
+    const wF = total - wB; if (!wF) break;
+    sumB += t * hist[t];
+    const mB = sumB / wB, mF = (sum - sumB) / wF;
+    const v = wB * wF * (mB - mF) * (mB - mF);
+    if (v > maxVar) { maxVar = v; thresh = t; }
+  }
+
+  const bin = new Uint8Array(c.width * c.height);
+  for (let p = 0; p < grays.length; p++) {
+    bin[p] = grays[p] > (thresh - 8) ? 255 : 0;
+  }
+
+  // Morphological Dilation (Stroke Thickening) for Thai Handwriting mode
+  if (engineMode === 'handwriting_thai') {
+    const thick = new Uint8Array(bin);
+    for (let y = 1; y < c.height - 1; y++) {
+      for (let x = 1; x < c.width - 1; x++) {
+        const idx = y * c.width + x;
+        if (bin[idx] === 0) {
+          thick[idx - 1] = 0; thick[idx + 1] = 0;
+          thick[idx - c.width] = 0; thick[idx + c.width] = 0;
+        }
+      }
+    }
+    bin.set(thick);
+  }
+
+  for (let i = 0, p = 0; i < d.length; i += 4, p++) {
+    d[i] = d[i+1] = d[i+2] = bin[p];
+  }
+  ctx.putImageData(imgData, 0, 0);
 
   const worker = await Tesseract.createWorker(lang, 1, {
     langPath: 'https://tessdata.projectnaptha.com/4.0.0_best',
