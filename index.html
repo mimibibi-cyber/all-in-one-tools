@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+  <!-- Zero Cache / No-Store Privacy Headers -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  
+  <title>AI ลบพื้นหลังอัตโนมัติ (ความละเอียดสูงสุด • ไม่เก็บ Cache)</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Prompt & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Prompt', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Prompt', 'Inter', sans-serif;
+      background: radial-gradient(circle at top left, #1e1b4b, #090d16 55%, #05070c 100%);
+      color: #f8fafc;
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    /* Transparent Checkerboard Pattern */
+    .checkerboard {
+      background-color: #1e293b;
+      background-image: 
+        linear-gradient(45deg, #334155 25%, transparent 25%), 
+        linear-gradient(-45deg, #334155 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #334155 75%), 
+        linear-gradient(-45deg, transparent 75%, #334155 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+
+    /* Glassmorphism Card */
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    /* Custom Range Slider for Mobile & Desktop */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.25);
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #6366f1;
+      border: 2px solid #ffffff;
+      margin-top: -7px;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.6);
+      transition: transform 0.15s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:active {
+      transform: scale(1.18);
+    }
+
+    /* Comparison Slider Handle */
+    .compare-handle {
+      touch-action: none;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.03); }
+    }
+    .animate-glow {
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-indigo-500 selection:text-white flex flex-col">
+
+  <!-- Top Navigation & Privacy Status Bar -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-white/10">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 shrink-0">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight text-white leading-tight">
+            AI ลบพื้นหลัง <span class="text-indigo-400">Ultra HD</span>
+          </h1>
+          <p class="text-[11px] sm:text-xs text-emerald-400 flex items-center gap-1 font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
+            ประมวลผลในเครื่อง 100% • ไม่เก็บ Cache
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btnPrivacyInfo" type="button" class="px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-300 flex items-center gap-1.5 transition">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+          </svg>
+          <span class="hidden sm:inline">ความปลอดภัย & GitHub</span>
+        </button>
+
+        <button id="btnClearMemory" type="button" title="ล้างข้อมูลรูปภาพออกจาก RAM ทันที" class="hidden px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-xs text-rose-300 font-medium flex items-center gap-1 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+          </svg>
+          <span>ล้าง RAM</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Toast / Status Notification Banner -->
+  <div id="toastContainer" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-[92%] max-w-md flex flex-col gap-2"></div>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-5 sm:py-8 flex flex-col gap-6">
+
+    <!-- STEP 1: Upload Zone (Mobile & Desktop Friendly) -->
+    <section id="uploadSection" class="flex-1 flex flex-col justify-center">
+      <div id="dropZone" class="glass-panel rounded-3xl p-6 sm:p-12 border-2 border-dashed border-indigo-400/40 hover:border-indigo-400 transition-all cursor-pointer text-center flex flex-col items-center justify-center min-h-[340px] sm:min-h-[400px] relative overflow-hidden group">
+        
+        <!-- Subtle Background Glow -->
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-violet-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 border border-indigo-400/30 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-xl">
+          <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+          </svg>
+        </div>
+
+        <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">
+          เลือกรูปภาพจากมือถือ หรือลากไฟล์มาวาง
+        </h2>
+        <p class="text-sm sm:text-base text-slate-300 max-w-md mb-6 leading-relaxed">
+          ตัดพื้นหลังอัตโนมัติด้วย AI คงความละเอียดต้นฉบับ 100% (4K / 8K) ไม่ลดขนาดไฟล์ และไม่บันทึกข้อมูลลง Cache
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center gap-3 w-full max-w-sm">
+          <button type="button" id="btnTriggerFile" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold text-base shadow-lg shadow-indigo-600/30 active:scale-[0.98] transition flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+            </svg>
+            <span>เลือกรูปภาพ / ถ่ายรูป</span>
+          </button>
+        </div>
+
+        <p class="mt-4 text-xs text-slate-400">
+          รองรับไฟล์ JPG, PNG, WEBP, HEIC, BMP • ประมวลผลบนอุปกรณ์คุณเท่านั้น
+        </p>
+
+        <!-- Hidden File Input (Supports iOS/Android Photo Library & Camera) -->
+        <input id="fileInput" type="file" accept="image/*" class="hidden" />
+      </div>
+
+      <!-- Feature Highlights -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
+        <div class="glass-panel rounded-2xl p-4 flex items-start gap-3">
+          <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-white">ไม่เก็บ Cache 100%</h3>
+            <p class="text-xs text-slate-400 mt-0.5">ประมวลผลใน RAM ชั่วคราว ปิดหน้าเว็บหรือกดล้างปุ๊บ ข้อมูลหายเกลี้ยงทันที</p>
+          </div>
+        </div>
+
+        <div class="glass-panel rounded-2xl p-4 flex items-start gap-3">
+          <div class="w-9 h-9 rounded-xl bg-indigo-500/15 text-indigo-400 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-white">คมชัดเท่าต้นฉบับ 100%</h3>
+            <p class="text-xs text-slate-400 mt-0.5">ผสาน Alpha Mask เข้ากับพิกเซลต้นฉบับโดยตรง ไม่บีบอัดลดความละเอียด</p>
+          </div>
+        </div>
+
+        <div class="glass-panel rounded-2xl p-4 flex items-start gap-3">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-white">เซฟได้ทุกสกุลไฟล์</h3>
+            <p class="text-xs text-slate-400 mt-0.5">รองรับ PNG, WEBP, JPG, BMP, ICO, SVG บันทึกลงอัลบั้มมือถือได้ทันที</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: AI Processing Progress View -->
+    <section id="processingSection" class="hidden glass-panel rounded-3xl p-8 sm:p-12 text-center flex flex-col items-center justify-center min-h-[360px]">
+      <div class="relative w-20 h-20 mb-6 flex items-center justify-center">
+        <div class="absolute inset-0 rounded-full border-4 border-indigo-500/20"></div>
+        <div class="absolute inset-0 rounded-full border-4 border-t-indigo-500 border-r-violet-500 animate-spin"></div>
+        <svg class="w-8 h-8 text-indigo-400 animate-pulse" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+        </svg>
+      </div>
+
+      <h2 id="progressTitle" class="text-lg sm:text-xl font-bold text-white mb-2">
+        กำลังเตรียมโมเดล AI ความละเอียดสูง...
+      </h2>
+      <p id="progressSubtitle" class="text-xs sm:text-sm text-slate-300 max-w-md mb-6">
+        ประมวลผลในอุปกรณ์ของคุณโดยตรง (ครั้งแรกอาจใช้เวลาโหลดโมเดล AI ประมาณ 5-15 วินาที)
+      </p>
+
+      <!-- Progress Bar -->
+      <div class="w-full max-w-md bg-slate-800/90 rounded-full h-3 overflow-hidden border border-white/10 p-0.5">
+        <div id="progressBar" class="h-full rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-emerald-400 transition-all duration-300" style="width: 12%"></div>
+      </div>
+      <div class="mt-2 flex items-center justify-between w-full max-w-md text-xs text-slate-400">
+        <span id="progressStepText">กำลังเริ่มต้น...</span>
+        <span id="progressPercent" class="font-semibold text-indigo-300">12%</span>
+      </div>
+    </section>
+
+    <!-- STEP 3: Result Editor & Multi-Format Export -->
+    <section id="editorSection" class="hidden flex flex-col gap-5">
+      
+      <!-- Top Action Strip -->
+      <div class="flex flex-wrap items-center justify-between gap-3 glass-panel rounded-2xl px-4 py-3">
+        <div class="flex items-center gap-3">
+          <button id="btnNewImage" type="button" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs sm:text-sm font-medium flex items-center gap-1.5 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <span>เลือกรูปใหม่</span>
+          </button>
+          <div class="text-xs text-slate-300">
+            <span class="text-slate-400">ความละเอียด:</span>
+            <strong id="resolutionBadge" class="text-emerald-400 font-semibold ml-1">0 × 0 px</strong>
+          </div>
+        </div>
+
+        <!-- View Mode Toggle -->
+        <div class="flex items-center bg-slate-900/90 p-1 rounded-xl border border-white/10">
+          <button id="modeCompareBtn" type="button" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 text-white transition">
+            เทียบ ก่อน/หลัง
+          </button>
+          <button id="modeResultBtn" type="button" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white transition">
+            ดูผลลัพธ์เต็ม
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Grid: Interactive Preview + Export & Fine-Tune Controls -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        
+        <!-- Left/Top: Interactive Canvas Comparison Viewport (7 cols on lg) -->
+        <div class="lg:col-span-7 flex flex-col gap-3">
+          <div id="previewWrapper" class="relative w-full rounded-3xl overflow-hidden border border-white/15 shadow-2xl checkerboard flex items-center justify-center min-h-[300px] sm:min-h-[420px] max-h-[68vh] select-none">
+            
+            <!-- Result Canvas (Full-Res Output Preview) -->
+            <canvas id="displayResultCanvas" class="max-w-full max-h-[68vh] w-auto h-auto object-contain block pointer-events-none"></canvas>
+
+            <!-- Original Image Overlay for Split Comparison -->
+            <div id="beforeOverlay" class="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none" style="clip-path: inset(0 50% 0 0);">
+              <canvas id="displayOriginalCanvas" class="max-w-full max-h-[68vh] w-auto h-auto object-contain block"></canvas>
+            </div>
+
+            <!-- Interactive Split Slider Bar -->
+            <div id="compareSliderBar" class="compare-handle absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_12px_rgba(0,0,0,0.8)] cursor-ew-resize z-20 flex items-center justify-center" style="left: 50%;">
+              <div class="w-9 h-9 rounded-full bg-white text-slate-900 shadow-xl flex items-center justify-center border-2 border-indigo-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" transform="rotate(90 12 12)" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Corner Badges -->
+            <span id="badgeBefore" class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/65 backdrop-blur-md text-[11px] font-medium text-white border border-white/10 pointer-events-none">
+              ต้นฉบับ
+            </span>
+            <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-indigo-600/85 backdrop-blur-md text-[11px] font-medium text-white border border-white/15 pointer-events-none">
+              ลบพื้นหลังแล้ว
+            </span>
+          </div>
+
+          <!-- Preview Backdrop Switcher (For inspecting edges & JPG background fill) -->
+          <div class="glass-panel rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-medium text-slate-300">สีพื้นหลัง (เช็กขอบ / ใส่สีพื้นหลัง):</span>
+            <div class="flex items-center gap-2">
+              <button type="button" data-bg="transparent" title="โปร่งใส (Transparent)" class="bg-preset-btn w-7 h-7 rounded-full checkerboard ring-2 ring-indigo-500 transition"></button>
+              <button type="button" data-bg="#ffffff" title="สีขาว" class="bg-preset-btn w-7 h-7 rounded-full bg-white border border-slate-400 transition"></button>
+              <button type="button" data-bg="#000000" title="สีดำ" class="bg-preset-btn w-7 h-7 rounded-full bg-black border border-slate-600 transition"></button>
+              <button type="button" data-bg="#00b140" title="สีเขียว (Green Screen)" class="bg-preset-btn w-7 h-7 rounded-full bg-[#00b140] border border-white/20 transition"></button>
+              <button type="button" data-bg="#3b82f6" title="สีฟ้า" class="bg-preset-btn w-7 h-7 rounded-full bg-blue-500 border border-white/20 transition"></button>
+              <label title="เลือกสีพื้นหลังเอง" class="w-7 h-7 rounded-full bg-gradient-to-tr from-rose-500 via-amber-400 to-emerald-400 p-0.5 cursor-pointer flex items-center justify-center">
+                <input id="customBgColor" type="color" value="#ffffff" class="opacity-0 w-0 h-0 absolute" />
+                <span class="w-full h-full rounded-full bg-slate-900/60 flex items-center justify-center text-[10px] font-bold text-white">+</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right/Bottom: Edge Refinement & Multi-Format Export Panel (5 cols on lg) -->
+        <div class="lg:col-span-5 flex flex-col gap-4">
+          
+          <!-- Edge Refinement Controls -->
+          <div class="glass-panel rounded-3xl p-5 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                </svg>
+                ปรับแต่งความคมขอบ (Real-Time)
+              </h3>
+              <button id="btnResetRefine" type="button" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium">
+                รีเซ็ตค่าเริ่มต้น
+              </button>
+            </div>
+
+            <!-- Alpha Threshold / Edge Tightness -->
+            <div>
+              <div class="flex justify-between text-xs mb-1.5">
+                <span class="text-slate-300">ความกระชับขอบ (กำจัดขอบขาว/เงาส่วนเกิน)</span>
+                <span id="valThreshold" class="font-semibold text-indigo-300">0</span>
+              </div>
+              <input id="sliderThreshold" type="range" min="-40" max="60" value="0" class="w-full" />
+            </div>
+
+            <!-- Edge Feather / Smoothness -->
+            <div>
+              <div class="flex justify-between text-xs mb-1.5">
+                <span class="text-slate-300">ความนุ่มนวลขอบ (Edge Feather)</span>
+                <span id="valFeather" class="font-semibold text-indigo-300">0.5 px</span>
+              </div>
+              <input id="sliderFeather" type="range" min="0" max="4" step="0.5" value="0.5" class="w-full" />
+            </div>
+          </div>
+
+          <!-- Export Format Selector & Save Card -->
+          <div class="glass-panel rounded-3xl p-5 flex flex-col gap-4 border border-indigo-500/25">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              เลือกสกุลไฟล์สำหรับบันทึก (ความละเอียดสูงสุด)
+            </h3>
+
+            <!-- Format Grid -->
+            <div class="grid grid-cols-3 gap-2" id="formatGrid">
+              <button type="button" data-format="png" class="format-btn active py-2.5 px-2 rounded-xl border border-indigo-500 bg-indigo-600/25 text-center transition">
+                <div class="text-xs sm:text-sm font-bold text-white">PNG</div>
+                <div class="text-[10px] text-emerald-300">โปร่งใส • ชัดสุด</div>
+              </button>
+
+              <button type="button" data-format="webp" class="format-btn py-2.5 px-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-center transition">
+                <div class="text-xs sm:text-sm font-bold text-white">WEBP</div>
+                <div class="text-[10px] text-slate-400">โปร่งใส • ไฟล์เบา</div>
+              </button>
+
+              <button type="button" data-format="jpg" class="format-btn py-2.5 px-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-center transition">
+                <div class="text-xs sm:text-sm font-bold text-white">JPG</div>
+                <div class="text-[10px] text-slate-400">ใส่สีพื้นหลัง</div>
+              </button>
+
+              <button type="button" data-format="bmp" class="format-btn py-2.5 px-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-center transition">
+                <div class="text-xs sm:text-sm font-bold text-white">BMP</div>
+                <div class="text-[10px] text-slate-400">Raw ไม่บีบอัด</div>
+              </button>
+
+              <button type="button" data-format="ico" class="format-btn py-2.5 px-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-center transition">
+                <div class="text-xs sm:text-sm font-bold text-white">ICO</div>
+                <div class="text-[10px] text-slate-400">ไอคอนโปร่งใส</div>
+              </button>
+
+              <button type="button" data-format="svg" class="format-btn py-2.5 px-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-center transition">
+                <div class="text-xs sm:text-sm font-bold text-white">SVG</div>
+                <div class="text-[10px] text-slate-400">เวกเตอร์ HD</div>
+              </button>
+            </div>
+
+            <!-- Format Hint Note -->
+            <p id="formatDescription" class="text-xs text-slate-300 bg-slate-900/70 rounded-xl px-3 py-2 border border-white/5">
+              ✨ <strong>PNG (แนะนำ):</strong> พื้นหลังโปร่งใส 100% แบบ Lossless ไม่มีการบีบอัดลดคุณภาพ เหมาะสำหรับงานกราฟิกและนำไปแต่งต่อ
+            </p>
+
+            <!-- Primary Save / Download Button -->
+            <div class="flex flex-col gap-2.5 pt-1">
+              <button id="btnSaveImage" type="button" class="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-base shadow-lg shadow-emerald-500/25 active:scale-[0.98] transition flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                <span id="saveBtnLabel">บันทึกรูปภาพ PNG ทันที</span>
+              </button>
+
+              <!-- Mobile Native Share / Save to Photos Button (Shown when supported on iOS/Android) -->
+              <button id="btnMobileShare" type="button" class="hidden w-full py-3 px-4 rounded-2xl bg-indigo-600/25 hover:bg-indigo-600/35 border border-indigo-400/40 text-indigo-200 font-semibold text-sm active:scale-[0.98] transition flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                </svg>
+                <span>แชร์ / บันทึกลงอัลบั้มรูปมือถือ (iOS/Android)</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Privacy & GitHub Deployment Info Modal -->
+  <div id="infoModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl max-w-lg w-full p-6 border border-white/15 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button id="btnCloseModal" type="button" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300">
+        ✕
+      </button>
+
+      <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+        <span class="text-emerald-400">🔒</span> ระบบความปลอดภัย & การติดตั้งบน GitHub
+      </h3>
+
+      <div class="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
+        <div class="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/25">
+          <p class="font-semibold text-emerald-300 mb-1">1. ไม่เก็บ Cache และไม่ส่งข้อมูลออกนอกเครื่อง 100%</p>
+          <p>รูปภาพของคุณจะถูกอ่านเข้าสู่หน่วยความจำชั่วคราว (RAM) ของเบราว์เซอร์เท่านั้น ไม่มีการอัปโหลดไปยังเซิร์ฟเวอร์ใดๆ และไม่มีการบันทึกลง LocalStorage หรือ IndexedDB</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/25">
+          <p class="font-semibold text-indigo-300 mb-1">2. คงความละเอียดต้นฉบับสูงสุด (Full-Resolution Pipeline)</p>
+          <p>ระบบใช้ AI วิเคราะห์แยกวัตถุและนำ Alpha Mask ความละเอียดสูงมาผสานกลับเข้ากับพิกเซลต้นฉบับขนาดจริง 100% ทำให้ภาพคมชัดไม่แตกแม้ซูมดูใกล้ๆ</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+          <p class="font-semibold text-white mb-1">3. วิธีอัปโหลดขึ้น GitHub Pages (ใช้งานฟรีตลอดชีพ)</p>
+          <ol class="list-decimal list-inside space-y-1 text-slate-300 mt-1">
+            <li>สร้าง Repository ใหม่บน GitHub (ตั้งชื่อ เช่น <code class="text-indigo-300">remove-bg</code>)</li>
+            <li>อัปโหลดไฟล์นี้โดยตั้งชื่อว่า <code class="text-indigo-300">index.html</code></li>
+            <li>ไปที่ <strong>Settings &gt; Pages</strong> เลือก Branch เป็น <code class="text-indigo-300">main</code> แล้วกด Save</li>
+            <li>เปิดลิงก์ผ่านมือถือและกด <strong>"เพิ่มไปยังหน้าจอโฮม"</strong> เพื่อใช้เป็นแอปได้ทันที!</li>
+          </ol>
+        </div>
+      </div>
+
+      <button id="btnModalOk" type="button" class="mt-5 w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition">
+        เข้าใจแล้ว
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Application Logic (ES Module with @imgly/background-removal) -->
+  <script type="module">
+    import { removeBackground } from 'https://esm.sh/@imgly/background-removal@1.4.5';
+
+    // =========================================================================
+    // 1. STATE MANAGEMENT (In-Memory Only - Zero Persistence / Zero Cache)
+    // =========================================================================
+    const state = {
+      originalImage: null,      // HTMLImageElement (Original Full Resolution)
+      originalFileName: 'image',
+      origWidth: 0,
+      origHeight: 0,
+      rawMaskCanvas: null,      // Offscreen full-resolution alpha mask canvas
+      finalFullCanvas: null,    // Offscreen full-resolution composited canvas
+      selectedFormat: 'png',    // png | webp | jpg | bmp | ico | svg
+      previewBg: 'transparent', // transparent | hex color
+      threshold: 0,             // -40 to 60
+      feather: 0.5,             // 0 to 4 px
+      comparePercent: 50,
+      viewMode: 'compare',      // compare | result
+      isProcessing: false
+    };
+
+    // DOM References
+    const el = {
+      uploadSection: document.getElementById('uploadSection'),
+      processingSection: document.getElementById('processingSection'),
+      editorSection: document.getElementById('editorSection'),
+      dropZone: document.getElementById('dropZone'),
+      fileInput: document.getElementById('fileInput'),
+      btnTriggerFile: document.getElementById('btnTriggerFile'),
+      btnNewImage: document.getElementById('btnNewImage'),
+      btnClearMemory: document.getElementById('btnClearMemory'),
+
+      // Progress
+      progressTitle: document.getElementById('progressTitle'),
+      progressSubtitle: document.getElementById('progressSubtitle'),
+      progressBar: document.getElementById('progressBar'),
+      progressStepText: document.getElementById('progressStepText'),
+      progressPercent: document.getElementById('progressPercent'),
+
+      // Preview & Canvases
+      resolutionBadge: document.getElementById('resolutionBadge'),
+      previewWrapper: document.getElementById('previewWrapper'),
+      displayResultCanvas: document.getElementById('displayResultCanvas'),
+      displayOriginalCanvas: document.getElementById('displayOriginalCanvas'),
+      beforeOverlay: document.getElementById('beforeOverlay'),
+      compareSliderBar: document.getElementById('compareSliderBar'),
+      badgeBefore: document.getElementById('badgeBefore'),
+      modeCompareBtn: document.getElementById('modeCompareBtn'),
+      modeResultBtn: document.getElementById('modeResultBtn'),
+
+      // Background & Refinement Controls
+      bgPresetBtns: document.querySelectorAll('.bg-preset-btn'),
+      customBgColor: document.getElementById('customBgColor'),
+      sliderThreshold: document.getElementById('sliderThreshold'),
+      sliderFeather: document.getElementById('sliderFeather'),
+      valThreshold: document.getElementById('valThreshold'),
+      valFeather: document.getElementById('valFeather'),
+      btnResetRefine: document.getElementById('btnResetRefine'),
+
+      // Export Controls
+      formatBtns: document.querySelectorAll('.format-btn'),
+      formatDescription: document.getElementById('formatDescription'),
+      btnSaveImage: document.getElementById('btnSaveImage'),
+      saveBtnLabel: document.getElementById('saveBtnLabel'),
+      btnMobileShare: document.getElementById('btnMobileShare'),
+
+      // Modal & Toast
+      infoModal: document.getElementById('infoModal'),
+      btnPrivacyInfo: document.getElementById('btnPrivacyInfo'),
+      btnCloseModal: document.getElementById('btnCloseModal'),
+      btnModalOk: document.getElementById('btnModalOk'),
+      toastContainer: document.getElementById('toastContainer')
+    };
+
+    // Format Descriptions in Thai
+    const formatInfoMap = {
+      png: '✨ <strong>PNG (แนะนำ):</strong> พื้นหลังโปร่งใส 100% แบบ Lossless ไม่มีการบีบอัดลดคุณภาพ เหมาะสำหรับงานกราฟิกและนำไปแต่งต่อ',
+      webp: '⚡ <strong>WEBP:</strong> พื้นหลังโปร่งใสความละเอียดสูง แต่ขนาดไฟล์เล็กกว่า PNG เหมาะสำหรับอัปโหลดขึ้นเว็บไซต์และโซเชียล',
+      jpg: '🖼️ <strong>JPG / JPEG:</strong> ภาพมาตรฐานความละเอียดสูงสุด 100% (ระบบจะเติมสีพื้นหลังตามที่คุณเลือกด้านซ้ายอัตโนมัติ)',
+      bmp: '💎 <strong>BMP (Bitmap):</strong> ไฟล์ภาพดิบไม่ผ่านการบีบอัดใดๆ รักษาข้อมูลพิกเซลครบถ้วน 100%',
+      ico: '🎯 <strong>ICO (Icon):</strong> ไฟล์ไอคอนโปร่งใสความละเอียดสูง (256×256 px) สำหรับทำไอคอนแอปหรือเว็บไซต์',
+      svg: '📐 <strong>SVG (Vector Wrapper):</strong> ห่อหุ้มภาพตัดพื้นหลังความละเอียดสูงในรูปแบบไฟล์ SVG เปิดได้ในโปรแกรมเวกเตอร์'
+    };
+
+    // =========================================================================
+    // 2. UTILITY FUNCTIONS (Toast, Progress, Memory Wipe)
+    // =========================================================================
+    function showToast(message, type = 'info') {
+      const colors = {
+        info: 'bg-slate-800/95 border-indigo-400/40 text-white',
+        success: 'bg-emerald-950/95 border-emerald-400/50 text-emerald-100',
+        error: 'bg-rose-950/95 border-rose-400/50 text-rose-100'
+      };
+      const toast = document.createElement('div');
+      toast.className = `px-4 py-3 rounded-2xl border backdrop-blur-md shadow-xl text-xs sm:text-sm font-medium text-center transition-all duration-300 transform translate-y-2 opacity-0 ${colors[type] || colors.info}`;
+      toast.textContent = message;
+      el.toastContainer.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3400);
+    }
+
+    function updateProgress(percent, title, stepText) {
+      const clamped = Math.min(100, Math.max(0, Math.round(percent)));
+      el.progressBar.style.width = `${clamped}%`;
+      el.progressPercent.textContent = `${clamped}%`;
+      if (title) el.progressTitle.textContent = title;
+      if (stepText) el.progressStepText.textContent = stepText;
+    }
+
+    function clearAllMemory() {
+      state.originalImage = null;
+      state.rawMaskCanvas = null;
+      state.finalFullCanvas = null;
+      el.fileInput.value = '';
+
+      // Clear canvases
+      [el.displayResultCanvas, el.displayOriginalCanvas].forEach(c => {
+        const ctx = c.getContext('2d');
+        ctx && ctx.clearRect(0, 0, c.width, c.height);
+        c.width = 0;
+        c.height = 0;
+      });
+
+      el.editorSection.classList.add('hidden');
+      el.processingSection.classList.add('hidden');
+      el.btnClearMemory.classList.add('hidden');
+      el.uploadSection.classList.remove('hidden');
+
+      showToast('ล้างรูปภาพและข้อมูลออกจาก RAM เรียบร้อยแล้ว 100%', 'success');
+    }
+
+    // =========================================================================
+    // 3. IMAGE UPLOAD & AI BACKGROUND REMOVAL ENGINE (FULL RESOLUTION)
+    // =========================================================================
+    async function handleFileSelect(file) {
+      if (!file || !file.type.startsWith('image/')) {
+        showToast('กรุณาเลือกไฟล์รูปภาพที่ถูกต้อง (JPG, PNG, WEBP ฯลฯ)', 'error');
+        return;
+      }
+      if (state.isProcessing) return;
+
+      state.isProcessing = true;
+      state.originalFileName = file.name.replace(/\.[^/.]+$/, '') || 'cutout';
+
+      // Switch UI to processing state
+      el.uploadSection.classList.add('hidden');
+      el.editorSection.classList.add('hidden');
+      el.processingSection.classList.remove('hidden');
+      updateProgress(8, 'กำลังโหลดรูปภาพความละเอียดต้นฉบับ...', 'กำลังอ่านไฟล์เข้าสู่ RAM...');
+
+      let objectUrl = null;
+      try {
+        // Load original image at 100% native resolution
+        objectUrl = URL.createObjectURL(file);
+        const img = await loadImage(objectUrl);
+        // Immediately revoke blob URL so nothing lingers in browser cache
+        URL.revokeObjectURL(objectUrl);
+        objectUrl = null;
+
+        state.originalImage = img;
+        state.origWidth = img.naturalWidth;
+        state.origHeight = img.naturalHeight;
+
+        el.resolutionBadge.textContent = `${state.origWidth} × ${state.origHeight} px`;
+
+        updateProgress(18, 'กำลังเรียกใช้งาน AI ลบพื้นหลังความละเอียดสูง...', 'กำลังเตรียมโมเดล AI (ISNet / Medium)...');
+
+        // Run @imgly/background-removal directly on the original file/blob
+        const resultBlob = await removeBackground(file, {
+          model: 'medium', // High-precision ISNet model optimized for browser WebAssembly/WebGPU
+          output: {
+            format: 'image/png',
+            quality: 1.0
+          },
+          progress: (key, current, total) => {
+            if (total > 0) {
+              const ratio = current / total;
+              if (key.includes('fetch')) {
+                updateProgress(18 + ratio * 42, 'กำลังดาวน์โหลดโมเดล AI...', `โหลดข้อมูล AI: ${Math.round(ratio * 100)}%`);
+              } else if (key.includes('compute')) {
+                updateProgress(60 + ratio * 30, 'AI กำลังวิเคราะห์และตัดพื้นหลัง...', `ประมวลผลพิกเซล: ${Math.round(ratio * 100)}%`);
+              }
+            }
+          }
+        });
+
+        updateProgress(93, 'กำลังผสาน Alpha Mask เข้ากับภาพต้นฉบับ 100%...', 'รักษาความคมชัดระดับต้นฉบับ...');
+
+        // Load AI output image
+        const aiUrl = URL.createObjectURL(resultBlob);
+        const aiImg = await loadImage(aiUrl);
+        URL.revokeObjectURL(aiUrl);
+
+        // Extract & upscale the AI alpha mask smoothly to match exact original dimensions
+        const maskCanvas = document.createElement('canvas');
+        maskCanvas.width = state.origWidth;
+        maskCanvas.height = state.origHeight;
+        const mCtx = maskCanvas.getContext('2d', { willReadFrequently: true });
+        mCtx.imageSmoothingEnabled = true;
+        mCtx.imageSmoothingQuality = 'high';
+        mCtx.drawImage(aiImg, 0, 0, state.origWidth, state.origHeight);
+        state.rawMaskCanvas = maskCanvas;
+
+        // Prepare display canvases
+        setupDisplayCanvases();
+
+        // Reset refinement sliders to clean defaults
+        state.threshold = 0;
+        state.feather = 0.5;
+        el.sliderThreshold.value = 0;
+        el.sliderFeather.value = 0.5;
+        el.valThreshold.textContent = '0';
+        el.valFeather.textContent = '0.5 px';
+
+        // Composite final full-resolution image
+        renderRefinedComposite();
+
+        updateProgress(100, 'เสร็จสมบูรณ์!', 'พร้อมบันทึกความละเอียดสูงสุด');
+
+        // Show Editor UI
+        setTimeout(() => {
+          el.processingSection.classList.add('hidden');
+          el.editorSection.classList.remove('hidden');
+          el.btnClearMemory.classList.remove('hidden');
+          checkMobileShareSupport();
+          showToast('ตัดพื้นหลังเสร็จสมบูรณ์! คงความละเอียดต้นฉบับ 100%', 'success');
+        }, 250);
+
+      } catch (err) {
+        console.error('AI Processing Error:', err);
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+        el.processingSection.classList.add('hidden');
+        el.uploadSection.classList.remove('hidden');
+        showToast('เกิดข้อผิดพลาดในการประมวลผล กรุณาลองใหม่อีกครั้ง', 'error');
+      } finally {
+        state.isProcessing = false;
+      }
+    }
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = (e) => reject(e);
+        img.src = src;
+      });
+    }
+
+    // =========================================================================
+    // 4. FULL-RESOLUTION COMPOSITING & EDGE REFINEMENT PIPELINE
+    // =========================================================================
+    function setupDisplayCanvases() {
+      const w = state.origWidth;
+      const h = state.origHeight;
+
+      el.displayOriginalCanvas.width = w;
+      el.displayOriginalCanvas.height = h;
+      const origCtx = el.displayOriginalCanvas.getContext('2d');
+      origCtx.drawImage(state.originalImage, 0, 0, w, h);
+
+      el.displayResultCanvas.width = w;
+      el.displayResultCanvas.height = h;
+    }
+
+    function renderRefinedComposite() {
+      if (!state.originalImage || !state.rawMaskCanvas) return;
+
+      const w = state.origWidth;
+      const h = state.origHeight;
+
+      // 1. Create refined mask canvas with optional feathering
+      const refinedMask = document.createElement('canvas');
+      refinedMask.width = w;
+      refinedMask.height = h;
+      const rmCtx = refinedMask.getContext('2d', { willReadFrequently: true });
+
+      if (state.feather > 0) {
+        rmCtx.filter = `blur(${state.feather}px)`;
+      }
+      rmCtx.drawImage(state.rawMaskCanvas, 0, 0, w, h);
+      rmCtx.filter = 'none';
+
+      // 2. Apply Alpha Threshold adjustment if modified
+      if (state.threshold !== 0) {
+        const maskData = rmCtx.getImageData(0, 0, w, h);
+        const data = maskData.data;
+        const shift = state.threshold * 2.2;
+        for (let i = 3; i < data.length; i += 4) {
+          let a = data[i];
+          if (a > 0 && a < 255) {
+            a = Math.min(255, Math.max(0, (a - 128 - shift) * 1.35 + 128));
+            data[i] = a;
+          } else if (shift > 15 && a === 255) {
+            // Slight erosion near edges handled by feather + threshold
+          }
+        }
+        rmCtx.putImageData(maskData, 0, 0);
+      }
+
+      // 3. Composite Full-Resolution Original Pixels + Refined Alpha Mask
+      const fullCanvas = document.createElement('canvas');
+      fullCanvas.width = w;
+      fullCanvas.height = h;
+      const fCtx = fullCanvas.getContext('2d');
+
+      // Draw original full-res image first
+      fCtx.drawImage(state.originalImage, 0, 0, w, h);
+
+      // Keep only pixels inside the refined AI alpha mask (destination-in)
+      fCtx.globalCompositeOperation = 'destination-in';
+      fCtx.drawImage(refinedMask, 0, 0, w, h);
+      fCtx.globalCompositeOperation = 'source-over';
+
+      state.finalFullCanvas = fullCanvas;
+
+      // 4. Update Interactive Display Canvas (with selected preview background)
+      const dCtx = el.displayResultCanvas.getContext('2d');
+      dCtx.clearRect(0, 0, w, h);
+
+      if (state.previewBg !== 'transparent') {
+        dCtx.fillStyle = state.previewBg;
+        dCtx.fillRect(0, 0, w, h);
+      }
+      dCtx.drawImage(fullCanvas, 0, 0, w, h);
+    }
+
+    // =========================================================================
+    // 5. MULTI-FORMAT FULL-RESOLUTION EXPORT (PNG, WEBP, JPG, BMP, ICO, SVG)
+    // =========================================================================
+    function buildExportCanvas(forceOpaqueBg = false) {
+      const w = state.origWidth;
+      const h = state.origHeight;
+      const outCanvas = document.createElement('canvas');
+      outCanvas.width = w;
+      outCanvas.height = h;
+      const ctx = outCanvas.getContext('2d');
+
+      if (forceOpaqueBg || state.previewBg !== 'transparent') {
+        ctx.fillStyle = state.previewBg === 'transparent' ? '#ffffff' : state.previewBg;
+        ctx.fillRect(0, 0, w, h);
+      }
+      ctx.drawImage(state.finalFullCanvas, 0, 0, w, h);
+      return outCanvas;
+    }
+
+    // Pure JS Uncompressed 32-bit RGBA BMP Encoder (Supports Transparency & Full Resolution)
+    function canvasToBmpBlob(canvas) {
+      const w = canvas.width;
+      const h = canvas.height;
+      const ctx = canvas.getContext('2d');
+      const imgData = ctx.getImageData(0, 0, w, h).data;
+
+      const rowSize = w * 4;
+      const pixelArraySize = rowSize * h;
+      const headerSize = 14 + 108; // BITMAPFILEHEADER + BITMAPV4HEADER (supports alpha)
+      const fileSize = headerSize + pixelArraySize;
+
+      const buffer = new ArrayBuffer(fileSize);
+      const view = new DataView(buffer);
+
+      // BITMAPFILEHEADER (14 bytes)
+      view.setUint8(0, 0x42); // 'B'
+      view.setUint8(1, 0x4D); // 'M'
+      view.setUint32(2, fileSize, true);
+      view.setUint32(6, 0, true);
+      view.setUint32(10, headerSize, true);
+
+      // BITMAPV4HEADER (108 bytes)
+      view.setUint32(14, 108, true);
+      view.setInt32(18, w, true);
+      view.setInt32(22, -h, true); // Top-down DIB
+      view.setUint16(26, 1, true);  // Planes
+      view.setUint16(28, 32, true); // 32-bit BGRA
+      view.setUint32(30, 3, true);  // BI_BITFIELDS
+      view.setUint32(34, pixelArraySize, true);
+      view.setInt32(38, 2835, true);
+      view.setInt32(42, 2835, true);
+      view.setUint32(46, 0, true);
+      view.setUint32(50, 0, true);
+      // RGBA bitmasks
+      view.setUint32(54, 0x00FF0000, true); // Red mask
+      view.setUint32(58, 0x0000FF00, true); // Green mask
+      view.setUint32(62, 0x000000FF, true); // Blue mask
+      view.setUint32(66, 0xFF000000, true); // Alpha mask
+      view.setUint32(70, 0x73524742, true); // 'sRGB'
+
+      // Write BGRA pixels
+      let offset = headerSize;
+      for (let i = 0; i < imgData.length; i += 4) {
+        view.setUint8(offset++, imgData[i + 2]); // B
+        view.setUint8(offset++, imgData[i + 1]); // G
+        view.setUint8(offset++, imgData[i]);     // R
+        view.setUint8(offset++, imgData[i + 3]); // A
+      }
+
+      return new Blob([buffer], { type: 'image/bmp' });
+    }
+
+    // Pure JS High-Res ICO Encoder (Embeds crisp 256x256 PNG inside ICO container)
+    async function canvasToIcoBlob(sourceCanvas) {
+      const iconSize = 256;
+      const icoCanvas = document.createElement('canvas');
+      icoCanvas.width = iconSize;
+      icoCanvas.height = iconSize;
+      const ctx = icoCanvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      // Preserve aspect ratio centered inside 256x256
+      const scale = Math.min(iconSize / sourceCanvas.width, iconSize / sourceCanvas.height);
+      const dw = Math.round(sourceCanvas.width * scale);
+      const dh = Math.round(sourceCanvas.height * scale);
+      const dx = Math.round((iconSize - dw) / 2);
+      const dy = Math.round((iconSize - dh) / 2);
+
+      if (state.previewBg !== 'transparent') {
+        ctx.fillStyle = state.previewBg;
+        ctx.fillRect(0, 0, iconSize, iconSize);
+      }
+      ctx.drawImage(sourceCanvas, dx, dy, dw, dh);
+
+      const pngBlob = await new Promise(res => icoCanvas.toBlob(res, 'image/png', 1.0));
+      const pngBytes = new Uint8Array(await pngBlob.arrayBuffer());
+
+      const headerLen = 6 + 16;
+      const icoBuffer = new ArrayBuffer(headerLen + pngBytes.length);
+      const view = new DataView(icoBuffer);
+
+      // ICONDIR
+      view.setUint16(0, 0, true); // Reserved
+      view.setUint16(2, 1, true); // Type 1 = ICO
+      view.setUint16(4, 1, true); // Image count = 1
+
+      // ICONDIRENTRY
+      view.setUint8(6, 0);        // 0 means 256px
+      view.setUint8(7, 0);        // 0 means 256px
+      view.setUint8(8, 0);        // Color palette
+      view.setUint8(9, 0);        // Reserved
+      view.setUint16(10, 1, true); // Color planes
+      view.setUint16(12, 32, true); // Bits per pixel
+      view.setUint32(14, pngBytes.length, true); // Image size
+      view.setUint32(18, headerLen, true);       // Offset
+
+      new Uint8Array(icoBuffer, headerLen).set(pngBytes);
+      return new Blob([icoBuffer], { type: 'image/x-icon' });
+    }
+
+    // SVG Wrapper with Embedded Full-Resolution Lossless PNG
+    function canvasToSvgBlob(canvas) {
+      const w = canvas.width;
+      const h = canvas.height;
+      const dataUrl = canvas.toDataURL('image/png', 1.0);
+      const svgMarkup = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+  <image width="${w}" height="${h}" href="${dataUrl}" />
+</svg>`;
+      return new Blob([svgMarkup], { type: 'image/svg+xml;charset=utf-8' });
+    }
+
+    async function generateExportFile() {
+      const fmt = state.selectedFormat;
+      const fileName = `${state.originalFileName}_nobg.${fmt}`;
+
+      if (fmt === 'png') {
+        const c = buildExportCanvas(false);
+        const blob = await new Promise(res => c.toBlob(res, 'image/png', 1.0));
+        return { blob, fileName, mime: 'image/png' };
+      }
+
+      if (fmt === 'webp') {
+        const c = buildExportCanvas(false);
+        const blob = await new Promise(res => c.toBlob(res, 'image/webp', 1.0));
+        return { blob, fileName, mime: 'image/webp' };
+      }
+
+      if (fmt === 'jpg') {
+        const c = buildExportCanvas(true); // JPG requires opaque background (defaults to white if transparent)
+        const blob = await new Promise(res => c.toBlob(res, 'image/jpeg', 1.0));
+        return { blob, fileName, mime: 'image/jpeg' };
+      }
+
+      if (fmt === 'bmp') {
+        const c = buildExportCanvas(false);
+        const blob = canvasToBmpBlob(c);
+        return { blob, fileName, mime: 'image/bmp' };
+      }
+
+      if (fmt === 'ico') {
+        const blob = await canvasToIcoBlob(state.finalFullCanvas);
+        return { blob, fileName, mime: 'image/x-icon' };
+      }
+
+      if (fmt === 'svg') {
+        const c = buildExportCanvas(false);
+        const blob = canvasToSvgBlob(c);
+        return { blob, fileName, mime: 'image/svg+xml' };
+      }
+    }
+
+    async function handleSaveDownload() {
+      if (!state.finalFullCanvas) return;
+      try {
+        el.btnSaveImage.disabled = true;
+        el.saveBtnLabel.textContent = 'กำลังสร้างไฟล์ความละเอียดสูงสุด...';
+
+        const { blob, fileName } = await generateExportFile();
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        // Revoke immediately after download trigger to prevent memory/cache retention
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+
+        showToast(`บันทึกไฟล์ ${fileName} เรียบร้อยแล้ว!`, 'success');
+      } catch (err) {
+        console.error(err);
+        showToast('ไม่สามารถบันทึกไฟล์ได้ กรุณาลองใหม่อีกครั้ง', 'error');
+      } finally {
+        el.btnSaveImage.disabled = false;
+        el.saveBtnLabel.textContent = `บันทึกรูปภาพ ${state.selectedFormat.toUpperCase()} ทันที`;
+      }
+    }
+
+    function checkMobileShareSupport() {
+      if (navigator.canShare && navigator.share) {
+        el.btnMobileShare.classList.remove('hidden');
+      }
+    }
+
+    async function handleMobileNativeShare() {
+      if (!state.finalFullCanvas) return;
+      try {
+        const { blob, fileName, mime } = await generateExportFile();
+        const file = new File([blob], fileName, { type: mime });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: fileName
+          });
+          showToast('แชร์ / บันทึกลงอัลบั้มเรียบร้อยแล้ว', 'success');
+        } else {
+          // Fallback to standard download
+          handleSaveDownload();
+        }
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          handleSaveDownload();
+        }
+      }
+    }
+
+    // =========================================================================
+    // 6. INTERACTIVE UI EVENT LISTENERS (Touch & Mouse Split Slider, Controls)
+    // =========================================================================
+    
+    // File Input & Drag-and-Drop
+    el.btnTriggerFile.addEventListener('click', (e) => {
+      e.stopPropagation();
+      el.fileInput.click();
+    });
+    el.dropZone.addEventListener('click', () => el.fileInput.click());
+    el.btnNewImage.addEventListener('click', () => el.fileInput.click());
+
+    el.fileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        handleFileSelect(e.target.files[0]);
+      }
+    });
+
+    el.dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      el.dropZone.classList.add('border-indigo-400', 'bg-indigo-500/10');
+    });
+    el.dropZone.addEventListener('dragleave', () => {
+      el.dropZone.classList.remove('border-indigo-400', 'bg-indigo-500/10');
+    });
+    el.dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      el.dropZone.classList.remove('border-indigo-400', 'bg-indigo-500/10');
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleFileSelect(e.dataTransfer.files[0]);
+      }
+    });
+
+    // Clear Memory Button
+    el.btnClearMemory.addEventListener('click', clearAllMemory);
+
+    // Split Screen Before/After Slider (Mouse & Touch)
+    let isDraggingSlider = false;
+
+    function updateCompareSlider(clientX) {
+      const rect = el.previewWrapper.getBoundingClientRect();
+      if (rect.width <= 0) return;
+      let percent = ((clientX - rect.left) / rect.width) * 100;
+      percent = Math.max(0, Math.min(100, percent));
+      state.comparePercent = percent;
+      el.compareSliderBar.style.left = `${percent}%`;
+      el.beforeOverlay.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+    }
+
+    el.previewWrapper.addEventListener('mousedown', (e) => {
+      if (state.viewMode !== 'compare') return;
+      isDraggingSlider = true;
+      updateCompareSlider(e.clientX);
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!isDraggingSlider) return;
+      updateCompareSlider(e.clientX);
+    });
+    window.addEventListener('mouseup', () => {
+      isDraggingSlider = false;
+    });
+
+    el.previewWrapper.addEventListener('touchstart', (e) => {
+      if (state.viewMode !== 'compare') return;
+      isDraggingSlider = true;
+      if (e.touches[0]) updateCompareSlider(e.touches[0].clientX);
+    }, { passive: true });
+    window.addEventListener('touchmove', (e) => {
+      if (!isDraggingSlider) return;
+      if (e.touches[0]) updateCompareSlider(e.touches[0].clientX);
+    }, { passive: true });
+    window.addEventListener('touchend', () => {
+      isDraggingSlider = false;
+    });
+
+    // View Mode Toggle (Compare vs Full Result)
+    el.modeCompareBtn.addEventListener('click', () => {
+      state.viewMode = 'compare';
+      el.modeCompareBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 text-white transition';
+      el.modeResultBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white transition';
+      el.beforeOverlay.classList.remove('hidden');
+      el.compareSliderBar.classList.remove('hidden');
+      el.badgeBefore.classList.remove('hidden');
+    });
+
+    el.modeResultBtn.addEventListener('click', () => {
+      state.viewMode = 'result';
+      el.modeResultBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 text-white transition';
+      el.modeCompareBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white transition';
+      el.beforeOverlay.classList.add('hidden');
+      el.compareSliderBar.classList.add('hidden');
+      el.badgeBefore.classList.add('hidden');
+    });
+
+    // Background Preset Switcher
+    function setPreviewBackground(bgValue) {
+      state.previewBg = bgValue;
+      el.bgPresetBtns.forEach(btn => {
+        if (btn.dataset.bg === bgValue) {
+          btn.classList.add('ring-2', 'ring-indigo-500');
+        } else {
+          btn.classList.remove('ring-2', 'ring-indigo-500');
+        }
+      });
+      renderRefinedComposite();
+    }
+
+    el.bgPresetBtns.forEach(btn => {
+      btn.addEventListener('click', () => setPreviewBackground(btn.dataset.bg));
+    });
+
+    el.customBgColor.addEventListener('input', (e) => {
+      setPreviewBackground(e.target.value);
+    });
+
+    // Edge Refinement Sliders
+    let refineDebounce = null;
+    function scheduleRefinement() {
+      if (refineDebounce) cancelAnimationFrame(refineDebounce);
+      refineDebounce = requestAnimationFrame(() => {
+        renderRefinedComposite();
+      });
+    }
+
+    el.sliderThreshold.addEventListener('input', (e) => {
+      state.threshold = parseInt(e.target.value, 10);
+      el.valThreshold.textContent = state.threshold;
+      scheduleRefinement();
+    });
+
+    el.sliderFeather.addEventListener('input', (e) => {
+      state.feather = parseFloat(e.target.value);
+      el.valFeather.textContent = `${state.feather} px`;
+      scheduleRefinement();
+    });
+
+    el.btnResetRefine.addEventListener('click', () => {
+      state.threshold = 0;
+      state.feather = 0.5;
+      el.sliderThreshold.value = 0;
+      el.sliderFeather.value = 0.5;
+      el.valThreshold.textContent = '0';
+      el.valFeather.textContent = '0.5 px';
+      renderRefinedComposite();
+    });
+
+    // Export Format Selector
+    el.formatBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fmt = btn.dataset.format;
+        state.selectedFormat = fmt;
+
+        el.formatBtns.forEach(b => {
+          b.classList.remove('border-indigo-500', 'bg-indigo-600/25');
+          b.classList.add('border-white/10', 'bg-white/5');
+        });
+        btn.classList.remove('border-white/10', 'bg-white/5');
+        btn.classList.add('border-indigo-500', 'bg-indigo-600/25');
+
+        el.formatDescription.innerHTML = formatInfoMap[fmt];
+        el.saveBtnLabel.textContent = `บันทึกรูปภาพ ${fmt.toUpperCase()} ทันที`;
+      });
+    });
+
+    // Save & Mobile Share Buttons
+    el.btnSaveImage.addEventListener('click', handleSaveDownload);
+    el.btnMobileShare.addEventListener('click', handleMobileNativeShare);
+
+    // Privacy & GitHub Modal Controls
+    el.btnPrivacyInfo.addEventListener('click', () => el.infoModal.classList.remove('hidden'));
+    el.btnCloseModal.addEventListener('click', () => el.infoModal.classList.add('hidden'));
+    el.btnModalOk.addEventListener('click', () => el.infoModal.classList.add('hidden'));
+    el.infoModal.addEventListener('click', (e) => {
+      if (e.target === el.infoModal) el.infoModal.classList.add('hidden');
+    });
+
+    // Wipe RAM automatically on page unload/hide for maximum privacy
+    window.addEventListener('pagehide', () => {
+      state.originalImage = null;
+      state.rawMaskCanvas = null;
+      state.finalFullCanvas = null;
+    });
+  </script>
+</body>
+</html>
