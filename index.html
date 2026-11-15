@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#090d16">
-<title>Privacy Studio Pro — Offline & No-Cache</title>
+<title>Privacy Studio Pro — All-in-One Offline</title>
 <style>
   :root {
     --bg: #090d16;
@@ -35,11 +35,11 @@
 
   header {
     position: sticky; top: 0; z-index: 40;
-    background: rgba(9, 13, 22, 0.9); backdrop-filter: blur(12px);
+    background: rgba(9, 13, 22, 0.92); backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     padding: 11px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px;
   }
-  .brand { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 15px; letter-spacing: -0.2px; }
+  .brand { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 15px; }
   .logo-box {
     width: 30px; height: 30px; border-radius: 8px;
     background: linear-gradient(135deg, #2563eb, #06b6d4);
@@ -69,7 +69,7 @@
   p.sub { margin: 0 0 14px 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
 
   .dropzone {
-    border: 1.5px dashed #374151; border-radius: 14px; padding: 24px 14px;
+    border: 1.5px dashed #374151; border-radius: 14px; padding: 22px 14px;
     text-align: center; cursor: pointer; background: rgba(17,24,39,0.6);
     transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
@@ -128,14 +128,32 @@
   .status-box.show { display: block; }
 
   .result-banner {
-    background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35);
-    border-radius: 12px; padding: 12px; margin-top: 12px;
+    background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: 12px; padding: 14px; margin-top: 12px;
   }
 
+  /* Before / After Compare Slider with Center Badge */
   .compare-box { position: relative; width: 100%; overflow: hidden; border-radius: 12px; border: 1px solid #374151; user-select: none; }
   .compare-box img { width: 100%; display: block; }
-  .compare-after { position: absolute; inset: 0; overflow: hidden; width: 50%; border-right: 2px solid #38bdf8; }
+  .compare-after { position: absolute; inset: 0; overflow: hidden; width: 50%; border-right: 2px solid #ffffff; }
   .compare-after img { width: 100%; max-width: none; }
+  .compare-pill {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.45); border-radius: 999px;
+    padding: 5px 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+    color: #fff; pointer-events: none; display: flex; gap: 14px;
+  }
+
+  /* EXIF Checkboxes */
+  .exif-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .exif-item {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface); border: 1px solid #374151; border-radius: 10px; padding: 9px 12px;
+    font-size: 12.5px; cursor: pointer;
+  }
+  .exif-item input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--danger); margin-right: 10px; }
+  .exif-val { color: var(--muted); font-size: 11.5px; max-width: 52%; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   .page-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 10px; }
   .page-item {
@@ -196,7 +214,7 @@
         <svg class="ico" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
         ลบพื้นหลัง AI ความละเอียดสูงสุด
       </h2>
-      <p class="sub">ประมวลผลในอุปกรณ์ 100% รักษาความละเอียดต้นฉบับเต็มพิกเซล ไม่เก็บ Cache</p>
+      <p class="sub">ประมวลผลในเครื่อง 100% รักษาความละเอียดต้นฉบับเต็มพิกเซล ไม่เก็บ Cache</p>
       <label class="dropzone">
         <input type="file" id="bgFileInput" accept="image/*">
         <svg class="ico-lg" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
@@ -234,33 +252,27 @@
             </select>
           </div>
           <div style="display:flex;align-items:flex-end;gap:8px;">
-            <button class="btn btn-primary" onclick="downloadBgResult()">
-              <svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              บันทึกไฟล์
-            </button>
-            <button class="btn btn-accent" onclick="shareBgResult()">
-              <svg class="ico" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-              แชร์/อัลบั้ม
-            </button>
+            <button class="btn btn-primary" onclick="downloadBgResult()">บันทึกไฟล์</button>
+            <button class="btn btn-accent" onclick="shareBgResult()">แชร์/อัลบั้ม</button>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== TAB 2: AI PHOTO RESTORATION & UPSCALER ==================== -->
+  <!-- ==================== TAB 2: AI PHOTO RESTORATION, COLORIZE & UPSCALER ==================== -->
   <section id="tab-upscale" class="tab-panel">
     <div class="card">
       <h2>
-        <svg class="ico" viewBox="0 0 24 24"><path d="M12 3v3m0 12v3M3 12h3m12 0h3m-4.2-5.8 2.1-2.1M5.1 18.9l2.1-2.1m0-9.6L5.1 5.1m13.8 13.8-2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>
-        เพิ่มความชัดภาพเก่า & ขยายความละเอียด
+        <svg class="ico" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        เพิ่มความชัดภาพเก่า & ฟื้นฟูสีสัน
       </h2>
-      <p class="sub">ฟื้นฟูภาพเก่า ภาพเบลอ ภาพแตก ให้คมชัดระดับ HD/4K พร้อมลบเกรนและคืนสีสด</p>
+      <p class="sub">เพิ่มความคมชัดภาพสี ลบรอยขีดข่วนภาพเก่าขาว-ดำ และลงสีภาพขาว-ดำให้เป็นภาพสีธรรมชาติ</p>
       <label class="dropzone">
         <input type="file" id="upFileInput" accept="image/*">
-        <svg class="ico-lg" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <div class="title">เลือกรูปภาพเก่าหรือภาพที่ต้องการเพิ่มความชัด</div>
-        <div class="hint">ประมวลผล Edge-Directed Super-Resolution + Bilateral Denoise ในเครื่อง</div>
+        <svg class="ico-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3m0 12v3M3 12h3m12 0h3m-4.2-5.8 2.1-2.1M5.1 18.9l2.1-2.1m0-9.6L5.1 5.1m13.8 13.8-2.1-2.1"/></svg>
+        <div class="title">เลือกรูปภาพเก่า ภาพเบลอ หรือภาพขาว-ดำ</div>
+        <div class="hint">ฟื้นฟูรายละเอียด ลบจุดด่างขาว และเร่งมิติแสงเงา</div>
       </label>
       <div id="upStatus" class="status-box"></div>
       <div id="upWorkspace" class="hidden" style="margin-top:12px;">
@@ -270,85 +282,110 @@
             <select id="upScale">
               <option value="2">2x HD (คมชัด 2 เท่า - แนะนำ)</option>
               <option value="4">4x Ultra HD (คมชัดสูงสุด 4 เท่า)</option>
-              <option value="1">1x คงขนาดเดิม (เน้นแก้เบลอ/คืนสี)</option>
+              <option value="1">1x คงขนาดเดิม (เน้นแก้เบลอ/ฟื้นฟูสี)</option>
             </select>
           </div>
           <div>
-            <label>โหมดฟื้นฟูภาพ</label>
-            <select id="upPreset">
-              <option value="portrait">ภาพบุคคล / ใบหน้าเก่า (ผิวเนียน ตาชัด)</option>
-              <option value="general">ภาพทั่วไป / วิว / วัตถุ</option>
-              <option value="doc">ภาพเอกสาร / ตัวหนังสือเก่า</option>
+            <label>โหมดจัดการสีและภาพเก่า</label>
+            <select id="upColorMode">
+              <option value="enhance_color">เพิ่มความชัด + คืนสีภาพสีให้สดใส</option>
+              <option value="bw_restore">ฟื้นฟูภาพขาว-ดำ คมชัด & ลบรอยขีดข่วน</option>
+              <option value="colorize_bw">ลงสีภาพขาว-ดำให้เป็นภาพสีธรรมชาติ</option>
             </select>
           </div>
         </div>
         <div class="grid-3" style="margin-top:10px;">
           <div>
-            <label>ความคมชัด (<span id="upSharpVal">65</span>%)</label>
-            <input type="range" id="upSharp" min="0" max="100" value="65" oninput="document.getElementById('upSharpVal').textContent=this.value">
+            <label>ความคมชัด (<span id="upSharpVal">70</span>%)</label>
+            <input type="range" id="upSharp" min="0" max="100" value="70" oninput="document.getElementById('upSharpVal').textContent=this.value">
           </div>
           <div>
-            <label>ลบเกรนเก่า (<span id="upDenoiseVal">40</span>%)</label>
-            <input type="range" id="upDenoise" min="0" max="100" value="40" oninput="document.getElementById('upDenoiseVal').textContent=this.value">
+            <label>ลบรอยขีดข่วน/เกรน (<span id="upDenoiseVal">45</span>%)</label>
+            <input type="range" id="upDenoise" min="0" max="100" value="45" oninput="document.getElementById('upDenoiseVal').textContent=this.value">
           </div>
           <div>
-            <label>คืนสีสดใส (<span id="upColorVal">30</span>%)</label>
-            <input type="range" id="upColor" min="0" max="100" value="30" oninput="document.getElementById('upColorVal').textContent=this.value">
+            <label>ความสดของสี (<span id="upColorVal">40</span>%)</label>
+            <input type="range" id="upColor" min="0" max="100" value="40" oninput="document.getElementById('upColorVal').textContent=this.value">
           </div>
         </div>
         <button class="btn btn-primary" style="margin-top:10px;" onclick="processUpscale()">ประมวลผลเพิ่มความชัด</button>
 
         <div id="upCompareWrap" class="hidden" style="margin-top:12px;">
-          <label>เลื่อนซ้าย-ขวา เพื่อเปรียบเทียบ (ซ้าย: ภาพใหม่ | ขวา: ต้นฉบับ)</label>
+          <label>เลื่อนซ้าย-ขวา เพื่อเปรียบเทียบ BEFORE / AFTER</label>
           <div class="compare-box" id="upCompareBox">
             <img id="upOrigPreview" alt="Before">
             <div class="compare-after" id="upAfterMask"><img id="upNewPreview" alt="After"></div>
+            <div class="compare-pill" id="upComparePill"><span>BEFORE</span><span>AFTER</span></div>
           </div>
           <input type="range" min="0" max="100" value="50" style="margin-top:8px;" oninput="slideCompare(this.value)">
           <div class="grid-2" style="margin-top:10px;">
-            <button class="btn btn-primary" onclick="saveCanvasFile(upOutCanvas, 'Enhanced_HD.png', 'image/png')">บันทึกภาพชัด (PNG)</button>
-            <button class="btn btn-accent" onclick="shareCanvasFile(upOutCanvas, 'Enhanced_HD.png', 'image/png')">แชร์ / บันทึกลงอัลบั้ม</button>
+            <button class="btn btn-primary" onclick="saveCanvasFile(upOutCanvas, 'Restored_HD.png', 'image/png')">บันทึกภาพชัด (PNG)</button>
+            <button class="btn btn-accent" onclick="shareCanvasFile(upOutCanvas, 'Restored_HD.png', 'image/png')">แชร์ / บันทึกลงอัลบั้ม</button>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== TAB 3: TEXTURE-SYNTHESIS WATERMARK REMOVER ==================== -->
+  <!-- ==================== TAB 3: DUAL-MODE WATERMARK REMOVER ==================== -->
   <section id="tab-inpaint" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><path d="M20 20H7L3 16c-.6-.6-.6-1.5 0-2.1l10-10c.6-.6 1.5-.6 2.1 0l6 6c.6.6.6 1.5 0 2.1L13 20"/><path d="M6 11l7 7"/></svg>
-        ลบลายน้ำ & วัตถุส่วนเกิน (ซ่อมพื้นผิวคมชัด ไม่เบลอ)
+        ลบลายน้ำ 2 โหมดอัจฉริยะ (อัตโนมัติ & เลือกเอง)
       </h2>
-      <p class="sub">ใช้ระบบ Patch Texture Synthesis ดึงลายพื้นผิวข้างเคียงมาแทนที่ ไม่เกิดรอยปื้นเบลอ</p>
+      <p class="sub">เลือกได้ทั้งโหมดตรวจจับลายน้ำโปร่งใสอัตโนมัติ และโหมดเลือกจุดระบายเอง</p>
       <label class="dropzone">
         <input type="file" id="wmFileInput" accept="image/*">
         <svg class="ico-lg" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-        <div class="title">เลือกรูปภาพที่ต้องการลบลายน้ำ</div>
-        <div class="hint">ซูมเข้าไปใกล้ๆ แล้วระบายเฉพาะทับตัวอักษรลายน้ำ</div>
+        <div class="title">เลือกรูปภาพที่มีลายน้ำพาดทับ</div>
+        <div class="hint">รองรับลายน้ำตัวหนังสือโปร่งใสและโลโก้</div>
       </label>
       <div id="wmWorkspace" class="hidden" style="margin-top:12px;">
         <div class="pill-group">
-          <button class="pill active" id="wmModeInpaint" onclick="setWmMode('inpaint')">ซ่อมพื้นผิวอัตโนมัติ (Patch Synthesis)</button>
-          <button class="pill" id="wmModeClone" onclick="setWmMode('clone')">ดูดพื้นผิวแปะทับ (Clone Stamp)</button>
+          <button class="pill active" id="wmModeAuto" onclick="setWmMode('auto')">โหมด 1: ลบอัตโนมัติ (Inverse Alpha)</button>
+          <button class="pill" id="wmModeManual" onclick="setWmMode('manual')">โหมด 2: เลือกระบายเอง (Patch & Clone)</button>
         </div>
-        <div class="grid-2" style="margin-bottom:8px;">
-          <div>
-            <label>ขนาดหัวแปรง (<span id="wmBrushVal">12</span> px)</label>
-            <input type="range" id="wmBrushSize" min="3" max="50" value="12" oninput="document.getElementById('wmBrushVal').textContent=this.value">
+
+        <!-- Auto Watermark Removal Controls -->
+        <div id="wmAutoPanel" class="card" style="background:var(--bg);margin-bottom:10px;">
+          <p class="sub" style="margin-bottom:8px;">แตะบนตัวอักษรลายน้ำในภาพ 1 ครั้ง หรือปรับระดับความโปร่งใสเพื่อหักล้างลายน้ำทั่วทั้งภาพโดยไม่เสียรายละเอียดใบหน้า/พื้นหลัง</p>
+          <div class="grid-2">
+            <div>
+              <label>ความเข้มการหักล้างลายน้ำ (<span id="wmAlphaVal">28</span>%)</label>
+              <input type="range" id="wmAlphaSlider" min="5" max="75" value="28" oninput="document.getElementById('wmAlphaVal').textContent=this.value">
+            </div>
+            <div>
+              <label>โทนสีของลายน้ำ</label>
+              <select id="wmTintType">
+                <option value="white">ลายน้ำสีขาว / เทาอ่อนโปร่งใส</option>
+                <option value="dark">ลายน้ำสีดำ / เทาเข้มโปร่งใส</option>
+              </select>
+            </div>
           </div>
-          <div style="display:flex;align-items:flex-end;gap:6px;">
-            <button class="btn-xs" onclick="wmZoom(1.3)">ซูมเข้า (+)</button>
-            <button class="btn-xs" onclick="wmZoom(0.77)">ซูมออก (-)</button>
-            <button class="btn-xs" onclick="wmUndo()">ย้อนกลับ</button>
+          <button class="btn btn-primary" style="margin-top:8px;" onclick="runAutoAlphaWatermarkRemoval()">ลบลายน้ำอัตโนมัติทั้งภาพ</button>
+        </div>
+
+        <!-- Manual Brush Controls -->
+        <div id="wmManualPanel" class="hidden" style="margin-bottom:10px;">
+          <div class="grid-2">
+            <div>
+              <label>ขนาดหัวแปรง (<span id="wmBrushVal">12</span> px)</label>
+              <input type="range" id="wmBrushSize" min="3" max="50" value="12" oninput="document.getElementById('wmBrushVal').textContent=this.value">
+            </div>
+            <div style="display:flex;align-items:flex-end;gap:6px;">
+              <button class="btn-xs" onclick="wmZoom(1.3)">ซูมเข้า (+)</button>
+              <button class="btn-xs" onclick="wmZoom(0.77)">ซูมออก (-)</button>
+              <button class="btn-xs" onclick="wmUndo()">ย้อนกลับ</button>
+            </div>
           </div>
         </div>
+
         <div class="canvas-wrap" style="overflow:auto;">
           <canvas id="wmCanvas"></canvas>
         </div>
         <div class="grid-3" style="margin-top:10px;">
-          <button class="btn btn-primary" onclick="runSmartPatchInpaint()">ลบลายน้ำที่ระบาย</button>
+          <button class="btn btn-primary" id="wmActionBtn" onclick="runSmartPatchInpaint()">ซ่อมจุดที่ระบาย</button>
           <button class="btn btn-secondary" onclick="saveCanvasFile(wmBaseCanvas, 'Clean_Image.png', 'image/png')">บันทึก</button>
           <button class="btn btn-accent" onclick="shareCanvasFile(wmBaseCanvas, 'Clean_Image.png', 'image/png')">แชร์</button>
         </div>
@@ -418,7 +455,6 @@
       <div id="scanPageListWrap" class="hidden" style="margin-top:12px;">
         <label>รายการหน้าที่รวมใน PDF (<span id="scanCount">0</span> หน้า)</label>
         <div class="page-list" id="scanPageList"></div>
-
         <div style="margin-top:12px;">
           <label>ตั้งชื่อไฟล์ PDF (เลือกชื่อแนะนำหรือพิมพ์เอง)</label>
           <div class="pill-group" id="pdfNamePresets"></div>
@@ -432,58 +468,115 @@
     </div>
   </section>
 
-  <!-- ==================== TAB 5: MULTI-FORMAT RESIZER & GPS STRIPPER ==================== -->
+  <!-- ==================== TAB 5: RESIZER (W×H) & SELECTIVE EXIF/GPS STRIPPER ==================== -->
   <section id="tab-resize" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-        ย่อขนาดไฟล์ & ลบข้อมูลส่วนตัว (GPS/EXIF)
+        ย่อขนาดไฟล์ & ติ๊กเลือกลบข้อมูลส่วนตัว
       </h2>
-      <p class="sub">ย่อขนาดรูปภาพ (คุม KB/%/px), PDF, Word (.docx), PowerPoint (.pptx) และ Excel (.xlsx)</p>
+      <p class="sub">กำหนดสัดส่วน กว้าง×ยาว (px) ได้อิสระ พร้อมติ๊กเลือกลบ GPS, วันที่ หรือข้อมูลกล้องได้ทีละรายการโดยไม่เด้งเปลี่ยนหน้า</p>
       <label class="dropzone">
         <input type="file" id="rsFileInput" accept="image/*,.pdf,.docx,.pptx,.xlsx">
         <svg class="ico-lg" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-        <div class="title">เลือกไฟล์ที่ต้องการย่อขนาด หรือลบพิกัด GPS</div>
-        <div class="hint">รองรับ JPG, PNG, WEBP, PDF, DOCX, PPTX, XLSX</div>
+        <div class="title">เลือกไฟล์รูปภาพ, PDF, Word, PowerPoint หรือ Excel</div>
+        <div class="hint">ประมวลผลอยู่ในหน้าเดิม ไม่เด้งเปิดแท็บใหม่</div>
       </label>
       <div id="rsStatus" class="status-box"></div>
+
       <div id="rsWorkspace" class="hidden" style="margin-top:12px;">
-        <div id="exifBox" class="card" style="background:var(--bg);font-size:12px;margin-bottom:10px;"></div>
+        <div id="rsFileSummary" style="font-size:12.5px;color:#93c5fd;margin-bottom:10px;"></div>
+
+        <!-- Selective EXIF Checkboxes (For Images) -->
+        <div id="exifSelectCard" class="card hidden" style="background:var(--bg);margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <label style="margin:0;color:#fff;">ติ๊กเลือกข้อมูลส่วนตัวที่ต้องการลบทิ้ง:</label>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-xs" onclick="setExifChecks('gps')">ลบเฉพาะ GPS</button>
+              <button class="btn-xs" onclick="setExifChecks('all')">ติ๊กทั้งหมด</button>
+            </div>
+          </div>
+          <div class="exif-list">
+            <label class="exif-item">
+              <span><input type="checkbox" id="chkExifGps" checked> พิกัดสถานที่ (GPS Location)</span>
+              <span class="exif-val" id="valExifGps">กำลังตรวจสอบ...</span>
+            </label>
+            <label class="exif-item">
+              <span><input type="checkbox" id="chkExifDate"> วันและเวลาที่ถ่าย (Date & Time)</span>
+              <span class="exif-val" id="valExifDate">-</span>
+            </label>
+            <label class="exif-item">
+              <span><input type="checkbox" id="chkExifDevice"> รุ่นมือถือ / กล้อง (Device Model)</span>
+              <span class="exif-val" id="valExifDevice">-</span>
+            </label>
+            <label class="exif-item">
+              <span><input type="checkbox" id="chkExifTech"> ค่ากล้อง & ซอฟต์แวร์ (ISO / Software)</span>
+              <span class="exif-val" id="valExifTech">-</span>
+            </label>
+          </div>
+        </div>
+
         <div class="grid-2">
           <div>
-            <label>โหมดการย่อขนาด</label>
+            <label>รูปแบบการย่อขนาด</label>
             <select id="rsMode" onchange="toggleRsInputs()">
+              <option value="dimensions">กำหนดสัดส่วน กว้าง × ยาว (px)</option>
               <option value="percent">ย่อตามเปอร์เซ็นต์ (%)</option>
-              <option value="kb">คุมขนาดไฟล์ไม่เกิน (KB) - สำหรับรูปภาพ</option>
-              <option value="px">กำหนดความกว้างสูงสุด (px)</option>
-              <option value="gps_only">ลบพิกัด GPS/EXIF อย่างเดียว (ความชัด 100%)</option>
+              <option value="kb">คุมขนาดไฟล์ไม่เกิน (KB)</option>
+              <option value="none">ไม่ย่อขนาด (คงความชัด 100% ลบเฉพาะข้อมูลที่ติ๊ก)</option>
             </select>
           </div>
-          <div id="rsValWrap">
+          <div id="rsSingleValWrap" class="hidden">
             <label id="rsValLabel">ขนาดที่ต้องการ (%)</label>
             <input type="number" id="rsValInput" value="60">
           </div>
         </div>
-        <button class="btn btn-primary" style="margin-top:10px;" onclick="executeResizeAll()">เริ่มย่อขนาดและลบข้อมูลส่วนตัว</button>
 
+        <!-- Custom Width x Height Controls -->
+        <div id="rsDimWrap" class="card" style="background:var(--bg);margin-top:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <label style="margin:0;">กำหนดขนาด กว้าง × ยาว (พิกเซล)</label>
+            <label style="margin:0;display:flex;align-items:center;gap:5px;cursor:pointer;color:#60a5fa;">
+              <input type="checkbox" id="rsLockRatio" checked> ล็อกสัดส่วนภาพอัตโนมัติ
+            </label>
+          </div>
+          <div class="grid-2">
+            <div>
+              <label>ความกว้าง (Width px)</label>
+              <input type="number" id="rsWidthInput" oninput="onRsDimChange('w')">
+            </div>
+            <div>
+              <label>ความสูง (Height px)</label>
+              <input type="number" id="rsHeightInput" oninput="onRsDimChange('h')">
+            </div>
+          </div>
+          <div class="pill-group" style="margin-top:8px;margin-bottom:0;">
+            <button class="pill" onclick="applyDimPreset(1080, 1080)">1:1 (1080×1080)</button>
+            <button class="pill" onclick="applyDimPreset(1920, 1080)">16:9 (1920×1080)</button>
+            <button class="pill" onclick="applyDimPreset(1080, 1350)">4:5 (1080×1350)</button>
+            <button class="pill" onclick="applyDimPreset(600, 800)">รูปติดบัตร (600×800)</button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="margin-top:10px;" onclick="executeResizeAll()">ประมวลผลย่อขนาด & ลบข้อมูลที่เลือก</button>
+
+        <!-- Inline Result Box (Does NOT auto-redirect/jump to another page) -->
         <div id="rsResultBox" class="result-banner hidden">
           <div id="rsResultInfo" style="font-size:13px;font-weight:600;color:#6ee7b7;margin-bottom:10px;"></div>
-          <div class="grid-2">
-            <button class="btn btn-primary" id="rsDownloadBtn">
-              <svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              ดาวน์โหลดไฟล์ที่ย่อแล้ว
-            </button>
-            <button class="btn btn-accent" id="rsShareBtn">
-              <svg class="ico" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-              แชร์ / บันทึกไฟล์
-            </button>
+          <div id="rsInlinePreviewWrap" class="hidden" style="margin-bottom:10px;text-align:center;">
+            <img id="rsInlinePreviewImg" style="max-width:100%;max-height:260px;border-radius:8px;border:1px solid #374151;">
+          </div>
+          <div class="grid-3">
+            <button class="btn btn-secondary" id="rsPreviewToggleBtn" onclick="toggleRsPreview()">ดูตัวอย่างภาพ</button>
+            <button class="btn btn-primary" id="rsDownloadBtn">บันทึกไฟล์ลงเครื่อง</button>
+            <button class="btn btn-accent" id="rsShareBtn">แชร์ / อัลบั้ม</button>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== TAB 6: UNIVERSAL CONVERTER (MULTI-PAGE PDF SUPPORT) ==================== -->
+  <!-- ==================== TAB 6: UNIVERSAL CONVERTER ==================== -->
   <section id="tab-convert" class="tab-panel">
     <div class="card">
       <h2>
@@ -495,7 +588,7 @@
         <input type="file" id="cvFileInput" accept="image/*,.pdf,.docx,.pptx,.xlsx,.csv" multiple>
         <svg class="ico-lg" viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
         <div class="title">เลือกไฟล์ต้นทาง (รองรับ PDF หลายหน้า และเลือกรูปหลายใบพร้อมกัน)</div>
-        <div class="hint">ประมวลผลปลอดภัยในเครื่อง 100% ไม่ส่งไฟล์ขึ้นเซิร์ฟเวอร์</div>
+        <div class="hint">ประมวลผลปลอดภัยในเครื่อง 100%</div>
       </label>
       <div id="cvStatus" class="status-box"></div>
       <div id="cvWorkspace" class="hidden" style="margin-top:12px;">
@@ -521,29 +614,36 @@
     </div>
   </section>
 
-  <!-- ==================== TAB 7: HIGH-PRECISION THAI/ENG OCR ==================== -->
+  <!-- ==================== TAB 7: HIGH-PRECISION THAI/ENG OCR WITH CROP BOX ==================== -->
   <section id="tab-ocr" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
         อ่านข้อความจากภาพ (ไทย + อังกฤษ แม่นยำสูง)
       </h2>
-      <p class="sub">ใช้โมเดลภาษาไทยความแม่นยำสูง พร้อมปรับคมชัดสระและวรรณยุกต์ไม่ให้เพี้ยนเป็นภาษาต่างดาว</p>
+      <p class="sub">ลากกรอบสีเขียวคลุมเฉพาะส่วนที่มีตัวหนังสือเพื่อตัดสิ่งรบกวน ทำให้ภาษาไทยแม่นยำสูงสุด</p>
       <label class="dropzone">
         <input type="file" id="ocrFileInput" accept="image/*">
         <svg class="ico-lg" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
         <div class="title">เลือกรูปภาพเอกสาร ป้าย หรือแคปหน้าจอ</div>
-        <div class="hint">รองรับภาษาไทยและภาษาอังกฤษ</div>
+        <div class="hint">รองรับการครอบตัดเฉพาะจุด (Interactive Crop)</div>
       </label>
       <div id="ocrStatus" class="status-box"></div>
       <div id="ocrWorkspace" class="hidden" style="margin-top:12px;">
-        <div class="grid-2">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <label style="margin:0;">ลากนิ้วบนภาพเพื่อครอบกรอบเฉพาะจุดที่ต้องการอ่าน:</label>
+          <button class="btn-xs" onclick="resetOcrCrop()">เลือกทั้งภาพ</button>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="ocrCropCanvas"></canvas>
+        </div>
+        <div class="grid-2" style="margin-top:10px;">
           <div>
-            <label>โหมดปรับภาพก่อนอ่าน (Pre-Processing)</label>
+            <label>โหมดปรับภาพก่อนอ่าน</label>
             <select id="ocrPreprocess">
-              <option value="sharpen">ปรับคมชัดสระไทย + ลดเงาพื้นหลัง (แนะนำ)</option>
-              <option value="otsu">ขาว-ดำ ตัดพื้นหลัง (Otsu Binarization)</option>
-              <option value="raw">ภาพต้นฉบับ (เหมาะกับภาพแคปหน้าจอคมๆ)</option>
+              <option value="sauvola">ตัดพื้นหลังอัจฉริยะ (Adaptive Threshold - แนะนำ)</option>
+              <option value="sharpen">ปรับคมชัดสระไทย + ลดเงา</option>
+              <option value="raw">ภาพต้นฉบับ (เหมาะกับภาพแคปหน้าจอ)</option>
             </select>
           </div>
           <div>
@@ -555,7 +655,7 @@
             </select>
           </div>
         </div>
-        <button class="btn btn-primary" style="margin-top:10px;" onclick="runHighAccuracyOCR()">เริ่มอ่านข้อความ</button>
+        <button class="btn btn-primary" style="margin-top:10px;" onclick="runHighAccuracyOCR()">เริ่มอ่านข้อความในกรอบ</button>
         <div style="margin-top:12px;">
           <label>ผลลัพธ์ข้อความ (แก้ไขเพิ่มเติมได้)</label>
           <textarea id="ocrResultText" rows="8" placeholder="ข้อความที่อ่านได้จะปรากฏที่นี่..."></textarea>
@@ -570,7 +670,7 @@
   </section>
 </main>
 
-<!-- BOTTOM NAVIGATION (LUCIDE VECTOR SVG ICONS) -->
+<!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
   <button class="nav-btn active" onclick="switchTab('bg', this)">
     <svg class="ico" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
@@ -590,7 +690,7 @@
   </button>
   <button class="nav-btn" onclick="switchTab('resize', this)">
     <svg class="ico" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-    <span>ย่อ/ลบGPS</span>
+    <span>ย่อ/ลบข้อมูล</span>
   </button>
   <button class="nav-btn" onclick="switchTab('convert', this)">
     <svg class="ico" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
@@ -614,8 +714,8 @@
     theme_color: "#090d16",
     icons: [{ src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232563eb'/><path d='M50 82s26-13 26-32V27L50 17 24 27v23c0 19 26 32 26 32z' fill='none' stroke='white' stroke-width='6'/></svg>", sizes: "192x192", type: "image/svg+xml" }]
   };
-  const mBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-  const link = document.createElement('link'); link.rel = 'manifest'; link.href = URL.createObjectURL(mBlob);
+  const link = document.createElement('link'); link.rel = 'manifest';
+  link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/json' }));
   document.head.appendChild(link);
 
   const swCode = `self.addEventListener('fetch', e => { e.respondWith(fetch(e.request).catch(() => new Response('Offline Mode'))); });`;
@@ -774,7 +874,7 @@ function getBgExportBlob() {
 async function downloadBgResult() { const { blob, name } = await getBgExportBlob(); triggerDownload(blob, name); }
 async function shareBgResult() { const { blob, name } = await getBgExportBlob(); triggerShareOrSave(blob, name); }
 
-// ==================== 3. AI PHOTO RESTORATION & UPSCALER ====================
+// ==================== 3. AI PHOTO RESTORATION, COLORIZE & UPSCALER ====================
 let upOrigImg = null, upOutCanvas = document.createElement('canvas');
 document.getElementById('upFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if (!file) return;
@@ -785,10 +885,10 @@ document.getElementById('upFileInput').addEventListener('change', async (e) => {
 
 function processUpscale() {
   if (!upOrigImg) return;
-  showStatus('upStatus', 'กำลังฟื้นฟูรายละเอียด ลบเกรนภาพเก่า และเพิ่มความคมชัด...');
+  showStatus('upStatus', 'กำลังฟื้นฟูรายละเอียด ลบรอยขีดข่วน และปรับมิติสีสัน...');
   setTimeout(() => {
     const scale = parseInt(document.getElementById('upScale').value);
-    const preset = document.getElementById('upPreset').value;
+    const colorMode = document.getElementById('upColorMode').value;
     const sharpAmt = parseInt(document.getElementById('upSharp').value) / 100;
     const denoiseAmt = parseInt(document.getElementById('upDenoise').value) / 100;
     const colorAmt = parseInt(document.getElementById('upColor').value) / 100;
@@ -807,27 +907,54 @@ function processUpscale() {
     for (let y = 1; y < h - 1; y++) {
       for (let x = 1; x < w - 1; x++) {
         const idx = (y * w + x) * 4;
+        // 3x3 Neighborhood for scratch/dust outlier removal + unsharp mask
         for (let c = 0; c < 3; c++) {
           const center = copy[idx + c];
-          const avg = (
-            copy[((y-1)*w + x)*4 + c] + copy[((y+1)*w + x)*4 + c] +
-            copy[(y*w + x-1)*4 + c] + copy[(y*w + x+1)*4 + c]
-          ) * 0.25;
+          const n1 = copy[((y-1)*w + x)*4 + c], n2 = copy[((y+1)*w + x)*4 + c];
+          const n3 = copy[(y*w + x-1)*4 + c], n4 = copy[(y*w + x+1)*4 + c];
+          const avg = (n1 + n2 + n3 + n4) * 0.25;
           const diff = center - avg;
-          let val = Math.abs(diff) < (22 * denoiseAmt) ? (center * (1 - denoiseAmt) + avg * denoiseAmt) : center;
-          const boost = preset === 'doc' ? 2.2 : (preset === 'portrait' ? 1.35 : 1.6);
-          val += diff * sharpAmt * boost;
+
+          // Suppress white dust/scratches on old photos
+          let val = (Math.abs(diff) > 55 && denoiseAmt > 0.3) ? avg :
+                    (Math.abs(diff) < 22 * denoiseAmt ? (center * (1 - denoiseAmt) + avg * denoiseAmt) : center);
+          val += diff * sharpAmt * 1.75;
           d[idx + c] = Math.max(0, Math.min(255, val));
         }
-        if (colorAmt > 0) {
-          let r = d[idx], g = d[idx+1], b = d[idx+2];
-          const lum = 0.299*r + 0.587*g + 0.114*b;
-          const sat = 1 + colorAmt * 0.55;
+
+        let r = d[idx], g = d[idx+1], b = d[idx+2];
+        const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+
+        if (colorMode === 'bw_restore') {
+          // Crisp silver-halide B&W tone with deep blacks and clean whites
+          const cLum = Math.max(0, Math.min(255, (lum - 128) * (1 + sharpAmt * 0.35) + 128));
+          d[idx] = d[idx+1] = d[idx+2] = cLum;
+        } else if (colorMode === 'colorize_bw') {
+          // Luminance-guided natural colorization (warm skin/midtones, cool sky/highlights, rich foliage shadows)
+          const norm = lum / 255;
+          const yNorm = y / h;
+          let cr, cg, cb;
+          if (yNorm < 0.35 && norm > 0.65) {
+            // Sky / upper highlights -> soft natural sky blue
+            cr = lum * 0.88; cg = lum * 0.96; cb = Math.min(255, lum * 1.12);
+          } else if (norm > 0.35 && norm < 0.78) {
+            // Midtones / skin & portrait warmth
+            cr = Math.min(255, lum * (1.08 + colorAmt * 0.15));
+            cg = lum * (0.98 + colorAmt * 0.04);
+            cb = lum * (0.86 - colorAmt * 0.08);
+          } else {
+            // Deep shadows / foliage
+            cr = lum * 0.92; cg = Math.min(255, lum * 1.04); cb = lum * 0.90;
+          }
+          d[idx] = cr; d[idx+1] = cg; d[idx+2] = cb;
+        } else {
+          // Color photo vibrancy & contrast restoration
+          const sat = 1 + colorAmt * 0.65;
           r = lum + (r - lum) * sat; g = lum + (g - lum) * sat; b = lum + (b - lum) * sat;
-          const contrast = 1 + colorAmt * 0.2;
-          d[idx] = Math.max(0, Math.min(255, (r - 128)*contrast + 128));
-          d[idx+1] = Math.max(0, Math.min(255, (g - 128)*contrast + 128));
-          d[idx+2] = Math.max(0, Math.min(255, (b - 128)*contrast + 128));
+          const contrast = 1 + colorAmt * 0.22;
+          d[idx] = Math.max(0, Math.min(255, (r - 128) * contrast + 128));
+          d[idx+1] = Math.max(0, Math.min(255, (g - 128) * contrast + 128));
+          d[idx+2] = Math.max(0, Math.min(255, (b - 128) * contrast + 128));
         }
       }
     }
@@ -847,13 +974,15 @@ function slideCompare(val) {
   const box = document.getElementById('upCompareBox');
   const mask = document.getElementById('upAfterMask');
   const img = document.getElementById('upNewPreview');
+  const pill = document.getElementById('upComparePill');
   mask.style.width = val + '%';
+  pill.style.left = val + '%';
   img.style.width = box.offsetWidth + 'px';
 }
 
-// ==================== 4. SMART PATCH TEXTURE-SYNTHESIS WATERMARK REMOVER ====================
+// ==================== 4. DUAL-MODE WATERMARK REMOVER (AUTO INVERSE-ALPHA & MANUAL) ====================
 let wmOrigImg = null, wmBaseCanvas = document.createElement('canvas'), wmMaskCanvas = document.createElement('canvas');
-let wmScale = 1, wmMode = 'inpaint', wmDrawing = false, cloneSrc = null, wmHistory = [];
+let wmScale = 1, wmMode = 'auto', wmDrawing = false, wmHistory = [];
 
 document.getElementById('wmFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if (!file) return;
@@ -871,9 +1000,12 @@ document.getElementById('wmFileInput').addEventListener('change', async (e) => {
 
 function setWmMode(m) {
   wmMode = m;
-  document.getElementById('wmModeInpaint').classList.toggle('active', m === 'inpaint');
-  document.getElementById('wmModeClone').classList.toggle('active', m === 'clone');
-  if (m === 'clone') alert('แตะบนจุดพื้นผิวที่สะอาด 1 ครั้งเพื่อดูดสี จากนั้นลากระบายทับลายน้ำ');
+  document.getElementById('wmModeAuto').classList.toggle('active', m === 'auto');
+  document.getElementById('wmModeManual').classList.toggle('active', m === 'manual');
+  document.getElementById('wmAutoPanel').classList.toggle('hidden', m !== 'auto');
+  document.getElementById('wmManualPanel').classList.toggle('hidden', m !== 'manual');
+  document.getElementById('wmActionBtn').textContent = m === 'auto' ? 'ลบลายน้ำอัตโนมัติ' : 'ซ่อมจุดที่ระบาย';
+  document.getElementById('wmActionBtn').onclick = m === 'auto' ? runAutoAlphaWatermarkRemoval : runSmartPatchInpaint;
 }
 
 function wmZoom(f) { wmScale = Math.max(0.5, Math.min(4.5, wmScale * f)); redrawWmDisplay(); }
@@ -895,6 +1027,47 @@ function redrawWmDisplay() {
   ctx.globalAlpha = 0.55; ctx.drawImage(wmMaskCanvas, 0, 0); ctx.globalAlpha = 1;
 }
 
+// Mode 1: Automatic Semi-Transparent Watermark Detection & Inverse Alpha Recovery
+function runAutoAlphaWatermarkRemoval() {
+  const w = wmBaseCanvas.width, h = wmBaseCanvas.height;
+  const ctx = wmBaseCanvas.getContext('2d');
+  ctx.drawImage(wmOrigImg, 0, 0); // Start clean from original
+  const imgData = ctx.getImageData(0, 0, w, h);
+  const d = imgData.data;
+  const alpha = parseInt(document.getElementById('wmAlphaSlider').value) / 100;
+  const isWhite = document.getElementById('wmTintType').value === 'white';
+  const wmColor = isWhite ? 255 : 0;
+
+  // Compute local high-pass luminance anomaly to isolate watermark text overlays without touching skin/sky
+  const lums = new Float32Array(w * h);
+  for (let i = 0, p = 0; i < d.length; i += 4, p++) {
+    lums[p] = 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2];
+  }
+
+  const r = 14; // Local window radius
+  for (let y = r; y < h - r; y++) {
+    for (let x = r; x < w - r; x++) {
+      const p = y * w + x;
+      const localAvg = (lums[p - r] + lums[p + r] + lums[p - r*w] + lums[p + r*w]) * 0.25;
+      const diff = lums[p] - localAvg;
+
+      // Detect semi-transparent overlay step edge
+      if ((isWhite && diff > 12 && diff < 95) || (!isWhite && diff < -12 && diff > -95)) {
+        const idx = p * 4;
+        // Inverse Alpha Blending Formula: C_orig = (C_blended - alpha * C_wm) / (1 - alpha)
+        for (let c = 0; c < 3; c++) {
+          const recovered = (d[idx + c] - alpha * wmColor) / (1 - alpha);
+          d[idx + c] = Math.max(0, Math.min(255, recovered));
+        }
+      }
+    }
+  }
+  ctx.putImageData(imgData, 0, 0);
+  wmHistory.push(ctx.getImageData(0, 0, w, h));
+  redrawWmDisplay();
+}
+
+// Mode 2: Manual Brush + Exemplar Patch Texture Synthesis
 const wmDispEl = document.getElementById('wmCanvas');
 function getWmPos(e) {
   const rect = wmDispEl.getBoundingClientRect();
@@ -906,34 +1079,19 @@ function getWmPos(e) {
   };
 }
 wmDispEl.addEventListener('pointerdown', (e) => {
-  const p = getWmPos(e);
-  if (wmMode === 'clone' && !cloneSrc) { cloneSrc = p; return; }
-  wmDrawing = true; drawWmStroke(p);
+  if (wmMode !== 'manual') return;
+  wmDrawing = true; drawWmStroke(getWmPos(e));
 });
-wmDispEl.addEventListener('pointermove', (e) => { if (wmDrawing) drawWmStroke(getWmPos(e)); });
-window.addEventListener('pointerup', () => {
-  if (wmDrawing && wmMode === 'clone') {
-    wmHistory.push(wmBaseCanvas.getContext('2d').getImageData(0, 0, wmBaseCanvas.width, wmBaseCanvas.height));
-    cloneSrc = null;
-  }
-  wmDrawing = false;
-});
+wmDispEl.addEventListener('pointermove', (e) => { if (wmDrawing && wmMode === 'manual') drawWmStroke(getWmPos(e)); });
+window.addEventListener('pointerup', () => wmDrawing = false);
 
 function drawWmStroke(p) {
   const r = parseInt(document.getElementById('wmBrushSize').value);
-  if (wmMode === 'inpaint') {
-    const mctx = wmMaskCanvas.getContext('2d');
-    mctx.fillStyle = '#ef4444'; mctx.beginPath(); mctx.arc(p.x, p.y, r, 0, Math.PI * 2); mctx.fill();
-  } else if (cloneSrc) {
-    const bctx = wmBaseCanvas.getContext('2d');
-    bctx.save(); bctx.beginPath(); bctx.arc(p.x, p.y, r, 0, Math.PI * 2); bctx.clip();
-    bctx.drawImage(wmBaseCanvas, cloneSrc.x - r, cloneSrc.y - r, r * 2, r * 2, p.x - r, p.y - r, r * 2, r * 2);
-    bctx.restore();
-  }
+  const mctx = wmMaskCanvas.getContext('2d');
+  mctx.fillStyle = '#ef4444'; mctx.beginPath(); mctx.arc(p.x, p.y, r, 0, Math.PI * 2); mctx.fill();
   redrawWmDisplay();
 }
 
-// Exemplar-Based Patch Texture Synthesis (Copies sharp texture patches instead of blurring)
 function runSmartPatchInpaint() {
   const w = wmBaseCanvas.width, h = wmBaseCanvas.height;
   const bctx = wmBaseCanvas.getContext('2d');
@@ -955,64 +1113,41 @@ function runSmartPatchInpaint() {
   }
   if (!count) return;
 
-  const patchR = 4; // 9x9 texture block
-  const searchR = 26;
+  const patchR = 4, searchR = 26;
   let guard = 0;
-
   while (count > 0 && guard++ < 80) {
-    // Find boundary pixels of mask
     const boundary = [];
     for (let y = Math.max(patchR, minY); y <= Math.min(h - patchR - 1, maxY); y++) {
       for (let x = Math.max(patchR, minX); x <= Math.min(w - patchR - 1, maxX); x++) {
         const idx = y * w + x;
-        if (mask[idx] === 1) {
-          if (!mask[idx-1] || !mask[idx+1] || !mask[idx-w] || !mask[idx+w]) {
-            boundary.push({ x, y });
-          }
-        }
+        if (mask[idx] === 1 && (!mask[idx-1] || !mask[idx+1] || !mask[idx-w] || !mask[idx+w])) boundary.push({ x, y });
       }
     }
     if (!boundary.length) break;
-
     for (const pt of boundary) {
       if (mask[pt.y * w + pt.x] === 0) continue;
       let bestScore = Infinity, bestX = pt.x, bestY = pt.y;
-
-      // Search clean nearby patches that match known pixels around pt
       for (let sy = Math.max(patchR, pt.y - searchR); sy <= Math.min(h - patchR - 1, pt.y + searchR); sy += 2) {
         for (let sx = Math.max(patchR, pt.x - searchR); sx <= Math.min(w - patchR - 1, pt.x + searchR); sx += 2) {
-          // Ensure candidate patch is 100% clean (outside mask)
           let clean = true;
           for (let dy = -patchR; dy <= patchR && clean; dy++) {
-            for (let dx = -patchR; dx <= patchR; dx++) {
-              if (mask[(sy + dy) * w + (sx + dx)] === 1) clean = false;
-            }
+            for (let dx = -patchR; dx <= patchR; dx++) if (mask[(sy + dy) * w + (sx + dx)] === 1) clean = false;
           }
           if (!clean) continue;
-
-          // Compute SSD on known pixels around pt
           let ssd = 0, valid = 0;
           for (let dy = -patchR; dy <= patchR; dy++) {
             for (let dx = -patchR; dx <= patchR; dx++) {
               const tIdx = (pt.y + dy) * w + (pt.x + dx);
               if (mask[tIdx] === 0) {
                 const sIdx = (sy + dy) * w + (sx + dx);
-                const dr = d[tIdx*4] - d[sIdx*4];
-                const dg = d[tIdx*4+1] - d[sIdx*4+1];
-                const db = d[tIdx*4+2] - d[sIdx*4+2];
-                ssd += dr*dr + dg*dg + db*db;
-                valid++;
+                const dr = d[tIdx*4] - d[sIdx*4], dg = d[tIdx*4+1] - d[sIdx*4+1], db = d[tIdx*4+2] - d[sIdx*4+2];
+                ssd += dr*dr + dg*dg + db*db; valid++;
               }
             }
           }
-          if (valid > 0) {
-            const score = ssd / valid;
-            if (score < bestScore) { bestScore = score; bestX = sx; bestY = sy; }
-          }
+          if (valid > 0 && ssd / valid < bestScore) { bestScore = ssd / valid; bestX = sx; bestY = sy; }
         }
       }
-
-      // Copy sharp pixels from best matching texture patch into masked pixels
       for (let dy = -patchR; dy <= patchR; dy++) {
         for (let dx = -patchR; dx <= patchR; dx++) {
           const tIdx = (pt.y + dy) * w + (pt.x + dx);
@@ -1025,7 +1160,6 @@ function runSmartPatchInpaint() {
       }
     }
   }
-
   bctx.putImageData(imgData, 0, 0);
   wmHistory.push(bctx.getImageData(0, 0, w, h));
   wmMaskCanvas.getContext('2d').clearRect(0, 0, w, h);
@@ -1142,38 +1276,118 @@ async function exportScannedPdf(share) {
   share ? triggerShareOrSave(blob, fname) : triggerDownload(blob, fname);
 }
 
-// ==================== 6. MULTI-FORMAT RESIZER & EXIF/GPS STRIPPER (WITH EXPLICIT DOWNLOAD BUTTON) ====================
-let rsCurrentFile = null, rsOutputBlob = null, rsOutputName = '';
+// ==================== 6. RESIZER (W×H) & SELECTIVE EXIF/GPS STRIPPER ====================
+let rsCurrentFile = null, rsOrigImg = null, rsOutputBlob = null, rsOutputName = '';
+
 document.getElementById('rsFileInput').addEventListener('change', async (e) => {
   rsCurrentFile = e.target.files[0]; if (!rsCurrentFile) return;
   document.getElementById('rsWorkspace').classList.remove('hidden');
   document.getElementById('rsResultBox').classList.add('hidden');
+  document.getElementById('rsInlinePreviewWrap').classList.add('hidden');
   const kb = (rsCurrentFile.size / 1024).toFixed(1);
-  let info = `ไฟล์: <b>${rsCurrentFile.name}</b> | ขนาดเดิม: <b>${kb} KB</b>`;
+  document.getElementById('rsFileSummary').innerHTML = `ไฟล์ที่เลือก: <b>${rsCurrentFile.name}</b> (${kb} KB)`;
+
   if (rsCurrentFile.type.startsWith('image/')) {
-    const buf = await rsCurrentFile.arrayBuffer();
-    const view = new DataView(buf);
-    const hasExif = view.byteLength > 4 && view.getUint16(0) === 0xFFD8;
-    info += hasExif ? `<br>ตรวจพบ Metadata (EXIF/GPS/ข้อมูลกล้อง) ระบบจะล้างออกอัตโนมัติ` : `<br>ไม่พบพิกัด GPS ฝังในส่วนหัว`;
+    rsOrigImg = await loadImageFromFile(rsCurrentFile);
+    document.getElementById('rsWidthInput').value = rsOrigImg.naturalWidth;
+    document.getElementById('rsHeightInput').value = rsOrigImg.naturalHeight;
+    document.getElementById('exifSelectCard').classList.remove('hidden');
+    document.getElementById('rsDimWrap').classList.remove('hidden');
+    await inspectImageExifTags(rsCurrentFile);
+  } else {
+    rsOrigImg = null;
+    document.getElementById('exifSelectCard').classList.add('hidden');
+    document.getElementById('rsDimWrap').classList.add('hidden');
+    document.getElementById('rsMode').value = 'percent';
+    toggleRsInputs();
   }
-  document.getElementById('exifBox').innerHTML = info;
 });
+
+async function inspectImageExifTags(file) {
+  try {
+    await loadLib('https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js');
+    const data = await exifr.parse(file, true);
+    document.getElementById('valExifGps').textContent = (data && data.latitude) ? `${data.latitude.toFixed(4)}°, ${data.longitude.toFixed(4)}°` : 'ไม่พบพิกัด';
+    document.getElementById('valExifDate').textContent = (data && data.DateTimeOriginal) ? new Date(data.DateTimeOriginal).toLocaleString('th-TH') : 'ไม่พบวันที่';
+    document.getElementById('valExifDevice').textContent = (data && (data.Make || data.Model)) ? `${data.Make || ''} ${data.Model || ''}`.trim() : 'ไม่ระบุรุ่นกล้อง';
+    document.getElementById('valExifTech').textContent = (data && (data.Software || data.ISO)) ? `${data.Software || ''} ISO:${data.ISO || '-'}` : 'ไม่ระบุ';
+  } catch (e) {
+    document.getElementById('valExifGps').textContent = 'พร้อมล้างข้อมูลส่วนหัว';
+  }
+}
+
+function setExifChecks(type) {
+  const all = type === 'all';
+  document.getElementById('chkExifGps').checked = true;
+  document.getElementById('chkExifDate').checked = all;
+  document.getElementById('chkExifDevice').checked = all;
+  document.getElementById('chkExifTech').checked = all;
+}
 
 function toggleRsInputs() {
   const m = document.getElementById('rsMode').value;
-  document.getElementById('rsValWrap').classList.toggle('hidden', m === 'gps_only');
-  document.getElementById('rsValLabel').textContent = m === 'percent' ? 'ขนาดที่ต้องการ (%)' : (m === 'kb' ? 'ขนาดไฟล์สูงสุด (KB)' : 'ความกว้างสูงสุด (px)');
+  document.getElementById('rsDimWrap').classList.toggle('hidden', m !== 'dimensions' || !rsOrigImg);
+  document.getElementById('rsSingleValWrap').classList.toggle('hidden', m === 'dimensions' || m === 'none');
+  document.getElementById('rsValLabel').textContent = m === 'percent' ? 'ขนาดที่ต้องการ (%)' : 'ขนาดไฟล์สูงสุด (KB)';
 }
 
-function finalizeResizeResult(blob, outName) {
+function onRsDimChange(axis) {
+  if (!rsOrigImg || !document.getElementById('rsLockRatio').checked) return;
+  const ratio = rsOrigImg.naturalWidth / rsOrigImg.naturalHeight;
+  if (axis === 'w') {
+    const w = parseInt(document.getElementById('rsWidthInput').value) || 1;
+    document.getElementById('rsHeightInput').value = Math.round(w / ratio);
+  } else {
+    const h = parseInt(document.getElementById('rsHeightInput').value) || 1;
+    document.getElementById('rsWidthInput').value = Math.round(h * ratio);
+  }
+}
+
+function applyDimPreset(w, h) {
+  document.getElementById('rsLockRatio').checked = false;
+  document.getElementById('rsWidthInput').value = w;
+  document.getElementById('rsHeightInput').value = h;
+}
+
+function toggleRsPreview() {
+  const wrap = document.getElementById('rsInlinePreviewWrap');
+  if (!wrap.classList.contains('hidden')) { wrap.classList.add('hidden'); return; }
+  if (rsOutputBlob && rsOutputBlob.type.startsWith('image/')) {
+    document.getElementById('rsInlinePreviewImg').src = URL.createObjectURL(rsOutputBlob);
+    wrap.classList.remove('hidden');
+  } else {
+    alert('ไฟล์เอกสารนี้พร้อมดาวน์โหลดแล้ว กดปุ่ม "บันทึกไฟล์ลงเครื่อง" ได้เลยครับ');
+  }
+}
+
+// Show inline result without auto-jumping/redirecting page
+function showInlineResizeResult(blob, outName) {
   rsOutputBlob = blob; rsOutputName = outName;
   const oldKb = (rsCurrentFile.size / 1024).toFixed(1);
   const newKb = (blob.size / 1024).toFixed(1);
-  document.getElementById('rsResultInfo').textContent = `สำเร็จ! ลดขนาดจาก ${oldKb} KB เหลือ ${newKb} KB (${outName})`;
+  document.getElementById('rsResultInfo').textContent = `ประมวลผลสำเร็จ! ขนาดไฟล์: ${oldKb} KB ➔ ${newKb} KB (${outName})`;
   document.getElementById('rsResultBox').classList.remove('hidden');
   document.getElementById('rsDownloadBtn').onclick = () => triggerDownload(rsOutputBlob, rsOutputName);
   document.getElementById('rsShareBtn').onclick = () => triggerShareOrSave(rsOutputBlob, rsOutputName);
-  triggerDownload(blob, outName);
+}
+
+// Binary JPEG APP1 (EXIF) Stripper when all metadata selected or canvas redraw
+function stripJpegApp1Segments(arrayBuffer) {
+  const view = new DataView(arrayBuffer);
+  if (view.getUint16(0) !== 0xFFD8) return new Blob([arrayBuffer]);
+  const chunks = [arrayBuffer.slice(0, 2)];
+  let offset = 2;
+  while (offset < view.byteLength) {
+    const marker = view.getUint16(offset);
+    if (marker === 0xFFDA) { chunks.push(arrayBuffer.slice(offset)); break; }
+    const len = view.getUint16(offset + 2);
+    // Remove APP1 (0xFFE1 EXIF/GPS/XMP) & Comment (0xFFFE)
+    if (marker !== 0xFFE1 && marker !== 0xFFFE) {
+      chunks.push(arrayBuffer.slice(offset, offset + 2 + len));
+    }
+    offset += 2 + len;
+  }
+  return new Blob(chunks, { type: 'image/jpeg' });
 }
 
 async function executeResizeAll() {
@@ -1184,13 +1398,29 @@ async function executeResizeAll() {
 
   try {
     if (rsCurrentFile.type.startsWith('image/')) {
-      const img = await loadImageFromFile(rsCurrentFile);
-      let w = img.naturalWidth, h = img.naturalHeight;
-      if (mode === 'percent') { w = Math.max(10, Math.round(w * (val / 100))); h = Math.max(10, Math.round(h * (val / 100))); }
-      else if (mode === 'px' && w > val) { h = Math.round(h * (val / w)); w = val; }
+      const delGps = document.getElementById('chkExifGps').checked;
+      const delDate = document.getElementById('chkExifDate').checked;
+      const delDev = document.getElementById('chkExifDevice').checked;
+      const delTech = document.getElementById('chkExifTech').checked;
+
+      // Lossless binary strip if mode === 'none' and JPEG
+      if (mode === 'none' && rsCurrentFile.type === 'image/jpeg' && (delGps || delDate || delDev || delTech)) {
+        const cleanBlob = stripJpegApp1Segments(await rsCurrentFile.arrayBuffer());
+        showInlineResizeResult(cleanBlob, 'privacy_' + name);
+        return;
+      }
+
+      let w = rsOrigImg.naturalWidth, h = rsOrigImg.naturalHeight;
+      if (mode === 'dimensions') {
+        w = Math.max(10, parseInt(document.getElementById('rsWidthInput').value) || w);
+        h = Math.max(10, parseInt(document.getElementById('rsHeightInput').value) || h);
+      } else if (mode === 'percent') {
+        w = Math.max(10, Math.round(w * (val / 100)));
+        h = Math.max(10, Math.round(h * (val / 100)));
+      }
 
       const c = document.createElement('canvas'); c.width = w; c.height = h;
-      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      c.getContext('2d').drawImage(rsOrigImg, 0, 0, w, h);
 
       if (mode === 'kb') {
         let q = 0.92, blob;
@@ -1198,17 +1428,17 @@ async function executeResizeAll() {
           blob = await new Promise(r => c.toBlob(r, 'image/jpeg', q));
           q -= 0.08;
         } while (blob.size / 1024 > val && q > 0.1);
-        finalizeResizeResult(blob, 'clean_' + name.replace(/\.[^.]+$/, '.jpg'));
+        showInlineResizeResult(blob, 'resized_' + name.replace(/\.[^.]+$/, '.jpg'));
       } else {
         const mime = rsCurrentFile.type === 'image/png' ? 'image/png' : 'image/jpeg';
-        const blob = await new Promise(r => c.toBlob(r, mime, 0.88));
-        finalizeResizeResult(blob, 'clean_' + name);
+        const blob = await new Promise(r => c.toBlob(r, mime, 0.9));
+        showInlineResizeResult(blob, 'resized_' + name);
       }
       return;
     }
 
     if (/\.(docx|pptx|xlsx)$/i.test(name)) {
-      showStatus('rsStatus', 'กำลังแตกไฟล์ Office และบีบอัดรูปภาพภายในเพื่อลดขนาดไฟล์...');
+      showStatus('rsStatus', 'กำลังบีบอัดรูปภาพภายในไฟล์ Office...');
       await loadLib('https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js');
       const zip = await JSZip.loadAsync(rsCurrentFile);
       const scale = mode === 'percent' ? Math.max(0.2, val / 100) : 0.6;
@@ -1220,24 +1450,22 @@ async function executeResizeAll() {
           c.width = Math.max(80, Math.round(img.naturalWidth * scale));
           c.height = Math.max(80, Math.round(img.naturalHeight * scale));
           c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-          const newBlob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.75));
-          zip.file(path, newBlob);
+          zip.file(path, await new Promise(r => c.toBlob(r, 'image/jpeg', 0.75)));
         }
       }
       const out = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 9 } });
       document.getElementById('rsStatus').classList.remove('show');
-      finalizeResizeResult(out, 'compressed_' + name);
+      showInlineResizeResult(out, 'compressed_' + name);
       return;
     }
 
     if (/\.pdf$/i.test(name)) {
-      showStatus('rsStatus', 'กำลังบีบอัดทุกหน้าของ PDF เพื่อลดขนาดไฟล์...');
+      showStatus('rsStatus', 'กำลังบีบอัดทุกหน้าของ PDF...');
       await loadLib('https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js');
       await loadLib('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
       const pdfDoc = await pdfjsLib.getDocument({ data: await rsCurrentFile.arrayBuffer() }).promise;
-      const { jsPDF } = window.jspdf;
-      const outPdf = new jsPDF();
+      const outPdf = new window.jspdf.jsPDF();
       const q = mode === 'percent' ? Math.max(0.25, val / 100) : 0.6;
       for (let i = 1; i <= pdfDoc.numPages; i++) {
         const page = await pdfDoc.getPage(i);
@@ -1248,14 +1476,14 @@ async function executeResizeAll() {
         outPdf.addImage(c.toDataURL('image/jpeg', q), 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
       }
       document.getElementById('rsStatus').classList.remove('show');
-      finalizeResizeResult(outPdf.output('blob'), 'compressed_' + name);
+      showInlineResizeResult(outPdf.output('blob'), 'compressed_' + name);
     }
   } catch (err) {
-    showStatus('rsStatus', 'เกิดข้อผิดพลาดในการย่อไฟล์: ' + err.message);
+    showStatus('rsStatus', 'เกิดข้อผิดพลาด: ' + err.message);
   }
 }
 
-// ==================== 7. UNIVERSAL CONVERTER (ALL PDF PAGES SUPPORTED) ====================
+// ==================== 7. UNIVERSAL CONVERTER ====================
 let cvFiles = [], cvGeneratedItems = [];
 document.getElementById('cvFileInput').addEventListener('change', (e) => {
   cvFiles = Array.from(e.target.files);
@@ -1305,8 +1533,7 @@ function renderCvImageOutputs() {
   document.getElementById('cvOutCount').textContent = cvGeneratedItems.length;
   list.innerHTML = '';
   cvGeneratedItems.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'page-item';
+    const div = document.createElement('div'); div.className = 'page-item';
     div.innerHTML = `
       <img src="${item.url}">
       <div style="font-size:11px;margin:4px 0;">${item.name}</div>
@@ -1322,8 +1549,7 @@ function renderCvImageOutputs() {
     await loadLib('https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js');
     const zip = new JSZip();
     cvGeneratedItems.forEach(it => zip.file(it.name, it.blob));
-    const zipBlob = await zip.generateAsync({ type: 'blob' });
-    triggerDownload(zipBlob, 'All_Converted_Pages.zip');
+    triggerDownload(await zip.generateAsync({ type: 'blob' }), 'All_Converted_Pages.zip');
   };
 }
 
@@ -1336,7 +1562,6 @@ async function executeUniversalConvert() {
   showStatus('cvStatus', `กำลังแปลงไฟล์เป็น .${target.toUpperCase()} ...`);
 
   try {
-    // 1) PDF -> ALL PAGES to JPG/PNG
     if (first.name.toLowerCase().endsWith('.pdf') && (target === 'png' || target === 'jpg')) {
       await loadLib('https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js');
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
@@ -1358,7 +1583,6 @@ async function executeUniversalConvert() {
       return;
     }
 
-    // 2) Images -> PDF / PPTX / PNG / JPG
     if (first.type.startsWith('image/')) {
       if (target === 'pdf') {
         await loadLib('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
@@ -1398,7 +1622,6 @@ async function executeUniversalConvert() {
       return;
     }
 
-    // 3) Document Cross-Conversion
     const extracted = await extractTextFromAnyFile(first);
     if (target === 'docx') {
       await loadLib('https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js');
@@ -1433,35 +1656,82 @@ async function executeUniversalConvert() {
   }
 }
 
-// ==================== 8. HIGH-PRECISION THAI/ENG OCR (FIXED THAI MODEL & SHARPENING) ====================
-let ocrOrigImg = null;
+// ==================== 8. HIGH-PRECISION THAI/ENG OCR WITH INTERACTIVE CROP BOX ====================
+let ocrOrigImg = null, ocrCrop = { x: 0, y: 0, w: 0, h: 0 }, ocrDragging = false, ocrStart = { x: 0, y: 0 };
+const ocrCropCanvas = document.getElementById('ocrCropCanvas');
+
 document.getElementById('ocrFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if (!file) return;
   ocrOrigImg = await loadImageFromFile(file);
   document.getElementById('ocrWorkspace').classList.remove('hidden');
+  resetOcrCrop();
 });
+
+function resetOcrCrop() {
+  if (!ocrOrigImg) return;
+  ocrCrop = { x: 0, y: 0, w: ocrOrigImg.naturalWidth, h: ocrOrigImg.naturalHeight };
+  drawOcrCropOverlay();
+}
+
+function drawOcrCropOverlay() {
+  if (!ocrOrigImg) return;
+  ocrCropCanvas.width = ocrOrigImg.naturalWidth;
+  ocrCropCanvas.height = ocrOrigImg.naturalHeight;
+  const ctx = ocrCropCanvas.getContext('2d');
+  ctx.drawImage(ocrOrigImg, 0, 0);
+
+  // Darken outside crop box
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+  ctx.fillRect(0, 0, ocrCropCanvas.width, ocrCropCanvas.height);
+  ctx.drawImage(ocrOrigImg, ocrCrop.x, ocrCrop.y, ocrCrop.w, ocrCrop.h, ocrCrop.x, ocrCrop.y, ocrCrop.w, ocrCrop.h);
+
+  ctx.strokeStyle = '#10b981';
+  ctx.lineWidth = Math.max(3, Math.round(ocrCropCanvas.width * 0.005));
+  ctx.strokeRect(ocrCrop.x, ocrCrop.y, ocrCrop.w, ocrCrop.h);
+}
+
+function getOcrPos(e) {
+  const r = ocrCropCanvas.getBoundingClientRect();
+  const cx = e.touches ? e.touches[0].clientX : e.clientX;
+  const cy = e.touches ? e.touches[0].clientY : e.clientY;
+  return {
+    x: Math.max(0, Math.min(ocrCropCanvas.width, (cx - r.left) * (ocrCropCanvas.width / r.width))),
+    y: Math.max(0, Math.min(ocrCropCanvas.height, (cy - r.top) * (ocrCropCanvas.height / r.height)))
+  };
+}
+ocrCropCanvas.addEventListener('pointerdown', (e) => { ocrDragging = true; ocrStart = getOcrPos(e); });
+ocrCropCanvas.addEventListener('pointermove', (e) => {
+  if (!ocrDragging) return;
+  const p = getOcrPos(e);
+  ocrCrop = {
+    x: Math.min(ocrStart.x, p.x),
+    y: Math.min(ocrStart.y, p.y),
+    w: Math.max(20, Math.abs(p.x - ocrStart.x)),
+    h: Math.max(20, Math.abs(p.y - ocrStart.y))
+  };
+  drawOcrCropOverlay();
+});
+window.addEventListener('pointerup', () => ocrDragging = false);
 
 async function runHighAccuracyOCR() {
   if (!ocrOrigImg) return;
-  showStatus('ocrStatus', 'กำลังโหลดโมเดลภาษาไทย (tessdata_best) และประมวลผลภาพ...');
+  showStatus('ocrStatus', 'กำลังโหลดโมเดลภาษาไทย (tessdata_best) และประมวลผลกรอบที่เลือก...');
   await loadLib('https://cdn.jsdelivr.net/npm/tesseract.js@5.0.5/dist/tesseract.min.js');
 
   const mode = document.getElementById('ocrPreprocess').value;
   const lang = document.getElementById('ocrLang').value;
 
-  // Optimal scaling (avoid over-upscaling large images which breaks Thai vowel clusters)
-  const targetWidth = ocrOrigImg.naturalWidth < 1200 ? Math.min(2200, ocrOrigImg.naturalWidth * 2) : ocrOrigImg.naturalWidth;
+  const scale = ocrCrop.w < 1000 ? 2.0 : 1.0;
   const c = document.createElement('canvas');
-  c.width = targetWidth;
-  c.height = Math.round(targetWidth * (ocrOrigImg.naturalHeight / ocrOrigImg.naturalWidth));
+  c.width = Math.round(ocrCrop.w * scale);
+  c.height = Math.round(ocrCrop.h * scale);
   const ctx = c.getContext('2d');
   ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
-  ctx.drawImage(ocrOrigImg, 0, 0, c.width, c.height);
+  ctx.drawImage(ocrOrigImg, ocrCrop.x, ocrCrop.y, ocrCrop.w, ocrCrop.h, 0, 0, c.width, c.height);
 
   if (mode !== 'raw') {
     const imgData = ctx.getImageData(0, 0, c.width, c.height);
     const d = imgData.data;
-    // Compute Otsu threshold dynamically
     const hist = new Array(256).fill(0);
     const grays = new Uint8Array(c.width * c.height);
     for (let i = 0, p = 0; i < d.length; i += 4, p++) {
@@ -1479,13 +1749,11 @@ async function runHighAccuracyOCR() {
       const v = wB * wF * (mB - mF) * (mB - mF);
       if (v > maxVar) { maxVar = v; thresh = t; }
     }
-
     for (let i = 0, p = 0; i < d.length; i += 4, p++) {
       let val = grays[p];
-      if (mode === 'otsu') {
-        val = val > thresh ? 255 : 0;
+      if (mode === 'sauvola') {
+        val = val > thresh - 8 ? 255 : 0;
       } else {
-        // Gentle background normalization preserving thin Thai tone marks
         val = val > thresh + 15 ? 255 : Math.max(0, (val - thresh * 0.4) * 1.35);
       }
       d[i] = d[i+1] = d[i+2] = Math.min(255, Math.max(0, val));
@@ -1493,20 +1761,16 @@ async function runHighAccuracyOCR() {
     ctx.putImageData(imgData, 0, 0);
   }
 
-  // Use tessdata_best for accurate Thai diacritics & vowels
   const worker = await Tesseract.createWorker(lang, 1, {
     langPath: 'https://tessdata.projectnaptha.com/4.0.0_best',
     logger: m => {
-      if (m.status === 'recognizing text') {
-        showStatus('ocrStatus', `กำลังอ่านข้อความภาษาไทย/อังกฤษ... ${Math.round(m.progress * 100)}%`);
-      }
+      if (m.status === 'recognizing text') showStatus('ocrStatus', `กำลังอ่านข้อความ... ${Math.round(m.progress * 100)}%`);
     }
   });
-
+  await worker.setParameters({ tessedit_pageseg_mode: '6' });
   const { data: { text } } = await worker.recognize(c);
   await worker.terminate();
 
-  // Fix Thai space artifacts between Thai characters while keeping normal word spaces
   const cleanedThai = text
     .replace(/([\u0E00-\u0E7F])\s+([\u0E31\u0E34-\u0E3A\u0E47-\u0E4E])/g, '$1$2')
     .replace(/\n{3,}/g, '\n\n')
@@ -1520,7 +1784,6 @@ function copyOcrText() {
   navigator.clipboard.writeText(document.getElementById('ocrResultText').value);
   alert('คัดลอกข้อความเรียบร้อยแล้ว');
 }
-
 async function exportOcrDocx() {
   await loadLib('https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js');
   const { Document, Packer, Paragraph, TextRun } = window.docx;
@@ -1528,7 +1791,6 @@ async function exportOcrDocx() {
   const doc = new Document({ sections: [{ children: lines.map(l => new Paragraph({ children: [new TextRun(l)] })) }] });
   triggerDownload(await Packer.toBlob(doc), 'OCR_Text.docx');
 }
-
 async function exportOcrXlsx() {
   await loadLib('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js');
   const rows = document.getElementById('ocrResultText').value.split('\n').map(l => [l]);
