@@ -6,13 +6,14 @@
   <meta name="theme-color" content="#090d16" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Privacy Studio" />
 
-  <!-- Strict Zero-Cache & Privacy Headers -->
+  <!-- Strict Zero-Data-Cache Policy -->
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
 
-  <title>All-in-One Privacy Studio • ลบพื้นหลัง สแกน PDF แปลงไฟล์ & OCR</title>
+  <title>All-in-One Privacy Studio • ลบพื้นหลัง ลบลายน้ำ สแกน PDF ลบ GPS & OCR</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -47,11 +48,11 @@
       color: #f8fafc;
       min-height: 100dvh;
       overflow-x: hidden;
-      padding-bottom: calc(5.2rem + env(safe-area-inset-bottom));
+      padding-bottom: calc(5.4rem + env(safe-area-inset-bottom));
     }
 
     .glass-panel {
-      background: rgba(15, 23, 42, 0.76);
+      background: rgba(17, 24, 39, 0.78);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border: 1px solid rgba(255, 255, 255, 0.09);
@@ -104,7 +105,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Hide scrollbar for horizontal preset chips */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -112,35 +112,40 @@
 <body class="antialiased selection:bg-indigo-500 selection:text-white">
 
   <!-- ===================================================================== -->
-  <!-- TOP HEADER: PRIVACY GUARD, REAL-TIME RAM MONITOR & PURGE BUTTON       -->
+  <!-- TOP HEADER: OFFLINE PWA GUARD, RAM MONITOR HUD & PURGE RAM BUTTON     -->
   <!-- ===================================================================== -->
   <header class="sticky top-0 z-40 glass-panel border-b border-white/10">
-    <div class="max-w-5xl mx-auto px-3.5 py-2.5 flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2.5 min-w-0">
+    <div class="max-w-5xl mx-auto px-3 py-2.5 flex items-center justify-between gap-2">
+      <!-- Brand & Offline Status -->
+      <div class="flex items-center gap-2 min-w-0">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 shrink-0">
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
           </svg>
         </div>
-        <div class="truncate">
-          <h1 class="text-sm sm:text-base font-bold text-white leading-tight truncate">
-            Privacy Studio <span class="text-indigo-400">All-in-One</span>
-          </h1>
-          <p class="text-[10px] sm:text-xs text-emerald-400 flex items-center gap-1 font-medium truncate">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse shrink-0"></span>
-            ไม่ส่งไฟล์ออกนอกเครื่อง • ลบ GPS • No Cache
-          </p>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-xs sm:text-sm font-bold text-white truncate">Privacy Studio</h1>
+            <span id="netStatusBadge" class="px-1.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-400/30 text-[9px] font-bold text-emerald-300 shrink-0">
+              ● PWA Ready
+            </span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">100% Local • No Cache • Offline Ready</p>
         </div>
       </div>
 
-      <!-- RAM Status Pill & Purge Action -->
+      <!-- Right Controls: Install PWA + RAM Monitor HUD + Purge Button -->
       <div class="flex items-center gap-1.5 shrink-0">
-        <div id="ramStatusPill" class="px-2.5 py-1 rounded-xl bg-slate-900/90 border border-white/10 text-[11px] text-slate-300 flex items-center gap-1.5">
+        <button id="btnInstallPwa" type="button" class="hidden px-2.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold shadow-md active:scale-95 transition">
+          + ติดตั้งแอป
+        </button>
+
+        <div id="ramStatusPill" title="หน่วยความจำบัฟเฟอร์ที่กำลังใช้งาน" class="px-2 py-1 rounded-xl bg-slate-900/95 border border-white/10 text-[10px] sm:text-[11px] text-slate-300 flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-400" id="ramDot"></span>
-          <span id="ramText">RAM: 0 MB</span>
+          <span id="ramText">0.0 MB</span>
         </div>
 
-        <button id="btnPurgeAll" type="button" title="ล้างข้อมูลทั้งหมดออกจาก RAM ทันที" class="px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 active:scale-95 border border-rose-500/35 text-[11px] sm:text-xs text-rose-300 font-semibold flex items-center gap-1 transition">
+        <button id="btnPurgeAll" type="button" title="ล้างรูปภาพและข้อมูลทั้งหมดออกจาก RAM ทันที" class="px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 active:scale-95 border border-rose-500/35 text-[11px] text-rose-300 font-semibold flex items-center gap-1 transition">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
           </svg>
@@ -150,52 +155,49 @@
     </div>
   </header>
 
-  <!-- Toast Container -->
+  <!-- Toast Notification Container -->
   <div id="toastContainer" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-[92%] max-w-md flex flex-col gap-2"></div>
 
   <!-- ===================================================================== -->
-  <!-- MAIN CONTENT WORKSPACE                                                -->
+  <!-- MAIN WORKSPACE (6 MODULES)                                            -->
   <!-- ===================================================================== -->
   <main class="max-w-5xl mx-auto px-3.5 py-4 sm:py-6">
 
     <!-- =================================================================== -->
-    <!-- TAB 1: AI AUTO REMOVE BACKGROUND (ULTRA HD)                         -->
+    <!-- MODULE 1: AI AUTO REMOVE BACKGROUND (ULTRA HD)                      -->
     <!-- =================================================================== -->
     <section id="tab-removebg" class="tab-panel active space-y-4">
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-lg sm:text-xl font-bold text-white">AI ลบพื้นหลังความละเอียดสูงสุด</h2>
-          <p class="text-xs text-slate-400">คงความละเอียดต้นฉบับ 100% • เซฟโปร่งใสได้ทุกสกุล • ลบพิกัด GPS</p>
+          <h2 class="text-lg sm:text-xl font-bold text-white">1. AI ลบพื้นหลังความละเอียดสูงสุด</h2>
+          <p class="text-xs text-slate-400">รักษาพิกเซลต้นฉบับ 100% • ลบ GPS อัตโนมัติ • เซฟได้ทุกสกุล</p>
         </div>
         <span id="bgResBadge" class="hidden px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-xs font-semibold text-emerald-300">0×0 px</span>
       </div>
 
-      <!-- Upload Card -->
-      <div id="bgUploadBox" class="glass-panel rounded-3xl p-8 border-2 border-dashed border-indigo-400/40 hover:border-indigo-400 text-center cursor-pointer transition flex flex-col items-center justify-center min-h-[270px]">
+      <div id="bgUploadBox" class="glass-panel rounded-3xl p-8 border-2 border-dashed border-indigo-400/40 hover:border-indigo-400 text-center cursor-pointer transition flex flex-col items-center justify-center min-h-[260px]">
         <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center mb-4">
           <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
           </svg>
         </div>
         <p class="text-base sm:text-lg font-bold text-white mb-1">เลือกรูปภาพจากมือถือ หรือถ่ายรูป</p>
-        <p class="text-xs text-slate-400 mb-5 max-w-sm">AI ประมวลผลในเครื่อง 100% รักษาพิกเซลต้นฉบับไม่ลดขนาด</p>
-        <button type="button" id="btnBgSelect" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold text-sm shadow-lg shadow-indigo-600/30 active:scale-95 transition">
+        <p class="text-xs text-slate-400 mb-5 max-w-sm">ประมวลผลในเบราว์เซอร์ 100% ไม่ส่งรูปขึ้นเซิร์ฟเวอร์</p>
+        <button type="button" id="btnBgSelect" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold text-sm shadow-lg active:scale-95 transition">
           เลือกรูปภาพทันที
         </button>
         <input id="bgFileInput" type="file" accept="image/*" class="hidden" />
       </div>
 
-      <!-- Processing Progress -->
       <div id="bgProgressBox" class="hidden glass-panel rounded-3xl p-8 text-center space-y-4">
         <div class="w-14 h-14 mx-auto rounded-full border-4 border-indigo-500/20 border-t-indigo-500 animate-spin"></div>
-        <h3 id="bgProgTitle" class="text-base font-bold text-white">กำลังโหลดโมเดล AI...</h3>
-        <p id="bgProgSub" class="text-xs text-slate-400">ประมวลผลบนมือถือของคุณโดยตรง (ครั้งแรกอาจใช้เวลาโหลดโมเดลสักครู่)</p>
+        <h3 id="bgProgTitle" class="text-base font-bold text-white">กำลังประมวลผล AI ลบพื้นหลัง...</h3>
+        <p class="text-xs text-slate-400">ทำงานในเครื่องของคุณ 100% ปลอดภัยและไม่เก็บ Cache</p>
         <div class="w-full max-w-md mx-auto bg-slate-800 rounded-full h-2.5 overflow-hidden">
           <div id="bgProgBar" class="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 transition-all duration-300" style="width: 10%"></div>
         </div>
       </div>
 
-      <!-- Editor & Export -->
       <div id="bgEditorBox" class="hidden space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2 glass-panel rounded-2xl p-2.5">
           <button id="btnBgNew" type="button" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-medium text-white">
@@ -211,11 +213,10 @@
           </div>
         </div>
 
-        <!-- Split Comparison Viewport -->
-        <div id="bgCompareWrap" class="relative w-full rounded-3xl overflow-hidden border border-white/15 checkerboard flex items-center justify-center min-h-[280px] max-h-[58vh] select-none touch-none">
-          <canvas id="bgResultCanvas" class="max-w-full max-h-[58vh] w-auto h-auto object-contain block pointer-events-none"></canvas>
+        <div id="bgCompareWrap" class="relative w-full rounded-3xl overflow-hidden border border-white/15 checkerboard flex items-center justify-center min-h-[260px] max-h-[55vh] select-none touch-none">
+          <canvas id="bgResultCanvas" class="max-w-full max-h-[55vh] w-auto h-auto object-contain block pointer-events-none"></canvas>
           <div id="bgBeforeLayer" class="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none" style="clip-path: inset(0 50% 0 0);">
-            <canvas id="bgOrigCanvas" class="max-w-full max-h-[58vh] w-auto h-auto object-contain block"></canvas>
+            <canvas id="bgOrigCanvas" class="max-w-full max-h-[55vh] w-auto h-auto object-contain block"></canvas>
           </div>
           <div id="bgSliderHandle" class="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-ew-resize flex items-center justify-center" style="left: 50%;">
             <div class="w-8 h-8 rounded-full bg-white text-slate-900 font-bold text-xs shadow-xl flex items-center justify-center border-2 border-indigo-500">⇄</div>
@@ -224,7 +225,6 @@
           <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-indigo-600/80 text-[10px] text-white">ลบพื้นหลัง</span>
         </div>
 
-        <!-- Refinement Sliders -->
         <div class="glass-panel rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <div class="flex justify-between text-xs mb-1">
@@ -242,9 +242,8 @@
           </div>
         </div>
 
-        <!-- Format Selector & Save/Share -->
         <div class="glass-panel rounded-3xl p-4 space-y-3">
-          <div class="grid grid-cols-3 sm:grid-cols-6 gap-2" id="bgFormatGrid">
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
             <button type="button" data-fmt="png" class="bg-fmt-btn py-2 rounded-xl border border-indigo-500 bg-indigo-600/25 text-xs font-bold text-white">PNG (ใส)</button>
             <button type="button" data-fmt="webp" class="bg-fmt-btn py-2 rounded-xl border border-white/10 bg-white/5 text-xs font-bold text-slate-300">WEBP (ใส)</button>
             <button type="button" data-fmt="jpg" class="bg-fmt-btn py-2 rounded-xl border border-white/10 bg-white/5 text-xs font-bold text-slate-300">JPG</button>
@@ -253,11 +252,11 @@
             <button type="button" data-fmt="svg" class="bg-fmt-btn py-2 rounded-xl border border-white/10 bg-white/5 text-xs font-bold text-slate-300">SVG</button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <button id="btnBgDownload" type="button" class="py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-sm shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
-              <span>⬇ บันทึกรูปภาพ PNG</span>
+            <button id="btnBgDownload" type="button" class="py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-sm shadow-lg active:scale-95 transition">
+              ⬇ บันทึกรูปภาพ PNG
             </button>
-            <button id="btnBgShare" type="button" class="py-3.5 px-4 rounded-2xl bg-indigo-600/30 border border-indigo-400/40 text-indigo-200 font-semibold text-sm active:scale-95 transition flex items-center justify-center gap-2">
-              <span>📤 แชร์ / บันทึกเข้าอัลบั้ม</span>
+            <button id="btnBgShare" type="button" class="py-3.5 px-4 rounded-2xl bg-indigo-600/30 border border-indigo-400/40 text-indigo-200 font-semibold text-sm active:scale-95 transition">
+              📤 แชร์ / บันทึกเข้าอัลบั้ม
             </button>
           </div>
         </div>
@@ -265,18 +264,86 @@
     </section>
 
     <!-- =================================================================== -->
-    <!-- TAB 2: SMART DOCUMENT SCANNER, PERSPECTIVE CROP, SIGN & MULTI-PDF   -->
+    <!-- MODULE 2: SMART WATERMARK & OBJECT REMOVER (INPAINTING ENGINE)      -->
+    <!-- =================================================================== -->
+    <section id="tab-dewatermark" class="tab-panel space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-white">2. ลบลายน้ำ & วัตถุส่วนเกิน (AI Inpaint)</h2>
+          <p class="text-xs text-slate-400">ใช้นิ้วระบายทับลายน้ำ ตัวหนังสือ วันที่ หรือจุดที่ไม่ต้องการ • ทำงานออฟไลน์ 100%</p>
+        </div>
+        <span class="px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-400/30 text-[10px] font-bold text-emerald-300">Offline Ready</span>
+      </div>
+
+      <div id="wmUploadBox" class="glass-panel rounded-3xl p-8 border-2 border-dashed border-indigo-400/40 text-center cursor-pointer flex flex-col items-center justify-center min-h-[240px]">
+        <div class="w-14 h-14 rounded-2xl bg-violet-500/20 border border-violet-400/30 flex items-center justify-center mb-3">
+          <svg class="w-7 h-7 text-violet-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+          </svg>
+        </div>
+        <p class="text-base font-bold text-white mb-1">เลือกรูปภาพที่ต้องการลบลายน้ำ / วัตถุ</p>
+        <p class="text-xs text-slate-400 mb-4">ระบายทับบริเวณที่ต้องการลบ แล้วกดปุ่ม "ลบลายน้ำทันที"</p>
+        <button id="btnWmSelect" type="button" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold text-sm shadow-lg">
+          เลือกรูปภาพ
+        </button>
+        <input id="wmFileInput" type="file" accept="image/*" class="hidden" />
+      </div>
+
+      <div id="wmEditorBox" class="hidden space-y-4">
+        <!-- Toolbar -->
+        <div class="glass-panel rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5">
+            <button id="btnWmNew" type="button" class="px-2.5 py-1.5 rounded-xl bg-white/10 text-xs text-white">+ รูปใหม่</button>
+            <button id="btnWmUndo" type="button" class="px-2.5 py-1.5 rounded-xl bg-white/10 text-xs text-slate-200">↶ ย้อนกลับ</button>
+            <button id="btnWmReset" type="button" class="px-2.5 py-1.5 rounded-xl bg-rose-500/20 text-xs text-rose-300">รีเซ็ต</button>
+          </div>
+          <label class="flex items-center gap-1.5 text-xs text-amber-300 cursor-pointer">
+            <input id="wmCompareToggle" type="checkbox" class="rounded text-indigo-600" />
+            <span>กดค้างเพื่อเทียบต้นฉบับ</span>
+          </label>
+        </div>
+
+        <!-- Brush Canvas Viewport -->
+        <div class="relative w-full rounded-3xl overflow-hidden border border-white/15 bg-slate-950 flex items-center justify-center touch-none select-none">
+          <canvas id="wmDisplayCanvas" class="max-w-full max-h-[56vh] w-auto h-auto block cursor-crosshair"></canvas>
+        </div>
+
+        <!-- Brush Size & Run Action -->
+        <div class="glass-panel rounded-2xl p-4 space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-slate-300 shrink-0">ขนาดหัวแปรง:</span>
+            <input id="wmBrushSlider" type="range" min="8" max="90" value="28" class="flex-1" />
+            <span id="wmBrushVal" class="text-xs font-bold text-indigo-400 w-10 text-right">28px</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button id="btnWmErase" type="button" class="py-3.5 px-4 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-sm shadow-lg active:scale-95 transition">
+              ✨ ลบลายน้ำ / วัตถุที่ระบาย
+            </button>
+            <div class="grid grid-cols-2 gap-2">
+              <button id="btnWmDownload" type="button" class="py-3.5 px-3 rounded-2xl bg-emerald-500 text-slate-950 font-bold text-xs sm:text-sm">
+                ⬇ บันทึกภาพ
+              </button>
+              <button id="btnWmShare" type="button" class="py-3.5 px-3 rounded-2xl bg-indigo-600/30 border border-indigo-400/40 text-indigo-200 font-semibold text-xs sm:text-sm">
+                📤 แชร์
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- MODULE 3: SMART PDF SCANNER, PERSPECTIVE WARP & SIGNATURE WATERMARK -->
     <!-- =================================================================== -->
     <section id="tab-scanner" class="tab-panel space-y-4">
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-lg sm:text-xl font-bold text-white">สแกนเอกสารอัจฉริยะ & รวม PDF</h2>
-          <p class="text-xs text-slate-400">ถ่ายเอียงดึงตรงอัตโนมัติ • ปรับสีสแกน • เซ็นชื่อ/คาดลายน้ำ • ตั้งชื่อไฟล์เอง</p>
+          <h2 class="text-lg sm:text-xl font-bold text-white">3. สแกน PDF & เครื่องมือเซ็นลายน้ำ</h2>
+          <p class="text-xs text-slate-400">ดึงขอบเอกสารตั้งตรง • เซ็นชื่อด้วยนิ้ว • คาดลายน้ำสำเนาถูกต้อง • ตั้งชื่อไฟล์เอง</p>
         </div>
         <span id="scanPageCountBadge" class="px-2.5 py-1 rounded-lg bg-indigo-500/20 border border-indigo-400/30 text-xs font-semibold text-indigo-300">0 หน้า</span>
       </div>
 
-      <!-- Add Document Photo Button -->
       <div class="glass-panel rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div class="text-xs sm:text-sm text-slate-300 text-center sm:text-left">
           ถ่ายรูปเอกสาร บัตรประชาชน หรือใบเสร็จ (เพิ่มได้หลายหน้าเพื่อรวมเป็น PDF เดียว)
@@ -287,64 +354,72 @@
         <input id="scanFileInput" type="file" accept="image/*" multiple class="hidden" />
       </div>
 
-      <!-- Interactive 4-Point Perspective Cropper Modal/Panel (Shown when cropping a page) -->
+      <!-- 4-Point Perspective Cropper with Magnifier Loupe -->
       <div id="scanCropperPanel" class="hidden glass-panel rounded-3xl p-4 space-y-3 border-2 border-indigo-500/50">
         <div class="flex items-center justify-between">
-          <h3 class="text-sm font-bold text-white">📐 ลากมุมทั้ง 4 ให้ตรงขอบเอกสาร (มีแว่นขยายช่วยเล็ง)</h3>
+          <h3 class="text-xs sm:text-sm font-bold text-white">📐 ลากมุมทั้ง 4 ให้ตรงขอบกระดาษ (มีแว่นขยายช่วยเล็ง)</h3>
           <button id="btnScanAutoDetect" type="button" class="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 text-xs font-medium">
-            ตรวจจับขอบอัตโนมัติ
+            ตรวจจับอัตโนมัติ
           </button>
         </div>
-
-        <div class="relative w-full bg-slate-950 rounded-2xl overflow-hidden flex items-center justify-center touch-none select-none" id="cropCanvasContainer">
-          <canvas id="scanCropCanvas" class="max-w-full max-h-[55vh] block"></canvas>
-          <!-- Magnifier Loupe for precision mobile touch -->
+        <div class="relative w-full bg-slate-950 rounded-2xl overflow-hidden flex items-center justify-center touch-none select-none">
+          <canvas id="scanCropCanvas" class="max-w-full max-h-[52vh] block"></canvas>
           <canvas id="scanMagnifier" width="110" height="110" class="hidden fixed pointer-events-none z-50 rounded-full border-2 border-emerald-400 shadow-2xl bg-slate-900"></canvas>
         </div>
-
         <div class="flex items-center justify-end gap-2">
-          <button id="btnScanCancelCrop" type="button" class="px-4 py-2.5 rounded-xl bg-white/10 text-xs font-medium text-slate-300">ยกเลิก</button>
-          <button id="btnScanApplyCrop" type="button" class="px-5 py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs sm:text-sm shadow-lg">
-            ✓ ดึงภาพให้ตรง & บันทึกหน้านี้
+          <button id="btnScanCancelCrop" type="button" class="px-4 py-2 rounded-xl bg-white/10 text-xs text-slate-300">ยกเลิก</button>
+          <button id="btnScanApplyCrop" type="button" class="px-5 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs sm:text-sm">
+            ✓ ดึงภาพให้ตรง & บันทึก
           </button>
         </div>
       </div>
 
-      <!-- Quick Sign & Watermark Drawer -->
-      <div id="scanSignPanel" class="hidden glass-panel rounded-3xl p-4 space-y-3 border border-amber-400/40">
+      <!-- Signature & Security Watermark Drawer (เครื่องมือเซ็นลายน้ำ) -->
+      <div id="scanSignPanel" class="hidden glass-panel rounded-3xl p-4 space-y-4 border border-amber-400/40">
         <div class="flex items-center justify-between">
-          <h3 class="text-sm font-bold text-amber-300">✍️ เซ็นชื่อ & คาดลายน้ำลงบนหน้าที่เลือก</h3>
-          <button id="btnCloseSignPanel" type="button" class="text-xs text-slate-400 hover:text-white">ปิด ✕</button>
+          <h3 class="text-sm font-bold text-amber-300">✍️ เครื่องมือเซ็นชื่อ & คาดลายน้ำ (หน้าที่ <span id="signTargetPageNum">1</span>)</h3>
+          <button id="btnCloseSignPanel" type="button" class="text-xs text-slate-400 hover:text-white px-2 py-1">ปิด ✕</button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Signature Pad -->
+          <!-- Handwritten Signature Pad -->
           <div class="space-y-2">
             <div class="flex items-center justify-between text-xs">
-              <span class="text-slate-300">1. วาดลายเซ็นบนกรอบ (พื้นหลังโปร่งใสอัตโนมัติ)</span>
-              <button id="btnClearSignPad" type="button" class="text-rose-400">ล้างลายเซ็น</button>
+              <span class="text-slate-300">1. เซ็นชื่อบนกรอบสีขาว (ตัดพื้นหลังใสอัตโนมัติ)</span>
+              <button id="btnClearSignPad" type="button" class="text-rose-400 font-medium">ล้างลายเซ็น</button>
             </div>
-            <canvas id="signaturePad" width="360" height="140" class="w-full h-32 rounded-xl bg-white touch-none cursor-crosshair border border-slate-400"></canvas>
-            <div class="flex items-center gap-2 text-xs">
+            <canvas id="signaturePad" width="380" height="140" class="w-full h-32 rounded-xl bg-white touch-none cursor-crosshair border border-slate-400"></canvas>
+            <div class="flex flex-wrap items-center gap-2 text-xs">
               <span class="text-slate-400">สีหมึก:</span>
               <button type="button" data-ink="#0f172a" class="ink-btn w-5 h-5 rounded-full bg-slate-900 ring-2 ring-indigo-400"></button>
-              <button type="button" data-ink="#1d4ed8" class="ink-btn w-5 h-5 rounded-full bg-blue-700"></button>
-              <button type="button" data-ink="#dc2626" class="ink-btn w-5 h-5 rounded-full bg-red-600"></button>
-              <button id="btnStampSign" type="button" class="ml-auto px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium">
-                ประทับลายเซ็นมุมขวาล่าง
+              <button type="button" data-ink="#1e3a8a" class="ink-btn w-5 h-5 rounded-full bg-blue-800"></button>
+              <button type="button" data-ink="#b91c1c" class="ink-btn w-5 h-5 rounded-full bg-red-700"></button>
+              <select id="signPosSelect" class="px-2 py-1 rounded-lg bg-slate-900 border border-white/15 text-[11px] text-white">
+                <option value="br">มุมขวาล่าง</option>
+                <option value="bc">กึ่งกลางล่าง</option>
+                <option value="bl">มุมซ้ายล่าง</option>
+                <option value="center">กลางเอกสาร</option>
+              </select>
+              <button id="btnStampSign" type="button" class="ml-auto px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold">
+                ประทับลายเซ็น
               </button>
             </div>
           </div>
 
-          <!-- Diagonal Watermark -->
+          <!-- Security Diagonal Watermark -->
           <div class="space-y-2">
-            <label class="text-xs text-slate-300 block">2. ข้อความคาดลายน้ำ (เช่น สำเนาถูกต้อง)</label>
+            <label class="text-xs text-slate-300 block">2. ข้อความคาดลายน้ำรับรองสำเนา</label>
             <input id="watermarkText" type="text" value="สำเนาถูกต้อง ใช้สำหรับยืนยันตัวตนเท่านั้น" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/15 text-xs text-white" />
-            <div class="flex items-center gap-2 text-xs">
-              <span class="text-slate-400">ความเข้ม:</span>
-              <input id="watermarkOpacity" type="range" min="15" max="85" value="40" class="flex-1" />
-              <button id="btnApplyWatermark" type="button" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold">
-                คาดลายน้ำเฉียง
+            <div class="flex flex-wrap items-center gap-2 text-xs">
+              <span class="text-slate-400">รูปแบบ:</span>
+              <select id="watermarkPattern" class="px-2.5 py-1 rounded-lg bg-slate-900 border border-white/15 text-[11px] text-white">
+                <option value="single">คาดเฉียง 1 แถวกลางภาพ</option>
+                <option value="tiled">คาดเฉียงเต็มหน้า (ป้องกันการนำไปใช้ต่อ)</option>
+              </select>
+              <span class="text-slate-400">เข้ม:</span>
+              <input id="watermarkOpacity" type="range" min="15" max="85" value="42" class="w-20" />
+              <button id="btnApplyWatermark" type="button" class="ml-auto px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold">
+                คาดลายน้ำ
               </button>
             </div>
           </div>
@@ -354,7 +429,7 @@
       <!-- Scanned Pages List -->
       <div id="scanPagesList" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
 
-      <!-- Smart File Naming & Export PDF Card -->
+      <!-- Export PDF with Smart Naming -->
       <div id="scanExportCard" class="hidden glass-panel rounded-3xl p-4 sm:p-5 space-y-4 border border-emerald-500/30">
         <div>
           <label class="text-xs font-semibold text-slate-300 block mb-1.5">ตั้งชื่อไฟล์ PDF (พิมพ์เอง หรือเลือกคำแนะนำด้านล่าง):</label>
@@ -362,59 +437,68 @@
             <input id="scanFileNameInput" type="text" placeholder="ระบุชื่อไฟล์..." class="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-white/15 text-sm text-white focus:outline-none focus:border-indigo-400" />
             <span class="text-xs font-bold text-slate-400">.pdf</span>
           </div>
-
-          <!-- Default Recommended Name Chips -->
-          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-2.5 pb-1" id="scanNamePresets">
-            <!-- Populated dynamically with current date/time -->
-          </div>
+          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-2.5 pb-1" id="scanNamePresets"></div>
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <button id="btnScanExportPdf" type="button" class="py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-sm shadow-lg active:scale-95 transition">
             ⬇ รวมทุกหน้าเป็น PDF & บันทึก
           </button>
           <button id="btnScanSharePdf" type="button" class="py-3.5 px-4 rounded-2xl bg-indigo-600/30 border border-indigo-400/40 text-indigo-200 font-semibold text-sm active:scale-95 transition">
-            📤 แชร์ไฟล์ PDF เข้า LINE / แอปอื่น
+            📤 แชร์ PDF เข้า LINE / แอปอื่น
           </button>
         </div>
       </div>
     </section>
 
     <!-- =================================================================== -->
-    <!-- TAB 3: IMAGE RESIZER & TARGET KB COMPRESSOR                         -->
+    <!-- MODULE 4: IMAGE RESIZER & EXIF/GPS METADATA STRIPPER                -->
     <!-- =================================================================== -->
     <section id="tab-resizer" class="tab-panel space-y-4">
       <div>
-        <h2 class="text-lg sm:text-xl font-bold text-white">ย่อขนาดภาพ & คุมขนาดไฟล์ (KB / MB)</h2>
-        <p class="text-xs text-slate-400">ย่อตาม %, กำหนดกว้าง×ยาว หรือบีบให้ไม่เกินขนาด KB ที่ระบบราชการ/เว็บกำหนด • ลบ GPS อัตโนมัติ</p>
+        <h2 class="text-lg sm:text-xl font-bold text-white">4. ย่อขนาดภาพ & ลบข้อมูลส่วนตัว (EXIF / GPS)</h2>
+        <p class="text-xs text-slate-400">ตรวจสอบและล้างพิกัด GPS, รุ่นมือถือ, วันเวลาที่ถ่าย พร้อมย่อขนาดหรือคุม KB</p>
       </div>
 
       <div class="glass-panel rounded-3xl p-5 text-center border-2 border-dashed border-white/15 cursor-pointer" id="resizerDropArea">
         <button id="btnResizerSelect" type="button" class="px-5 py-3 rounded-2xl bg-indigo-600 text-white font-semibold text-sm shadow-lg">
-          เลือกรูปภาพที่ต้องการย่อขนาด
+          เลือกรูปภาพ (ตรวจจับ GPS & ย่อขนาด)
         </button>
         <input id="resizerFileInput" type="file" accept="image/*" class="hidden" />
-        <p id="resizerOrigInfo" class="text-xs text-slate-400 mt-2">รองรับ JPG, PNG, WEBP ความละเอียดสูง</p>
+        <p id="resizerOrigInfo" class="text-xs text-slate-400 mt-2">รองรับ JPG, PNG, WEBP, HEIC</p>
       </div>
 
       <div id="resizerControls" class="hidden space-y-4">
-        <!-- Mode Selector -->
-        <div class="grid grid-cols-3 gap-2 glass-panel p-1.5 rounded-2xl">
-          <button type="button" data-rmode="percent" class="rmode-btn py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold">ย่อตาม %</button>
-          <button type="button" data-rmode="dims" class="rmode-btn py-2 rounded-xl text-slate-300 text-xs font-bold">กว้าง × ยาว (px)</button>
-          <button type="button" data-rmode="targetkb" class="rmode-btn py-2 rounded-xl text-slate-300 text-xs font-bold">คุมขนาดไม่เกิน KB</button>
+        <!-- Privacy EXIF / GPS Metadata Inspector Card -->
+        <div class="glass-panel rounded-2xl p-4 border border-amber-400/30 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+              🛡️ รายงานข้อมูลส่วนตัวที่ฝังในภาพ (Metadata Audit)
+            </span>
+            <span id="exifBadgeStatus" class="px-2 py-0.5 rounded bg-amber-500/20 text-[10px] font-bold text-amber-200">พบข้อมูลฝังในไฟล์</span>
+          </div>
+          <div id="exifDetailsBox" class="text-[11px] text-slate-300 bg-slate-950/70 rounded-xl p-2.5 space-y-1 font-mono"></div>
         </div>
 
-        <!-- Mode A: Percent -->
-        <div id="rmode-percent" class="glass-panel rounded-2xl p-4 space-y-2">
+        <!-- 4 Modes: Strip Only (100% Orig), Percent, Exact px, Target KB -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 glass-panel p-1.5 rounded-2xl">
+          <button type="button" data-rmode="cleanonly" class="rmode-btn py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold">ลบ GPS อย่างเดียว (100%)</button>
+          <button type="button" data-rmode="percent" class="rmode-btn py-2 rounded-xl text-slate-300 text-xs font-bold">ย่อตาม %</button>
+          <button type="button" data-rmode="dims" class="rmode-btn py-2 rounded-xl text-slate-300 text-xs font-bold">กว้าง × ยาว (px)</button>
+          <button type="button" data-rmode="targetkb" class="rmode-btn py-2 rounded-xl text-slate-300 text-xs font-bold">คุมไม่เกิน KB</button>
+        </div>
+
+        <div id="rmode-cleanonly" class="glass-panel rounded-2xl p-4 text-xs text-slate-300">
+          โหมดนี้จะรักษาความกว้าง×ยาวเดิม 100% แต่เข้ารหัสพิกเซลใหม่ทั้งหมดเพื่อล้างพิกัด GPS รุ่นกล้อง และข้อมูลลับออกอย่างถาวร
+        </div>
+
+        <div id="rmode-percent" class="hidden glass-panel rounded-2xl p-4 space-y-2">
           <div class="flex justify-between text-xs">
             <span class="text-slate-300">สัดส่วนขนาดภาพใหม่</span>
             <span id="rPercentVal" class="text-indigo-400 font-bold">50%</span>
           </div>
-          <input id="rPercentSlider" type="range" min="10" max="100" value="50" class="w-full" />
+          <input id="rPercentSlider" type="range" min="10" max="150" value="50" class="w-full" />
         </div>
 
-        <!-- Mode B: Exact Dimensions -->
         <div id="rmode-dims" class="hidden glass-panel rounded-2xl p-4 space-y-3">
           <div class="grid grid-cols-2 gap-3">
             <div>
@@ -428,13 +512,12 @@
           </div>
           <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
             <input id="rLockRatio" type="checkbox" checked class="rounded text-indigo-600" />
-            <span>ล็อกสัดส่วนภาพอัตโนมัติ (ไม่ให้ภาพยืดเบี้ยว)</span>
+            <span>ล็อกสัดส่วนภาพอัตโนมัติ</span>
           </label>
         </div>
 
-        <!-- Mode C: Target KB -->
         <div id="rmode-targetkb" class="hidden glass-panel rounded-2xl p-4 space-y-2">
-          <label class="text-xs text-slate-300 block">ระบุขนาดไฟล์สูงสุดที่ต้องการ (กิโลไบต์ - KB)</label>
+          <label class="text-xs text-slate-300 block">ระบุขนาดไฟล์สูงสุดที่ต้องการ (KB)</label>
           <div class="flex items-center gap-2">
             <input id="rTargetKbInput" type="number" value="200" min="10" max="10240" class="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-white/15 text-sm text-white" />
             <span class="text-xs font-bold text-slate-400">KB</span>
@@ -447,30 +530,28 @@
           </div>
         </div>
 
-        <!-- Output Format & Process Button -->
         <div class="glass-panel rounded-2xl p-4 space-y-3">
           <div class="flex items-center justify-between gap-2">
-            <span class="text-xs text-slate-300">สกุลไฟล์ปลายทาง:</span>
+            <span class="text-xs text-slate-300">สกุลไฟล์ปลายทาง (ปลอด EXIF/GPS 100%):</span>
             <select id="rOutFormat" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-white/15 text-xs text-white">
-              <option value="image/jpeg">JPG (แนะนำสำหรับคุม KB)</option>
-              <option value="image/webp">WEBP (ชัดและไฟล์เล็กมาก)</option>
-              <option value="image/png">PNG (โปร่งใส Lossless)</option>
+              <option value="image/jpeg">JPG (แนะนำ)</option>
+              <option value="image/webp">WEBP (ไฟล์เล็กมาก)</option>
+              <option value="image/png">PNG (Lossless)</option>
             </select>
           </div>
           <button id="btnRunResize" type="button" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition">
-            ⚡ ประมวลผลย่อขนาดภาพ
+            🛡️ ล้างข้อมูลส่วนตัว & ประมวลผลภาพ
           </button>
         </div>
 
-        <!-- Resize Result Summary -->
         <div id="resizerResultBox" class="hidden glass-panel rounded-3xl p-4 space-y-3 border border-emerald-500/30">
           <div class="flex items-center justify-between text-xs">
             <span class="text-slate-300">ขนาดใหม่: <strong id="rNewDimText" class="text-white">0×0</strong></span>
-            <span class="text-emerald-400 font-bold" id="rNewSizeText">0 KB</span>
+            <span class="text-emerald-400 font-bold" id="rNewSizeText">0 KB • ปลอด GPS 100%</span>
           </div>
-          <img id="rPreviewImg" alt="Resized Preview" class="max-h-56 mx-auto rounded-xl object-contain bg-slate-900" />
+          <img id="rPreviewImg" alt="Clean Preview" class="max-h-56 mx-auto rounded-xl object-contain bg-slate-900" />
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <button id="btnResizerDownload" type="button" class="py-3 rounded-xl bg-emerald-500 text-slate-950 font-bold text-sm">⬇ บันทึกรูปภาพ</button>
+            <button id="btnResizerDownload" type="button" class="py-3 rounded-xl bg-emerald-500 text-slate-950 font-bold text-sm">⬇ บันทึกรูปภาพสะอาด</button>
             <button id="btnResizerShare" type="button" class="py-3 rounded-xl bg-indigo-600/30 border border-indigo-400/40 text-indigo-200 font-semibold text-sm">📤 แชร์ / เข้าอัลบั้ม</button>
           </div>
         </div>
@@ -478,15 +559,14 @@
     </section>
 
     <!-- =================================================================== -->
-    <!-- TAB 4: UNIVERSAL FILE CONVERTER (IMAGE <-> PDF <-> WORD)            -->
+    <!-- MODULE 5: UNIVERSAL FILE CONVERTER (IMAGE <-> PDF <-> WORD)         -->
     <!-- =================================================================== -->
     <section id="tab-converter" class="tab-panel space-y-4">
       <div>
-        <h2 class="text-lg sm:text-xl font-bold text-white">แปลงไฟล์ครบวงจร (Image ⇄ PDF ⇄ Word)</h2>
-        <p class="text-xs text-slate-400">ประมวลผลในเบราว์เซอร์ 100% ไม่ต้องอัปโหลดไฟล์ขึ้นเว็บอื่น</p>
+        <h2 class="text-lg sm:text-xl font-bold text-white">5. แปลงไฟล์ครบวงจร (Image ⇄ PDF ⇄ Word)</h2>
+        <p class="text-xs text-slate-400">แปลงไปมาได้ทุกสกุลในเครื่อง 100% ไม่ต้องอัปโหลดขึ้นเว็บอื่น</p>
       </div>
 
-      <!-- Conversion Direction Selector -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <button type="button" data-conv="img2img" class="conv-mode-btn p-3 rounded-2xl border border-indigo-500 bg-indigo-600/25 text-left">
           <div class="text-xs font-bold text-white">รูปภาพ ➔ รูปภาพ</div>
@@ -506,7 +586,6 @@
         </button>
       </div>
 
-      <!-- Converter Upload & Action Card -->
       <div class="glass-panel rounded-3xl p-5 space-y-4">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
@@ -519,8 +598,7 @@
           <input id="convFileInput" type="file" accept="image/*" multiple class="hidden" />
         </div>
 
-        <!-- Target Format Options -->
-        <div id="convTargetBar" class="flex flex-wrap items-center gap-2 pt-2 border-t border-white/10">
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-white/10">
           <span class="text-xs text-slate-300">แปลงเป็นสกุล:</span>
           <select id="convTargetSelect" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-white/15 text-xs text-white">
             <option value="png">PNG (ความละเอียดสูงสุด)</option>
@@ -533,17 +611,16 @@
           </button>
         </div>
 
-        <!-- Converter Output List -->
         <div id="convOutputList" class="space-y-2.5"></div>
       </div>
     </section>
 
     <!-- =================================================================== -->
-    <!-- TAB 5: AI OCR (EXTRACT THAI & ENGLISH TEXT FROM IMAGE)              -->
+    <!-- MODULE 6: AI OCR (EXTRACT THAI & ENGLISH TEXT FROM IMAGE)           -->
     <!-- =================================================================== -->
     <section id="tab-ocr" class="tab-panel space-y-4">
       <div>
-        <h2 class="text-lg sm:text-xl font-bold text-white">อ่านข้อความจากรูปภาพ (AI OCR ไทย + อังกฤษ)</h2>
+        <h2 class="text-lg sm:text-xl font-bold text-white">6. อ่านข้อความจากรูปภาพ (AI OCR ไทย + อังกฤษ)</h2>
         <p class="text-xs text-slate-400">ดึงตัวหนังสือจากภาพถ่าย เอกสาร หรือใบเสร็จ แล้วคัดลอกหรือบันทึกเป็น Word (.docx)</p>
       </div>
 
@@ -560,7 +637,6 @@
           <input id="ocrFileInput" type="file" accept="image/*" class="hidden" />
         </div>
 
-        <!-- Preview & Progress -->
         <div id="ocrWorkArea" class="hidden space-y-3">
           <img id="ocrPreviewImg" alt="OCR Source" class="max-h-52 mx-auto rounded-2xl border border-white/10 object-contain bg-slate-950" />
 
@@ -602,55 +678,165 @@
   </main>
 
   <!-- ===================================================================== -->
-  <!-- BOTTOM NAVIGATION BAR (THUMB-FRIENDLY MOBILE-FIRST UI)                -->
+  <!-- BOTTOM NAVIGATION BAR (6 MOBILE-FIRST TOOLS)                          -->
   <!-- ===================================================================== -->
   <nav class="fixed bottom-0 inset-x-0 z-40 glass-panel border-t border-white/10 pb-[env(safe-area-inset-bottom)]">
-    <div class="max-w-5xl mx-auto grid grid-cols-5">
-      <button type="button" data-tab="removebg" class="nav-tab active py-2.5 flex flex-col items-center justify-center gap-1 text-indigo-400 transition">
+    <div class="max-w-5xl mx-auto grid grid-cols-6">
+      <button type="button" data-tab="removebg" class="nav-tab active py-2 flex flex-col items-center justify-center gap-0.5 text-indigo-400 transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
         </svg>
-        <span class="text-[10px] font-semibold">ลบพื้นหลัง</span>
+        <span class="text-[9px] sm:text-[10px] font-semibold truncate">ลบพื้นหลัง</span>
       </button>
 
-      <button type="button" data-tab="scanner" class="nav-tab py-2.5 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
+      <button type="button" data-tab="dewatermark" class="nav-tab py-2 flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-white transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
         </svg>
-        <span class="text-[10px] font-semibold">สแกน PDF</span>
+        <span class="text-[9px] sm:text-[10px] font-semibold truncate">ลบลายน้ำ</span>
       </button>
 
-      <button type="button" data-tab="resizer" class="nav-tab py-2.5 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
+      <button type="button" data-tab="scanner" class="nav-tab py-2 flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-white transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
         </svg>
-        <span class="text-[10px] font-semibold">ย่อขนาด</span>
+        <span class="text-[9px] sm:text-[10px] font-semibold truncate">สแกน/เซ็น</span>
       </button>
 
-      <button type="button" data-tab="converter" class="nav-tab py-2.5 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
+      <button type="button" data-tab="resizer" class="nav-tab py-2 flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-white transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+        </svg>
+        <span class="text-[9px] sm:text-[10px] font-semibold truncate">ย่อ/ลบGPS</span>
+      </button>
+
+      <button type="button" data-tab="converter" class="nav-tab py-2 flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-white transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
         </svg>
-        <span class="text-[10px] font-semibold">แปลงไฟล์</span>
+        <span class="text-[9px] sm:text-[10px] font-semibold truncate">แปลงไฟล์</span>
       </button>
 
-      <button type="button" data-tab="ocr" class="nav-tab py-2.5 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
+      <button type="button" data-tab="ocr" class="nav-tab py-2 flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-white transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
         </svg>
-        <span class="text-[10px] font-semibold">อ่านข้อความ</span>
+        <span class="text-[9px] sm:text-[10px] font-semibold truncate">อ่านภาพ</span>
       </button>
     </div>
   </nav>
 
   <!-- ===================================================================== -->
-  <!-- APPLICATION LOGIC (LAZY-LOADED LIBRARIES, ZERO-CACHE & RAM GUARD)     -->
+  <!-- APPLICATION LOGIC (OFFLINE PWA, ZERO-CACHE, RAM GUARD & 6 MODULES)    -->
   <!-- ===================================================================== -->
   <script type="module">
     // =========================================================================
-    // 0. CORE UTILITIES: TOAST, LAZY SCRIPT LOADER, RAM TRACKER, SHARE/SAVE
+    // 0A. SINGLE-FILE OFFLINE PWA SETUP (INLINE MANIFEST + SERVICE WORKER)
+    // =========================================================================
+    (function setupOfflinePWA() {
+      try {
+        const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4f46e5"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#g)"/><path d="M256 104l128 48v96c0 92-54 166-128 192-74-26-128-100-128-192v-96l128-48z" fill="none" stroke="#fff" stroke-width="32" stroke-linejoin="round"/><path d="M204 256l36 36 72-72" fill="none" stroke="#fff" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        const iconUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgIcon);
+
+        const manifestObj = {
+          name: 'All-in-One Privacy Studio',
+          short_name: 'PrivacyStudio',
+          start_url: location.href,
+          display: 'standalone',
+          background_color: '#090d16',
+          theme_color: '#090d16',
+          icons: [{ src: iconUrl, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }]
+        };
+        const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
+        const manifestLink = document.createElement('link');
+        manifestLink.rel = 'manifest';
+        manifestLink.href = URL.createObjectURL(manifestBlob);
+        document.head.appendChild(manifestLink);
+
+        // Register inline Service Worker (Caches ONLY static UI shell, NEVER caches user images/blobs)
+        if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+          const swCode = `
+            const SHELL_CACHE = 'privacy-studio-shell-v1';
+            self.addEventListener('install', (e) => {
+              self.skipWaiting();
+              e.waitUntil(caches.open(SHELL_CACHE).then(c => c.addAll([self.registration.scope]).catch(() => {})));
+            });
+            self.addEventListener('activate', (e) => {
+              e.waitUntil(self.clients.claim());
+            });
+            self.addEventListener('fetch', (e) => {
+              const url = e.request.url;
+              if (e.request.method !== 'GET' || url.startsWith('blob:') || url.startsWith('data:')) return;
+              // Network-first with offline fallback for app shell & CDN libraries
+              e.respondWith(
+                fetch(e.request).then(res => {
+                  if (res && res.status === 200 && (url.includes('cdn.') || url.includes('cdnjs.') || url.includes('fonts.') || url === self.registration.scope)) {
+                    const clone = res.clone();
+                    caches.open(SHELL_CACHE).then(c => c.put(e.request, clone));
+                  }
+                  return res;
+                }).catch(() => caches.match(e.request))
+              );
+            });
+          `;
+          const swBlob = new Blob([swCode], { type: 'application/javascript' });
+          navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+        }
+      } catch (e) { /* Ignore in restricted sandboxes */ }
+
+      // Online/Offline Live Status Indicator
+      const netBadge = document.getElementById('netStatusBadge');
+      function updateNetStatus() {
+        if (navigator.onLine) {
+          netBadge.textContent = '● Online / PWA';
+          netBadge.className = 'px-1.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-400/30 text-[9px] font-bold text-emerald-300 shrink-0';
+        } else {
+          netBadge.textContent = '⚡ Offline Mode';
+          netBadge.className = 'px-1.5 py-0.5 rounded-md bg-amber-500/20 border border-amber-400/30 text-[9px] font-bold text-amber-300 shrink-0';
+        }
+      }
+      window.addEventListener('online', updateNetStatus);
+      window.addEventListener('offline', updateNetStatus);
+      updateNetStatus();
+
+      // PWA Install Prompt
+      let deferredPrompt = null;
+      const btnInstall = document.getElementById('btnInstallPwa');
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        btnInstall.classList.remove('hidden');
+      });
+      btnInstall.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        btnInstall.classList.add('hidden');
+      });
+    })();
+
+    // =========================================================================
+    // 0B. CORE UTILITIES: TOAST, LAZY SCRIPT LOADER, RAM GUARD, SHARE/SAVE
     // =========================================================================
     const loadedScripts = new Set();
+    const activeBlobUrls = new Set();
+
+    function createTrackedBlobUrl(blob) {
+      const u = URL.createObjectURL(blob);
+      activeBlobUrls.add(u);
+      return u;
+    }
+    function revokeTrackedBlobUrl(u) {
+      if (u && activeBlobUrls.has(u)) {
+        URL.revokeObjectURL(u);
+        activeBlobUrls.delete(u);
+      }
+    }
+    function revokeAllTrackedBlobUrls() {
+      activeBlobUrls.forEach(u => URL.revokeObjectURL(u));
+      activeBlobUrls.clear();
+    }
 
     function loadScriptOnce(url) {
       if (loadedScripts.has(url)) return Promise.resolve();
@@ -658,10 +844,7 @@
         const s = document.createElement('script');
         s.src = url;
         s.async = true;
-        s.onload = () => {
-          loadedScripts.add(url);
-          resolve();
-        };
+        s.onload = () => { loadedScripts.add(url); resolve(); };
         s.onerror = () => reject(new Error(`Failed to load ${url}`));
         document.head.appendChild(s);
       });
@@ -686,14 +869,14 @@
     }
 
     function triggerDownloadBlob(blob, filename) {
-      const url = URL.createObjectURL(blob);
+      const url = createTrackedBlobUrl(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
       document.body.appendChild(a);
       a.click();
       a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1500);
+      setTimeout(() => revokeTrackedBlobUrl(url), 1500);
       showToast(`บันทึกไฟล์ ${filename} เรียบร้อย!`, 'success');
     }
 
@@ -713,26 +896,32 @@
 
     function fileToImage(file) {
       return new Promise((resolve, reject) => {
-        const url = URL.createObjectURL(file);
+        const url = createTrackedBlobUrl(file);
         const img = new Image();
-        img.onload = () => {
-          URL.revokeObjectURL(url);
-          resolve(img);
-        };
-        img.onerror = (e) => {
-          URL.revokeObjectURL(url);
-          reject(e);
-        };
+        img.onload = () => { revokeTrackedBlobUrl(url); resolve(img); };
+        img.onerror = (e) => { revokeTrackedBlobUrl(url); reject(e); };
         img.src = url;
       });
     }
 
-    // Real-time RAM Estimator & Purge Guard
+    function zeroCanvas(c) {
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      if (ctx) ctx.clearRect(0, 0, c.width, c.height);
+      c.width = 0;
+      c.height = 0;
+    }
+
+    // Central Memory Registry & RAM Guard
     const appMemory = {
       bgOrigImg: null,
       bgMaskCanvas: null,
       bgFinalCanvas: null,
-      scanPages: [],       // Array of { id, origCanvas, croppedCanvas, filteredCanvas, corners, filter }
+      wmWorkCanvas: null,
+      wmOrigCanvas: null,
+      wmMaskCanvas: null,
+      wmHistory: [],
+      scanPages: [],
       resizerImg: null,
       resizerBlob: null,
       convFiles: [],
@@ -743,6 +932,8 @@
       let bytes = 0;
       if (appMemory.bgOrigImg) bytes += appMemory.bgOrigImg.naturalWidth * appMemory.bgOrigImg.naturalHeight * 4;
       if (appMemory.bgFinalCanvas) bytes += appMemory.bgFinalCanvas.width * appMemory.bgFinalCanvas.height * 4;
+      if (appMemory.wmWorkCanvas) bytes += appMemory.wmWorkCanvas.width * appMemory.wmWorkCanvas.height * 8;
+      appMemory.wmHistory.forEach(h => { bytes += h.width * h.height * 4; });
       appMemory.scanPages.forEach(p => {
         if (p.origCanvas) bytes += p.origCanvas.width * p.origCanvas.height * 4;
         if (p.filteredCanvas) bytes += p.filteredCanvas.width * p.filteredCanvas.height * 4;
@@ -750,26 +941,44 @@
       if (appMemory.resizerImg) bytes += appMemory.resizerImg.naturalWidth * appMemory.resizerImg.naturalHeight * 4;
 
       const mb = (bytes / (1024 * 1024)).toFixed(1);
-      document.getElementById('ramText').textContent = `RAM: ${mb} MB`;
+      document.getElementById('ramText').textContent = `${mb} MB`;
       const dot = document.getElementById('ramDot');
-      dot.className = bytes > 150 * 1024 * 1024 ? 'w-2 h-2 rounded-full bg-amber-400 animate-pulse' : 'w-2 h-2 rounded-full bg-emerald-400';
+      dot.className = bytes > 160 * 1024 * 1024 ? 'w-2 h-2 rounded-full bg-amber-400 animate-pulse' : 'w-2 h-2 rounded-full bg-emerald-400';
     }
-    setInterval(updateRamMonitor, 2000);
+    setInterval(updateRamMonitor, 1800);
 
-    document.getElementById('btnPurgeAll').addEventListener('click', () => {
+    function purgeAllMemory(silent = false) {
+      zeroCanvas(appMemory.bgMaskCanvas);
+      zeroCanvas(appMemory.bgFinalCanvas);
+      zeroCanvas(appMemory.wmWorkCanvas);
+      zeroCanvas(appMemory.wmOrigCanvas);
+      zeroCanvas(appMemory.wmMaskCanvas);
+      appMemory.scanPages.forEach(p => {
+        zeroCanvas(p.origCanvas);
+        zeroCanvas(p.croppedCanvas);
+        zeroCanvas(p.filteredCanvas);
+      });
+      revokeAllTrackedBlobUrls();
+
       appMemory.bgOrigImg = null;
       appMemory.bgMaskCanvas = null;
       appMemory.bgFinalCanvas = null;
+      appMemory.wmWorkCanvas = null;
+      appMemory.wmOrigCanvas = null;
+      appMemory.wmMaskCanvas = null;
+      appMemory.wmHistory = [];
       appMemory.scanPages = [];
       appMemory.resizerImg = null;
       appMemory.resizerBlob = null;
       appMemory.convFiles = [];
       appMemory.ocrImageFile = null;
 
-      // Reset UI views
+      // Reset UI
       document.getElementById('bgEditorBox').classList.add('hidden');
       document.getElementById('bgUploadBox').classList.remove('hidden');
       document.getElementById('bgResBadge').classList.add('hidden');
+      document.getElementById('wmEditorBox').classList.add('hidden');
+      document.getElementById('wmUploadBox').classList.remove('hidden');
       renderScanPagesList();
       document.getElementById('resizerControls').classList.add('hidden');
       document.getElementById('resizerResultBox').classList.add('hidden');
@@ -778,8 +987,11 @@
       document.getElementById('ocrOutputText').value = '';
 
       updateRamMonitor();
-      showToast('ล้างรูปภาพและข้อมูลทั้งหมดออกจาก RAM เรียบร้อย 100%', 'success');
-    });
+      if (!silent) showToast('ล้างรูปภาพและข้อมูลทั้งหมดออกจาก RAM เรียบร้อย 100%', 'success');
+    }
+
+    document.getElementById('btnPurgeAll').addEventListener('click', () => purgeAllMemory(false));
+    window.addEventListener('pagehide', () => purgeAllMemory(true));
 
     // Bottom Navigation Tab Switching
     const navTabs = document.querySelectorAll('.nav-tab');
@@ -803,14 +1015,7 @@
     // =========================================================================
     // 1. MODULE 1: AI AUTO REMOVE BACKGROUND (ULTRA HD)
     // =========================================================================
-    let bgState = {
-      fileName: 'cutout',
-      format: 'png',
-      previewBg: 'transparent',
-      threshold: 0,
-      feather: 0.5
-    };
-
+    let bgState = { fileName: 'cutout', format: 'png', previewBg: 'transparent', threshold: 0, feather: 0.5 };
     const bgFileInput = document.getElementById('bgFileInput');
     document.getElementById('btnBgSelect').addEventListener('click', (e) => { e.stopPropagation(); bgFileInput.click(); });
     document.getElementById('bgUploadBox').addEventListener('click', () => bgFileInput.click());
@@ -829,32 +1034,24 @@
       const progBar = document.getElementById('bgProgBar');
       const progTitle = document.getElementById('bgProgTitle');
       progBar.style.width = '12%';
-      progTitle.textContent = 'กำลังอ่านภาพความละเอียดต้นฉบับ...';
 
       try {
         const origImg = await fileToImage(file);
         appMemory.bgOrigImg = origImg;
-        const w = origImg.naturalWidth;
-        const h = origImg.naturalHeight;
+        const w = origImg.naturalWidth, h = origImg.naturalHeight;
 
         const badge = document.getElementById('bgResBadge');
         badge.textContent = `${w} × ${h} px`;
         badge.classList.remove('hidden');
 
         progBar.style.width = '25%';
-        progTitle.textContent = 'กำลังโหลดและประมวลผล AI ลบพื้นหลัง...';
-
-        // Lazy-load @imgly/background-removal via ES module dynamic import
         const { removeBackground } = await import('https://esm.sh/@imgly/background-removal@1.4.5');
 
         const resultBlob = await removeBackground(file, {
           model: 'medium',
           output: { format: 'image/png', quality: 1.0 },
           progress: (key, cur, tot) => {
-            if (tot > 0) {
-              const pct = Math.round(25 + (cur / tot) * 65);
-              progBar.style.width = `${pct}%`;
-            }
+            if (tot > 0) progBar.style.width = `${Math.round(25 + (cur / tot) * 65)}%`;
           }
         });
 
@@ -863,18 +1060,15 @@
 
         const aiImg = await fileToImage(resultBlob);
         const maskCanvas = document.createElement('canvas');
-        maskCanvas.width = w;
-        maskCanvas.height = h;
+        maskCanvas.width = w; maskCanvas.height = h;
         const mCtx = maskCanvas.getContext('2d', { willReadFrequently: true });
         mCtx.imageSmoothingEnabled = true;
         mCtx.imageSmoothingQuality = 'high';
         mCtx.drawImage(aiImg, 0, 0, w, h);
         appMemory.bgMaskCanvas = maskCanvas;
 
-        // Draw Original preview canvas
         const origC = document.getElementById('bgOrigCanvas');
-        origC.width = w;
-        origC.height = h;
+        origC.width = w; origC.height = h;
         origC.getContext('2d').drawImage(origImg, 0, 0, w, h);
 
         renderBgComposite();
@@ -892,16 +1086,12 @@
     });
 
     function renderBgComposite() {
-      const origImg = appMemory.bgOrigImg;
-      const rawMask = appMemory.bgMaskCanvas;
+      const origImg = appMemory.bgOrigImg, rawMask = appMemory.bgMaskCanvas;
       if (!origImg || !rawMask) return;
-
-      const w = origImg.naturalWidth;
-      const h = origImg.naturalHeight;
+      const w = origImg.naturalWidth, h = origImg.naturalHeight;
 
       const refinedMask = document.createElement('canvas');
-      refinedMask.width = w;
-      refinedMask.height = h;
+      refinedMask.width = w; refinedMask.height = h;
       const rmCtx = refinedMask.getContext('2d', { willReadFrequently: true });
       if (bgState.feather > 0) rmCtx.filter = `blur(${bgState.feather}px)`;
       rmCtx.drawImage(rawMask, 0, 0, w, h);
@@ -912,16 +1102,13 @@
         const d = imgData.data;
         const shift = bgState.threshold * 2.2;
         for (let i = 3; i < d.length; i += 4) {
-          if (d[i] > 0 && d[i] < 255) {
-            d[i] = Math.min(255, Math.max(0, (d[i] - 128 - shift) * 1.35 + 128));
-          }
+          if (d[i] > 0 && d[i] < 255) d[i] = Math.min(255, Math.max(0, (d[i] - 128 - shift) * 1.35 + 128));
         }
         rmCtx.putImageData(imgData, 0, 0);
       }
 
       const fullC = document.createElement('canvas');
-      fullC.width = w;
-      fullC.height = h;
+      fullC.width = w; fullC.height = h;
       const fCtx = fullC.getContext('2d');
       fCtx.drawImage(origImg, 0, 0, w, h);
       fCtx.globalCompositeOperation = 'destination-in';
@@ -930,8 +1117,7 @@
       appMemory.bgFinalCanvas = fullC;
 
       const resC = document.getElementById('bgResultCanvas');
-      resC.width = w;
-      resC.height = h;
+      resC.width = w; resC.height = h;
       const rCtx = resC.getContext('2d');
       rCtx.clearRect(0, 0, w, h);
       if (bgState.previewBg !== 'transparent') {
@@ -941,7 +1127,6 @@
       rCtx.drawImage(fullC, 0, 0, w, h);
     }
 
-    // BG Refinement & Swatches
     document.getElementById('bgThreshSlider').addEventListener('input', (e) => {
       bgState.threshold = parseInt(e.target.value, 10);
       document.getElementById('bgThreshVal').textContent = bgState.threshold;
@@ -960,12 +1145,8 @@
         renderBgComposite();
       });
     });
-    document.getElementById('bgCustomColor').addEventListener('input', (e) => {
-      bgState.previewBg = e.target.value;
-      renderBgComposite();
-    });
+    document.getElementById('bgCustomColor').addEventListener('input', (e) => { bgState.previewBg = e.target.value; renderBgComposite(); });
 
-    // Split Slider Touch & Mouse
     const bgCompareWrap = document.getElementById('bgCompareWrap');
     let bgDragging = false;
     function moveBgSlider(clientX) {
@@ -981,15 +1162,12 @@
     window.addEventListener('touchmove', (e) => { if (bgDragging && e.touches[0]) moveBgSlider(e.touches[0].clientX); }, { passive: true });
     window.addEventListener('touchend', () => bgDragging = false);
 
-    // Format Selection & Export (PNG, WEBP, JPG, BMP, ICO, SVG)
     document.querySelectorAll('.bg-fmt-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         bgState.format = btn.dataset.fmt;
-        document.querySelectorAll('.bg-fmt-btn').forEach(b => {
-          b.className = 'bg-fmt-btn py-2 rounded-xl border border-white/10 bg-white/5 text-xs font-bold text-slate-300';
-        });
+        document.querySelectorAll('.bg-fmt-btn').forEach(b => b.className = 'bg-fmt-btn py-2 rounded-xl border border-white/10 bg-white/5 text-xs font-bold text-slate-300');
         btn.className = 'bg-fmt-btn py-2 rounded-xl border border-indigo-500 bg-indigo-600/25 text-xs font-bold text-white';
-        document.getElementById('btnBgDownload').innerHTML = `<span>⬇ บันทึกรูปภาพ ${bgState.format.toUpperCase()}</span>`;
+        document.getElementById('btnBgDownload').textContent = `⬇ บันทึกรูปภาพ ${bgState.format.toUpperCase()}`;
       });
     });
 
@@ -1016,8 +1194,7 @@
 
     async function getBgExportBlob() {
       const src = appMemory.bgFinalCanvas;
-      const w = src.width, h = src.height;
-      const fmt = bgState.format;
+      const w = src.width, h = src.height, fmt = bgState.format;
       const out = document.createElement('canvas');
       out.width = w; out.height = h;
       const ctx = out.getContext('2d');
@@ -1065,11 +1242,287 @@
     });
 
     // =========================================================================
-    // 2. MODULE 2: SMART DOCUMENT SCANNER, PERSPECTIVE WARP, SIGN & MULTI-PDF
+    // 2. MODULE 2: SMART WATERMARK & OBJECT REMOVER (INPAINTING ENGINE)
+    // =========================================================================
+    let wmBrushSize = 28;
+    let wmDrawing = false;
+    let wmFileName = 'cleaned';
+    const wmDisplayCanvas = document.getElementById('wmDisplayCanvas');
+
+    const wmFileInput = document.getElementById('wmFileInput');
+    document.getElementById('btnWmSelect').addEventListener('click', (e) => { e.stopPropagation(); wmFileInput.click(); });
+    document.getElementById('wmUploadBox').addEventListener('click', () => wmFileInput.click());
+    document.getElementById('btnWmNew').addEventListener('click', () => wmFileInput.click());
+
+    document.getElementById('wmBrushSlider').addEventListener('input', (e) => {
+      wmBrushSize = parseInt(e.target.value, 10);
+      document.getElementById('wmBrushVal').textContent = `${wmBrushSize}px`;
+    });
+
+    wmFileInput.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      wmFileInput.value = '';
+      wmFileName = file.name.replace(/\.[^/.]+$/, '') || 'cleaned';
+
+      const img = await fileToImage(file);
+      const w = img.naturalWidth, h = img.naturalHeight;
+
+      const origC = document.createElement('canvas');
+      origC.width = w; origC.height = h;
+      origC.getContext('2d').drawImage(img, 0, 0);
+
+      const workC = document.createElement('canvas');
+      workC.width = w; workC.height = h;
+      workC.getContext('2d').drawImage(img, 0, 0);
+
+      const maskC = document.createElement('canvas');
+      maskC.width = w; maskC.height = h;
+
+      appMemory.wmOrigCanvas = origC;
+      appMemory.wmWorkCanvas = workC;
+      appMemory.wmMaskCanvas = maskC;
+      appMemory.wmHistory = [];
+
+      wmDisplayCanvas.width = w;
+      wmDisplayCanvas.height = h;
+      renderWmViewport();
+      updateRamMonitor();
+
+      document.getElementById('wmUploadBox').classList.add('hidden');
+      document.getElementById('wmEditorBox').classList.remove('hidden');
+    });
+
+    function renderWmViewport(showOrig = false) {
+      if (!appMemory.wmWorkCanvas) return;
+      const ctx = wmDisplayCanvas.getContext('2d');
+      ctx.clearRect(0, 0, wmDisplayCanvas.width, wmDisplayCanvas.height);
+      if (showOrig && appMemory.wmOrigCanvas) {
+        ctx.drawImage(appMemory.wmOrigCanvas, 0, 0);
+        return;
+      }
+      ctx.drawImage(appMemory.wmWorkCanvas, 0, 0);
+      if (appMemory.wmMaskCanvas) {
+        ctx.save();
+        ctx.globalAlpha = 0.55;
+        ctx.drawImage(appMemory.wmMaskCanvas, 0, 0);
+        ctx.restore();
+      }
+    }
+
+    function getWmPos(e) {
+      const rect = wmDisplayCanvas.getBoundingClientRect();
+      const cx = e.touches ? e.touches[0].clientX : e.clientX;
+      const cy = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: ((cx - rect.left) / rect.width) * wmDisplayCanvas.width,
+        y: ((cy - rect.top) / rect.height) * wmDisplayCanvas.height,
+        scale: wmDisplayCanvas.width / rect.width
+      };
+    }
+
+    function strokeWmMask(x, y, scale, isStart) {
+      const mCtx = appMemory.wmMaskCanvas.getContext('2d');
+      mCtx.lineCap = 'round';
+      mCtx.lineJoin = 'round';
+      mCtx.strokeStyle = '#f43f5e';
+      mCtx.fillStyle = '#f43f5e';
+      mCtx.lineWidth = wmBrushSize * scale;
+      if (isStart) {
+        mCtx.beginPath();
+        mCtx.arc(x, y, (wmBrushSize * scale) / 2, 0, Math.PI * 2);
+        mCtx.fill();
+        mCtx.beginPath();
+        mCtx.moveTo(x, y);
+      } else {
+        mCtx.lineTo(x, y);
+        mCtx.stroke();
+      }
+      renderWmViewport();
+    }
+
+    wmDisplayCanvas.addEventListener('mousedown', (e) => {
+      if (document.getElementById('wmCompareToggle').checked) { renderWmViewport(true); return; }
+      wmDrawing = true;
+      const p = getWmPos(e);
+      strokeWmMask(p.x, p.y, p.scale, true);
+    });
+    wmDisplayCanvas.addEventListener('mousemove', (e) => {
+      if (!wmDrawing) return;
+      const p = getWmPos(e);
+      strokeWmMask(p.x, p.y, p.scale, false);
+    });
+    window.addEventListener('mouseup', () => {
+      wmDrawing = false;
+      if (document.getElementById('wmCompareToggle').checked) renderWmViewport(false);
+    });
+
+    wmDisplayCanvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if (document.getElementById('wmCompareToggle').checked) { renderWmViewport(true); return; }
+      wmDrawing = true;
+      const p = getWmPos(e);
+      strokeWmMask(p.x, p.y, p.scale, true);
+    }, { passive: false });
+    wmDisplayCanvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (!wmDrawing) return;
+      const p = getWmPos(e);
+      strokeWmMask(p.x, p.y, p.scale, false);
+    }, { passive: false });
+    wmDisplayCanvas.addEventListener('touchend', () => {
+      wmDrawing = false;
+      if (document.getElementById('wmCompareToggle').checked) renderWmViewport(false);
+    });
+
+    // Multi-Scale Iterative Boundary-Diffusion Inpainting Engine (Fast, Full-Res, 100% Offline)
+    document.getElementById('btnWmErase').addEventListener('click', () => {
+      const workC = appMemory.wmWorkCanvas;
+      const maskC = appMemory.wmMaskCanvas;
+      if (!workC || !maskC) return;
+
+      const w = workC.width, h = workC.height;
+      const mData = maskC.getContext('2d').getImageData(0, 0, w, h).data;
+
+      // Find bounding box of painted mask to optimize speed
+      let minX = w, minY = h, maxX = 0, maxY = 0, hasMask = false;
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          if (mData[(y * w + x) * 4 + 3] > 20) {
+            hasMask = true;
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+      if (!hasMask) {
+        showToast('กรุณาใช้นิ้วระบายทับลายน้ำหรือวัตถุที่ต้องการลบก่อน', 'info');
+        return;
+      }
+
+      // Save snapshot for Undo (keep max 4 snapshots to protect RAM)
+      const snap = document.createElement('canvas');
+      snap.width = w; snap.height = h;
+      snap.getContext('2d').drawImage(workC, 0, 0);
+      if (appMemory.wmHistory.length >= 4) zeroCanvas(appMemory.wmHistory.shift());
+      appMemory.wmHistory.push(snap);
+
+      const pad = 16;
+      const bx0 = Math.max(1, minX - pad), by0 = Math.max(1, minY - pad);
+      const bx1 = Math.min(w - 2, maxX + pad), by1 = Math.min(h - 2, maxY + pad);
+
+      const wCtx = workC.getContext('2d');
+      const imgData = wCtx.getImageData(0, 0, w, h);
+      const px = imgData.data;
+
+      // Binary mask state: 1 = hole to fill, 0 = known good pixel
+      const hole = new Uint8Array(w * h);
+      let remaining = 0;
+      for (let y = by0; y <= by1; y++) {
+        for (let x = bx0; x <= bx1; x++) {
+          if (mData[(y * w + x) * 4 + 3] > 20) {
+            hole[y * w + x] = 1;
+            remaining++;
+          }
+        }
+      }
+
+      // 1. Onion-peel inward filling from known boundary pixels
+      const dirs = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,-1],[-1,1],[1,1]];
+      let safety = 0;
+      while (remaining > 0 && safety < 400) {
+        safety++;
+        const toFill = [];
+        for (let y = by0; y <= by1; y++) {
+          for (let x = bx0; x <= bx1; x++) {
+            const idx = y * w + x;
+            if (hole[idx] === 1) {
+              let rSum = 0, gSum = 0, bSum = 0, wSum = 0;
+              for (let d = 0; d < 8; d++) {
+                const nx = x + dirs[d][0], ny = y + dirs[d][1];
+                const nIdx = ny * w + nx;
+                if (hole[nIdx] === 0) {
+                  const weight = d < 4 ? 1.0 : 0.707;
+                  const pIdx = nIdx * 4;
+                  rSum += px[pIdx] * weight;
+                  gSum += px[pIdx + 1] * weight;
+                  bSum += px[pIdx + 2] * weight;
+                  wSum += weight;
+                }
+              }
+              if (wSum > 0) toFill.push({ idx, r: rSum / wSum, g: gSum / wSum, b: bSum / wSum });
+            }
+          }
+        }
+        if (!toFill.length) break;
+        for (let i = 0; i < toFill.length; i++) {
+          const item = toFill[i];
+          hole[item.idx] = 0;
+          const pIdx = item.idx * 4;
+          px[pIdx] = item.r; px[pIdx + 1] = item.g; px[pIdx + 2] = item.b;
+          remaining--;
+        }
+      }
+
+      // 2. Multi-pass Laplacian smoothing inside original mask region for seamless gradient blending
+      for (let pass = 0; pass < 14; pass++) {
+        for (let y = by0; y <= by1; y++) {
+          for (let x = bx0; x <= bx1; x++) {
+            const idx = y * w + x;
+            if (mData[idx * 4 + 3] > 20) {
+              const pIdx = idx * 4;
+              const pL = pIdx - 4, pR = pIdx + 4, pU = pIdx - w * 4, pD = pIdx + w * 4;
+              px[pIdx]     = (px[pL] + px[pR] + px[pU] + px[pD]) * 0.25;
+              px[pIdx + 1] = (px[pL + 1] + px[pR + 1] + px[pU + 1] + px[pD + 1]) * 0.25;
+              px[pIdx + 2] = (px[pL + 2] + px[pR + 2] + px[pU + 2] + px[pD + 2]) * 0.25;
+            }
+          }
+        }
+      }
+
+      wCtx.putImageData(imgData, 0, 0);
+      maskC.getContext('2d').clearRect(0, 0, w, h);
+      renderWmViewport();
+      updateRamMonitor();
+      showToast('ลบลายน้ำและสมานพื้นผิวเรียบร้อย!', 'success');
+    });
+
+    document.getElementById('btnWmUndo').addEventListener('click', () => {
+      if (!appMemory.wmHistory.length) return;
+      const prev = appMemory.wmHistory.pop();
+      appMemory.wmWorkCanvas.getContext('2d').drawImage(prev, 0, 0);
+      zeroCanvas(prev);
+      appMemory.wmMaskCanvas.getContext('2d').clearRect(0, 0, appMemory.wmMaskCanvas.width, appMemory.wmMaskCanvas.height);
+      renderWmViewport();
+      updateRamMonitor();
+    });
+
+    document.getElementById('btnWmReset').addEventListener('click', () => {
+      if (!appMemory.wmOrigCanvas) return;
+      appMemory.wmWorkCanvas.getContext('2d').drawImage(appMemory.wmOrigCanvas, 0, 0);
+      appMemory.wmMaskCanvas.getContext('2d').clearRect(0, 0, appMemory.wmMaskCanvas.width, appMemory.wmMaskCanvas.height);
+      renderWmViewport();
+    });
+
+    document.getElementById('btnWmDownload').addEventListener('click', async () => {
+      if (!appMemory.wmWorkCanvas) return;
+      const blob = await new Promise(r => appMemory.wmWorkCanvas.toBlob(r, 'image/png', 1));
+      triggerDownloadBlob(blob, `${wmFileName}_clean.png`);
+    });
+    document.getElementById('btnWmShare').addEventListener('click', async () => {
+      if (!appMemory.wmWorkCanvas) return;
+      const blob = await new Promise(r => appMemory.wmWorkCanvas.toBlob(r, 'image/png', 1));
+      triggerShareBlob(blob, `${wmFileName}_clean.png`, 'image/png');
+    });
+
+    // =========================================================================
+    // 3. MODULE 3: SMART DOCUMENT SCANNER, PERSPECTIVE WARP & SIGNATURE STAMPER
     // =========================================================================
     let activeCropPageIdx = -1;
     let activeSignPageIdx = -1;
-    let cropCorners = []; // [{x,y}, {x,y}, {x,y}, {x,y}] normalized 0..1 (TL, TR, BR, BL)
+    let cropCorners = [];
     let draggingCornerIdx = -1;
 
     function initDefaultScanFileNames() {
@@ -1116,8 +1569,7 @@
         if (!file.type.startsWith('image/')) continue;
         const img = await fileToImage(file);
         const origC = document.createElement('canvas');
-        origC.width = img.naturalWidth;
-        origC.height = img.naturalHeight;
+        origC.width = img.naturalWidth; origC.height = img.naturalHeight;
         origC.getContext('2d').drawImage(img, 0, 0);
 
         const autoCorners = detectDocumentCorners(origC);
@@ -1136,27 +1588,18 @@
 
       renderScanPagesList();
       updateRamMonitor();
-
-      // Open 4-point perspective cropper immediately for the newly added single page so user can fine-tune if desired
-      if (files.length === 1 && appMemory.scanPages.length > 0) {
-        openScanCropper(appMemory.scanPages.length - 1);
-      } else {
-        showToast(`เพิ่มเอกสาร ${files.length} หน้าและดึงขอบตรงอัตโนมัติแล้ว`, 'success');
-      }
+      if (files.length === 1 && appMemory.scanPages.length > 0) openScanCropper(appMemory.scanPages.length - 1);
+      else showToast(`เพิ่มเอกสาร ${files.length} หน้าและดึงขอบตรงอัตโนมัติแล้ว`, 'success');
     });
 
-    // Smart Edge / Document Boundary Detection (Luminance Gradient Bounding Quad)
     function detectDocumentCorners(canvas) {
-      const sw = 160;
-      const sh = Math.round((canvas.height / canvas.width) * sw);
+      const sw = 160, sh = Math.round((canvas.height / canvas.width) * sw);
       const tmp = document.createElement('canvas');
       tmp.width = sw; tmp.height = sh;
       const ctx = tmp.getContext('2d');
       ctx.drawImage(canvas, 0, 0, sw, sh);
       const data = ctx.getImageData(0, 0, sw, sh).data;
 
-      // Compute center brightness vs border brightness to detect paper quad
-      let minX = sw * 0.08, maxX = sw * 0.92, minY = sh * 0.08, maxY = sh * 0.92;
       let edgePoints = [];
       for (let y = 4; y < sh - 4; y += 2) {
         for (let x = 4; x < sw - 4; x += 2) {
@@ -1166,9 +1609,7 @@
           const lum = data[idx] * 0.3 + data[idx + 1] * 0.59 + data[idx + 2] * 0.11;
           const lumR = data[idxR] * 0.3 + data[idxR + 1] * 0.59 + data[idxR + 2] * 0.11;
           const lumD = data[idxD] * 0.3 + data[idxD + 1] * 0.59 + data[idxD + 2] * 0.11;
-          if (Math.abs(lum - lumR) + Math.abs(lum - lumD) > 55) {
-            edgePoints.push({ x, y });
-          }
+          if (Math.abs(lum - lumR) + Math.abs(lum - lumD) > 55) edgePoints.push({ x, y });
         }
       }
 
@@ -1179,10 +1620,8 @@
         let bl = { x: sw * 0.08, y: sh * 0.92, score: Infinity };
 
         edgePoints.forEach(p => {
-          const dTL = Math.hypot(p.x, p.y);
-          const dTR = Math.hypot(sw - p.x, p.y);
-          const dBR = Math.hypot(sw - p.x, sh - p.y);
-          const dBL = Math.hypot(p.x, sh - p.y);
+          const dTL = Math.hypot(p.x, p.y), dTR = Math.hypot(sw - p.x, p.y);
+          const dBR = Math.hypot(sw - p.x, sh - p.y), dBL = Math.hypot(p.x, sh - p.y);
           if (dTL < tl.score && p.x < sw * 0.45 && p.y < sh * 0.45) tl = { x: p.x, y: p.y, score: dTL };
           if (dTR < tr.score && p.x > sw * 0.55 && p.y < sh * 0.45) tr = { x: p.x, y: p.y, score: dTR };
           if (dBR < br.score && p.x > sw * 0.55 && p.y > sh * 0.55) br = { x: p.x, y: p.y, score: dBR };
@@ -1196,99 +1635,60 @@
           { x: Math.max(0.02, bl.x / sw), y: Math.min(0.98, bl.y / sh) }
         ];
       }
-
-      return [
-        { x: 0.06, y: 0.06 },
-        { x: 0.94, y: 0.06 },
-        { x: 0.94, y: 0.94 },
-        { x: 0.06, y: 0.94 }
-      ];
+      return [{ x: 0.06, y: 0.06 }, { x: 0.94, y: 0.06 }, { x: 0.94, y: 0.94 }, { x: 0.06, y: 0.94 }];
     }
 
-    // Pure-JS Bilinear / Homography Perspective Warp (Flattens tilted document into crisp rectangle)
     function warpPerspectiveCanvas(srcCanvas, corners) {
-      const sw = srcCanvas.width;
-      const sh = srcCanvas.height;
+      const sw = srcCanvas.width, sh = srcCanvas.height;
       const pts = corners.map(c => ({ x: c.x * sw, y: c.y * sh }));
-
-      const topW = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
-      const botW = Math.hypot(pts[2].x - pts[3].x, pts[2].y - pts[3].y);
-      const leftH = Math.hypot(pts[3].x - pts[0].x, pts[3].y - pts[0].y);
-      const rightH = Math.hypot(pts[2].x - pts[1].x, pts[2].y - pts[1].y);
-
-      const dstW = Math.max(100, Math.round(Math.max(topW, botW)));
-      const dstH = Math.max(100, Math.round(Math.max(leftH, rightH)));
+      const dstW = Math.max(100, Math.round(Math.max(Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y), Math.hypot(pts[2].x - pts[3].x, pts[2].y - pts[3].y))));
+      const dstH = Math.max(100, Math.round(Math.max(Math.hypot(pts[3].x - pts[0].x, pts[3].y - pts[0].y), Math.hypot(pts[2].x - pts[1].x, pts[2].y - pts[1].y))));
 
       const dstCanvas = document.createElement('canvas');
-      dstCanvas.width = dstW;
-      dstCanvas.height = dstH;
+      dstCanvas.width = dstW; dstCanvas.height = dstH;
       const dstCtx = dstCanvas.getContext('2d');
-
       const srcData = srcCanvas.getContext('2d').getImageData(0, 0, sw, sh).data;
       const dstImg = dstCtx.createImageData(dstW, dstH);
       const dstData = dstImg.data;
 
-      // Compute 3x3 Homography matrix mapping destination (u,v) -> source (x,y)
-      const H = computeHomography(
-        [{ x: 0, y: 0 }, { x: dstW, y: 0 }, { x: dstW, y: dstH }, { x: 0, y: dstH }],
-        pts
-      );
+      const H = computeHomography([{ x: 0, y: 0 }, { x: dstW, y: 0 }, { x: dstW, y: dstH }, { x: 0, y: dstH }], pts);
 
       for (let y = 0; y < dstH; y++) {
         for (let x = 0; x < dstW; x++) {
           const denom = H[6] * x + H[7] * y + 1;
           const sx = (H[0] * x + H[1] * y + H[2]) / denom;
           const sy = (H[3] * x + H[4] * y + H[5]) / denom;
-
-          const ix = Math.floor(sx);
-          const iy = Math.floor(sy);
-          const dstIdx = (y * dstW + x) * 4;
+          const ix = Math.floor(sx), iy = Math.floor(sy), dstIdx = (y * dstW + x) * 4;
 
           if (ix >= 0 && ix < sw - 1 && iy >= 0 && iy < sh - 1) {
-            const fx = sx - ix;
-            const fy = sy - iy;
-            const w00 = (1 - fx) * (1 - fy);
-            const w10 = fx * (1 - fy);
-            const w01 = (1 - fx) * fy;
-            const w11 = fx * fy;
-
-            const i00 = (iy * sw + ix) * 4;
-            const i10 = i00 + 4;
-            const i01 = i00 + sw * 4;
-            const i11 = i01 + 4;
-
+            const fx = sx - ix, fy = sy - iy;
+            const w00 = (1 - fx) * (1 - fy), w10 = fx * (1 - fy), w01 = (1 - fx) * fy, w11 = fx * fy;
+            const i00 = (iy * sw + ix) * 4, i10 = i00 + 4, i01 = i00 + sw * 4, i11 = i01 + 4;
             dstData[dstIdx]     = srcData[i00] * w00 + srcData[i10] * w10 + srcData[i01] * w01 + srcData[i11] * w11;
             dstData[dstIdx + 1] = srcData[i00 + 1] * w00 + srcData[i10 + 1] * w10 + srcData[i01 + 1] * w01 + srcData[i11 + 1] * w11;
             dstData[dstIdx + 2] = srcData[i00 + 2] * w00 + srcData[i10 + 2] * w10 + srcData[i01 + 2] * w01 + srcData[i11 + 2] * w11;
             dstData[dstIdx + 3] = 255;
           } else {
-            dstData[dstIdx] = 255; dstData[dstIdx + 1] = 255; dstData[dstIdx + 2] = 255; dstData[dstIdx + 3] = 255;
+            dstData[dstIdx] = dstData[dstIdx + 1] = dstData[dstIdx + 2] = dstData[dstIdx + 3] = 255;
           }
         }
       }
-
       dstCtx.putImageData(dstImg, 0, 0);
       return dstCanvas;
     }
 
     function computeHomography(src, dst) {
-      const A = [];
-      const b = [];
+      const A = [], b = [];
       for (let i = 0; i < 4; i++) {
-        const sx = src[i].x, sy = src[i].y;
-        const dx = dst[i].x, dy = dst[i].y;
-        A.push([sx, sy, 1, 0, 0, 0, -dx * sx, -dx * sy]);
-        b.push(dx);
-        A.push([0, 0, 0, sx, sy, 1, -dy * sx, -dy * sy]);
-        b.push(dy);
+        const sx = src[i].x, sy = src[i].y, dx = dst[i].x, dy = dst[i].y;
+        A.push([sx, sy, 1, 0, 0, 0, -dx * sx, -dx * sy]); b.push(dx);
+        A.push([0, 0, 0, sx, sy, 1, -dy * sx, -dy * sy]); b.push(dy);
       }
-      // Gaussian elimination
       const n = 8;
       for (let i = 0; i < n; i++) {
         let maxRow = i;
         for (let k = i + 1; k < n; k++) if (Math.abs(A[k][i]) > Math.abs(A[maxRow][i])) maxRow = k;
-        [A[i], A[maxRow]] = [A[maxRow], A[i]];
-        [b[i], b[maxRow]] = [b[maxRow], b[i]];
+        [A[i], A[maxRow]] = [A[maxRow], A[i]]; [b[i], b[maxRow]] = [b[maxRow], b[i]];
         for (let k = i + 1; k < n; k++) {
           const factor = A[k][i] / A[i][i];
           for (let j = i; j < n; j++) A[k][j] -= factor * A[i][j];
@@ -1310,21 +1710,17 @@
       out.width = w; out.height = h;
       const ctx = out.getContext('2d');
       ctx.drawImage(srcCanvas, 0, 0);
-
       if (filterType === 'orig') return out;
 
       const imgData = ctx.getImageData(0, 0, w, h);
       const d = imgData.data;
-
       for (let i = 0; i < d.length; i += 4) {
         const r = d[i], g = d[i + 1], b = d[i + 2];
         if (filterType === 'magic') {
-          // Brighten paper whites and boost ink contrast
           d[i]     = Math.min(255, Math.max(0, (r - 128) * 1.28 + 148));
           d[i + 1] = Math.min(255, Math.max(0, (g - 128) * 1.28 + 148));
           d[i + 2] = Math.min(255, Math.max(0, (b - 128) * 1.28 + 148));
         } else if (filterType === 'bw') {
-          // Crisp High-Contrast Document B&W
           const lum = r * 0.299 + g * 0.587 + b * 0.114;
           const val = lum > 142 ? 255 : Math.max(0, lum * 0.65);
           d[i] = d[i + 1] = d[i + 2] = val;
@@ -1334,14 +1730,12 @@
       return out;
     }
 
-    // Interactive 4-Corner Cropper UI with Magnifier Loupe
     const scanCropCanvas = document.getElementById('scanCropCanvas');
     const scanMagnifier = document.getElementById('scanMagnifier');
 
     function openScanCropper(pageIdx) {
       activeCropPageIdx = pageIdx;
-      const page = appMemory.scanPages[pageIdx];
-      cropCorners = JSON.parse(JSON.stringify(page.corners));
+      cropCorners = JSON.parse(JSON.stringify(appMemory.scanPages[pageIdx].corners));
       document.getElementById('scanCropperPanel').classList.remove('hidden');
       drawCropperOverlay();
     }
@@ -1351,47 +1745,29 @@
       if (!page) return;
       const orig = page.origCanvas;
       const maxW = Math.min(window.innerWidth - 48, 640);
-      const scale = Math.min(maxW / orig.width, (window.innerHeight * 0.52) / orig.height, 1);
+      const scale = Math.min(maxW / orig.width, (window.innerHeight * 0.5) / orig.height, 1);
 
       scanCropCanvas.width = Math.round(orig.width * scale);
       scanCropCanvas.height = Math.round(orig.height * scale);
       const ctx = scanCropCanvas.getContext('2d');
       ctx.drawImage(orig, 0, 0, scanCropCanvas.width, scanCropCanvas.height);
 
-      // Darken outer area
       ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
       ctx.fillRect(0, 0, scanCropCanvas.width, scanCropCanvas.height);
 
       const pts = cropCorners.map(c => ({ x: c.x * scanCropCanvas.width, y: c.y * scanCropCanvas.height }));
-
-      // Clip inside quad to show bright image
       ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(pts[0].x, pts[0].y);
-      pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
-      ctx.closePath();
-      ctx.clip();
+      ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y)); ctx.closePath(); ctx.clip();
       ctx.drawImage(orig, 0, 0, scanCropCanvas.width, scanCropCanvas.height);
       ctx.restore();
 
-      // Draw border lines
-      ctx.strokeStyle = '#34d399';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.moveTo(pts[0].x, pts[0].y);
-      pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
-      ctx.closePath();
-      ctx.stroke();
+      ctx.strokeStyle = '#34d399'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y)); ctx.closePath(); ctx.stroke();
 
-      // Draw 4 draggable corner handles
       pts.forEach((p, idx) => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 13, 0, Math.PI * 2);
-        ctx.fillStyle = draggingCornerIdx === idx ? '#f59e0b' : '#6366f1';
-        ctx.fill();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = '#ffffff';
-        ctx.stroke();
+        ctx.beginPath(); ctx.arc(p.x, p.y, 13, 0, Math.PI * 2);
+        ctx.fillStyle = draggingCornerIdx === idx ? '#f59e0b' : '#6366f1'; ctx.fill();
+        ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.stroke();
       });
     }
 
@@ -1401,22 +1777,12 @@
       scanMagnifier.classList.remove('hidden');
       scanMagnifier.style.left = `${Math.max(10, clientX - 55)}px`;
       scanMagnifier.style.top = `${Math.max(10, clientY - 135)}px`;
-
       const mCtx = scanMagnifier.getContext('2d');
       mCtx.clearRect(0, 0, 110, 110);
-      const orig = page.origCanvas;
-      const sx = normX * orig.width;
-      const sy = normY * orig.height;
-      const zoomBox = Math.min(orig.width, orig.height) * 0.16;
-      mCtx.drawImage(orig, sx - zoomBox / 2, sy - zoomBox / 2, zoomBox, zoomBox, 0, 0, 110, 110);
-
-      // Crosshair
-      mCtx.strokeStyle = '#34d399';
-      mCtx.lineWidth = 1.5;
-      mCtx.beginPath();
-      mCtx.moveTo(55, 0); mCtx.lineTo(55, 110);
-      mCtx.moveTo(0, 55); mCtx.lineTo(110, 55);
-      mCtx.stroke();
+      const orig = page.origCanvas, zoomBox = Math.min(orig.width, orig.height) * 0.16;
+      mCtx.drawImage(orig, normX * orig.width - zoomBox / 2, normY * orig.height - zoomBox / 2, zoomBox, zoomBox, 0, 0, 110, 110);
+      mCtx.strokeStyle = '#34d399'; mCtx.lineWidth = 1.5;
+      mCtx.beginPath(); mCtx.moveTo(55, 0); mCtx.lineTo(55, 110); mCtx.moveTo(0, 55); mCtx.lineTo(110, 55); mCtx.stroke();
     }
 
     function getCanvasPointerPos(e) {
@@ -1424,61 +1790,46 @@
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
       return {
-        clientX,
-        clientY,
+        clientX, clientY,
         nx: Math.max(0, Math.min(1, (clientX - rect.left) / rect.width)),
         ny: Math.max(0, Math.min(1, (clientY - rect.top) / rect.height))
       };
     }
 
-    function onCropPointerDown(e) {
+    scanCropCanvas.addEventListener('mousedown', (e) => {
       const { nx, ny } = getCanvasPointerPos(e);
       let bestIdx = -1, bestDist = 0.14;
-      cropCorners.forEach((c, i) => {
-        const d = Math.hypot(c.x - nx, c.y - ny);
-        if (d < bestDist) { bestDist = d; bestIdx = i; }
-      });
-      if (bestIdx !== -1) {
-        if (e.cancelable) e.preventDefault();
-        draggingCornerIdx = bestIdx;
-        drawCropperOverlay();
-      }
-    }
+      cropCorners.forEach((c, i) => { const d = Math.hypot(c.x - nx, c.y - ny); if (d < bestDist) { bestDist = d; bestIdx = i; } });
+      if (bestIdx !== -1) { draggingCornerIdx = bestIdx; drawCropperOverlay(); }
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (draggingCornerIdx === -1) return;
+      const { clientX, clientY, nx, ny } = getCanvasPointerPos(e);
+      cropCorners[draggingCornerIdx] = { x: nx, y: ny }; drawCropperOverlay(); updateMagnifier(clientX, clientY, nx, ny);
+    });
+    window.addEventListener('mouseup', () => { draggingCornerIdx = -1; scanMagnifier.classList.add('hidden'); drawCropperOverlay(); });
 
-    function onCropPointerMove(e) {
+    scanCropCanvas.addEventListener('touchstart', (e) => {
+      const { nx, ny } = getCanvasPointerPos(e);
+      let bestIdx = -1, bestDist = 0.14;
+      cropCorners.forEach((c, i) => { const d = Math.hypot(c.x - nx, c.y - ny); if (d < bestDist) { bestDist = d; bestIdx = i; } });
+      if (bestIdx !== -1) { if (e.cancelable) e.preventDefault(); draggingCornerIdx = bestIdx; drawCropperOverlay(); }
+    }, { passive: false });
+    window.addEventListener('touchmove', (e) => {
       if (draggingCornerIdx === -1) return;
       if (e.cancelable) e.preventDefault();
       const { clientX, clientY, nx, ny } = getCanvasPointerPos(e);
-      cropCorners[draggingCornerIdx] = { x: nx, y: ny };
-      drawCropperOverlay();
-      updateMagnifier(clientX, clientY, nx, ny);
-    }
-
-    function onCropPointerUp() {
-      draggingCornerIdx = -1;
-      scanMagnifier.classList.add('hidden');
-      drawCropperOverlay();
-    }
-
-    scanCropCanvas.addEventListener('mousedown', onCropPointerDown);
-    window.addEventListener('mousemove', onCropPointerMove);
-    window.addEventListener('mouseup', onCropPointerUp);
-    scanCropCanvas.addEventListener('touchstart', onCropPointerDown, { passive: false });
-    window.addEventListener('touchmove', onCropPointerMove, { passive: false });
-    window.addEventListener('touchend', onCropPointerUp);
+      cropCorners[draggingCornerIdx] = { x: nx, y: ny }; drawCropperOverlay(); updateMagnifier(clientX, clientY, nx, ny);
+    }, { passive: false });
+    window.addEventListener('touchend', () => { draggingCornerIdx = -1; scanMagnifier.classList.add('hidden'); drawCropperOverlay(); });
 
     document.getElementById('btnScanAutoDetect').addEventListener('click', () => {
       const page = appMemory.scanPages[activeCropPageIdx];
       if (!page) return;
       cropCorners = detectDocumentCorners(page.origCanvas);
       drawCropperOverlay();
-      showToast('ตรวจจับมุมเอกสารอัตโนมัติแล้ว', 'info');
     });
-
-    document.getElementById('btnScanCancelCrop').addEventListener('click', () => {
-      document.getElementById('scanCropperPanel').classList.add('hidden');
-    });
-
+    document.getElementById('btnScanCancelCrop').addEventListener('click', () => document.getElementById('scanCropperPanel').classList.add('hidden'));
     document.getElementById('btnScanApplyCrop').addEventListener('click', () => {
       const page = appMemory.scanPages[activeCropPageIdx];
       if (!page) return;
@@ -1487,22 +1838,18 @@
       page.filteredCanvas = applyScanFilter(page.croppedCanvas, page.filter);
       document.getElementById('scanCropperPanel').classList.add('hidden');
       renderScanPagesList();
-      showToast('ตัดขอบและดึงภาพให้ตรงเรียบร้อย!', 'success');
+      showToast('ดึงขอบเอกสารตั้งตรงเรียบร้อย!', 'success');
     });
 
-    // Signature Pad & Watermark Logic
+    // Signature Pad & Security Watermark Stamper
     const signPad = document.getElementById('signaturePad');
     const signCtx = signPad.getContext('2d');
     let signDrawing = false;
-    let signInkColor = '#0f172a';
-    signCtx.lineWidth = 3;
-    signCtx.lineCap = 'round';
-    signCtx.strokeStyle = signInkColor;
+    signCtx.lineWidth = 3.2; signCtx.lineCap = 'round'; signCtx.strokeStyle = '#0f172a';
 
     document.querySelectorAll('.ink-btn').forEach(b => {
       b.addEventListener('click', () => {
-        signInkColor = b.dataset.ink;
-        signCtx.strokeStyle = signInkColor;
+        signCtx.strokeStyle = b.dataset.ink;
         document.querySelectorAll('.ink-btn').forEach(x => x.classList.remove('ring-2', 'ring-indigo-400'));
         b.classList.add('ring-2', 'ring-indigo-400');
       });
@@ -1528,11 +1875,17 @@
       if (!page) return;
       const target = page.filteredCanvas;
       const ctx = target.getContext('2d');
-      const sw = target.width * 0.28;
+      const sw = target.width * 0.30;
       const sh = sw * (signPad.height / signPad.width);
-      ctx.drawImage(signPad, target.width - sw - target.width * 0.06, target.height - sh - target.height * 0.05, sw, sh);
+      const pos = document.getElementById('signPosSelect').value;
+      let dx = target.width - sw - target.width * 0.06;
+      let dy = target.height - sh - target.height * 0.05;
+      if (pos === 'bc') dx = (target.width - sw) / 2;
+      if (pos === 'bl') dx = target.width * 0.06;
+      if (pos === 'center') { dx = (target.width - sw) / 2; dy = (target.height - sh) / 2; }
+      ctx.drawImage(signPad, dx, dy, sw, sh);
       renderScanPagesList();
-      showToast('ประทับลายเซ็นลงเอกสารแล้ว', 'success');
+      showToast('ประทับลายเซ็นลงเอกสารเรียบร้อย!', 'success');
     });
 
     document.getElementById('btnApplyWatermark').addEventListener('click', () => {
@@ -1541,28 +1894,38 @@
       const text = document.getElementById('watermarkText').value.trim();
       if (!text) return;
       const opacity = parseInt(document.getElementById('watermarkOpacity').value, 10) / 100;
+      const pattern = document.getElementById('watermarkPattern').value;
       const target = page.filteredCanvas;
       const ctx = target.getContext('2d');
+
       ctx.save();
-      ctx.translate(target.width / 2, target.height / 2);
-      ctx.rotate(-Math.PI / 6);
-      const fontSize = Math.max(22, Math.round(target.width * 0.042));
+      const fontSize = Math.max(22, Math.round(target.width * 0.04));
       ctx.font = `bold ${fontSize}px Prompt, sans-serif`;
       ctx.fillStyle = `rgba(30, 58, 138, ${opacity})`;
       ctx.textAlign = 'center';
-      ctx.fillText(text, 0, 0);
+
+      if (pattern === 'tiled') {
+        ctx.translate(target.width / 2, target.height / 2);
+        ctx.rotate(-Math.PI / 6);
+        const stepY = fontSize * 4.5;
+        for (let y = -target.height; y <= target.height; y += stepY) {
+          ctx.fillText(text, 0, y);
+        }
+      } else {
+        ctx.translate(target.width / 2, target.height / 2);
+        ctx.rotate(-Math.PI / 6);
+        ctx.fillText(text, 0, 0);
+      }
       ctx.restore();
       renderScanPagesList();
-      showToast('คาดลายน้ำลงเอกสารเรียบร้อย', 'success');
+      showToast('คาดลายน้ำรับรองสำเนาเรียบร้อย!', 'success');
     });
 
     function rotateCanvas90(srcCanvas) {
       const out = document.createElement('canvas');
-      out.width = srcCanvas.height;
-      out.height = srcCanvas.width;
+      out.width = srcCanvas.height; out.height = srcCanvas.width;
       const ctx = out.getContext('2d');
-      ctx.translate(out.width / 2, out.height / 2);
-      ctx.rotate(Math.PI / 2);
+      ctx.translate(out.width / 2, out.height / 2); ctx.rotate(Math.PI / 2);
       ctx.drawImage(srcCanvas, -srcCanvas.width / 2, -srcCanvas.height / 2);
       return out;
     }
@@ -1602,8 +1965,8 @@
             <button type="button" data-flt="bw" class="py-1 rounded-lg ${page.filter === 'bw' ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-300'}">ขาว-ดำ</button>
           </div>
           <div class="grid grid-cols-3 gap-1.5 text-[11px] pt-1">
-            <button type="button" data-act="crop" class="py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-white font-medium">📐 ตัดขอบ</button>
-            <button type="button" data-act="rotate" class="py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-white font-medium">↻ หมุน 90°</button>
+            <button type="button" data-act="crop" class="py-1.5 rounded-lg bg-white/10 text-white font-medium">📐 ตัดขอบ</button>
+            <button type="button" data-act="rotate" class="py-1.5 rounded-lg bg-white/10 text-white font-medium">↻ หมุน 90°</button>
             <button type="button" data-act="sign" class="py-1.5 rounded-lg bg-amber-500/20 text-amber-300 font-medium">✍️ เซ็น/ลายน้ำ</button>
           </div>
         `;
@@ -1615,7 +1978,6 @@
             renderScanPagesList();
           });
         });
-
         card.querySelector('[data-act="crop"]').addEventListener('click', () => openScanCropper(idx));
         card.querySelector('[data-act="rotate"]').addEventListener('click', () => {
           page.croppedCanvas = rotateCanvas90(page.croppedCanvas);
@@ -1624,27 +1986,24 @@
         });
         card.querySelector('[data-act="sign"]').addEventListener('click', () => {
           activeSignPageIdx = idx;
+          document.getElementById('signTargetPageNum').textContent = idx + 1;
           document.getElementById('scanSignPanel').classList.remove('hidden');
           document.getElementById('scanSignPanel').scrollIntoView({ behavior: 'smooth' });
         });
         card.querySelector('[data-act="up"]').addEventListener('click', () => {
-          if (idx > 0) {
-            [appMemory.scanPages[idx - 1], appMemory.scanPages[idx]] = [appMemory.scanPages[idx], appMemory.scanPages[idx - 1]];
-            renderScanPagesList();
-          }
+          if (idx > 0) { [appMemory.scanPages[idx - 1], appMemory.scanPages[idx]] = [appMemory.scanPages[idx], appMemory.scanPages[idx - 1]]; renderScanPagesList(); }
         });
         card.querySelector('[data-act="down"]').addEventListener('click', () => {
-          if (idx < appMemory.scanPages.length - 1) {
-            [appMemory.scanPages[idx + 1], appMemory.scanPages[idx]] = [appMemory.scanPages[idx], appMemory.scanPages[idx + 1]];
-            renderScanPagesList();
-          }
+          if (idx < appMemory.scanPages.length - 1) { [appMemory.scanPages[idx + 1], appMemory.scanPages[idx]] = [appMemory.scanPages[idx], appMemory.scanPages[idx + 1]]; renderScanPagesList(); }
         });
         card.querySelector('[data-act="del"]').addEventListener('click', () => {
+          zeroCanvas(appMemory.scanPages[idx].origCanvas);
+          zeroCanvas(appMemory.scanPages[idx].croppedCanvas);
+          zeroCanvas(appMemory.scanPages[idx].filteredCanvas);
           appMemory.scanPages.splice(idx, 1);
           renderScanPagesList();
           updateRamMonitor();
         });
-
         list.appendChild(card);
       });
     }
@@ -1653,30 +2012,22 @@
       await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true });
-      const pageW = pdf.internal.pageSize.getWidth();
-      const pageH = pdf.internal.pageSize.getHeight();
-
+      const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
       appMemory.scanPages.forEach((p, idx) => {
         if (idx > 0) pdf.addPage();
         const c = p.filteredCanvas;
-        const imgData = c.toDataURL('image/jpeg', 0.94);
         const ratio = Math.min((pageW - 10) / c.width, (pageH - 10) / c.height);
-        const w = c.width * ratio;
-        const h = c.height * ratio;
-        pdf.addImage(imgData, 'JPEG', (pageW - w) / 2, (pageH - h) / 2, w, h);
+        pdf.addImage(c.toDataURL('image/jpeg', 0.94), 'JPEG', (pageW - c.width * ratio) / 2, (pageH - c.height * ratio) / 2, c.width * ratio, c.height * ratio);
       });
-
       return pdf.output('blob');
     }
 
     document.getElementById('btnScanExportPdf').addEventListener('click', async () => {
       if (!appMemory.scanPages.length) return;
-      showToast('กำลังรวมเอกสารเป็นไฟล์ PDF...', 'info');
       const blob = await buildMultiPagePdfBlob();
       const rawName = document.getElementById('scanFileNameInput').value.trim() || 'Scan_Document';
       triggerDownloadBlob(blob, `${rawName.replace(/\.pdf$/i, '')}.pdf`);
     });
-
     document.getElementById('btnScanSharePdf').addEventListener('click', async () => {
       if (!appMemory.scanPages.length) return;
       const blob = await buildMultiPagePdfBlob();
@@ -1685,11 +2036,42 @@
     });
 
     // =========================================================================
-    // 3. MODULE 3: IMAGE RESIZER & TARGET KB COMPRESSOR
+    // 4. MODULE 4: IMAGE RESIZER & EXIF/GPS METADATA INSPECTOR/STRIPPER
     // =========================================================================
-    let resizerMode = 'percent';
+    let resizerMode = 'cleanonly';
     let resizerOrigRatio = 1;
-    let resizerFileName = 'resized';
+    let resizerFileName = 'clean';
+
+    // Lightweight Binary EXIF & GPS Tag Scanner
+    async function inspectImageExif(file) {
+      const lines = [`ชื่อไฟล์: ${file.name}`, `ขนาดไฟล์เดิม: ${(file.size / 1024).toFixed(1)} KB (${file.type})`];
+      try {
+        const slice = await file.slice(0, 65536).arrayBuffer();
+        const view = new DataView(slice);
+        let foundExif = false, foundGps = false;
+        const decoder = new TextDecoder('latin1');
+        const rawStr = decoder.decode(new Uint8Array(slice));
+
+        if (view.byteLength > 4 && view.getUint16(0) === 0xFFD8) {
+          if (rawStr.includes('Exif')) foundExif = true;
+          if (rawStr.includes('GPS')) foundGps = true;
+        }
+        const camMatch = rawStr.match(/(Apple|iPhone|Samsung|SM-[A-Z0-9]+|Xiaomi|OPPO|vivo|Sony|Canon|Nikon|Pixel [0-9]+)/);
+        const dateMatch = rawStr.match(/20[12][0-9]:[01][0-9]:[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]/);
+
+        if (foundGps) lines.push('⚠️ พิกัดตำแหน่ง GPS: ตรวจพบข้อมูลพิกัดสถานที่ (จะถูกลบออกทั้งหมด)');
+        else lines.push('✓ พิกัดตำแหน่ง GPS: ไม่พบในส่วนหัวไฟล์');
+
+        if (camMatch) lines.push(`⚠️ รุ่นอุปกรณ์/กล้อง: ${camMatch[0]} (จะถูกลบออก)`);
+        if (dateMatch) lines.push(`⚠️ วันเวลาที่ถ่าย: ${dateMatch[0]} (จะถูกลบออก)`);
+        if (!foundExif && !camMatch && !dateMatch) lines.push('ℹ️ ไม่พบข้อมูล EXIF ส่วนตัว หรือถูกล้างมาแล้ว');
+
+        document.getElementById('exifBadgeStatus').textContent = (foundExif || foundGps || camMatch) ? 'พบข้อมูลส่วนตัว (พร้อมล้าง)' : 'พร้อมทำความสะอาด';
+      } catch (e) {
+        lines.push('พร้อมล้างข้อมูล Metadata ทั้งหมด');
+      }
+      document.getElementById('exifDetailsBox').innerHTML = lines.map(l => `<div>${l}</div>`).join('');
+    }
 
     const resizerInput = document.getElementById('resizerFileInput');
     document.getElementById('btnResizerSelect').addEventListener('click', (e) => { e.stopPropagation(); resizerInput.click(); });
@@ -1699,12 +2081,14 @@
       const file = e.target.files?.[0];
       if (!file) return;
       resizerInput.value = '';
-      resizerFileName = file.name.replace(/\.[^/.]+$/, '') || 'resized';
+      resizerFileName = file.name.replace(/\.[^/.]+$/, '') || 'clean';
+      await inspectImageExif(file);
+
       const img = await fileToImage(file);
       appMemory.resizerImg = img;
       resizerOrigRatio = img.naturalWidth / img.naturalHeight;
 
-      document.getElementById('resizerOrigInfo').textContent = `ต้นฉบับ: ${img.naturalWidth} × ${img.naturalHeight} px (${(file.size / 1024).toFixed(1)} KB)`;
+      document.getElementById('resizerOrigInfo').textContent = `ต้นฉบับ: ${img.naturalWidth} × ${img.naturalHeight} px`;
       document.getElementById('rWidthInput').value = Math.round(img.naturalWidth * 0.5);
       document.getElementById('rHeightInput').value = Math.round(img.naturalHeight * 0.5);
       document.getElementById('resizerControls').classList.remove('hidden');
@@ -1715,40 +2099,28 @@
     document.querySelectorAll('.rmode-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         resizerMode = btn.dataset.rmode;
-        document.querySelectorAll('.rmode-btn').forEach(b => {
-          b.className = 'rmode-btn py-2 rounded-xl text-slate-300 text-xs font-bold';
-        });
+        document.querySelectorAll('.rmode-btn').forEach(b => b.className = 'rmode-btn py-2 rounded-xl text-slate-300 text-xs font-bold');
         btn.className = 'rmode-btn py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold';
-        ['percent', 'dims', 'targetkb'].forEach(m => {
+        ['cleanonly', 'percent', 'dims', 'targetkb'].forEach(m => {
           document.getElementById(`rmode-${m}`).classList.toggle('hidden', m !== resizerMode);
         });
       });
     });
 
-    document.getElementById('rPercentSlider').addEventListener('input', (e) => {
-      document.getElementById('rPercentVal').textContent = `${e.target.value}%`;
-    });
-
+    document.getElementById('rPercentSlider').addEventListener('input', (e) => { document.getElementById('rPercentVal').textContent = `${e.target.value}%`; });
     document.getElementById('rWidthInput').addEventListener('input', (e) => {
-      if (document.getElementById('rLockRatio').checked && e.target.value) {
-        document.getElementById('rHeightInput').value = Math.round(parseInt(e.target.value, 10) / resizerOrigRatio);
-      }
+      if (document.getElementById('rLockRatio').checked && e.target.value) document.getElementById('rHeightInput').value = Math.round(parseInt(e.target.value, 10) / resizerOrigRatio);
     });
     document.getElementById('rHeightInput').addEventListener('input', (e) => {
-      if (document.getElementById('rLockRatio').checked && e.target.value) {
-        document.getElementById('rWidthInput').value = Math.round(parseInt(e.target.value, 10) * resizerOrigRatio);
-      }
+      if (document.getElementById('rLockRatio').checked && e.target.value) document.getElementById('rWidthInput').value = Math.round(parseInt(e.target.value, 10) * resizerOrigRatio);
     });
-    document.querySelectorAll('.kb-preset').forEach(b => {
-      b.addEventListener('click', () => { document.getElementById('rTargetKbInput').value = b.dataset.kb; });
-    });
+    document.querySelectorAll('.kb-preset').forEach(b => b.addEventListener('click', () => { document.getElementById('rTargetKbInput').value = b.dataset.kb; }));
 
     document.getElementById('btnRunResize').addEventListener('click', async () => {
       const img = appMemory.resizerImg;
       if (!img) return;
       const mime = document.getElementById('rOutFormat').value;
-      let targetW = img.naturalWidth;
-      let targetH = img.naturalHeight;
+      let targetW = img.naturalWidth, targetH = img.naturalHeight;
 
       if (resizerMode === 'percent') {
         const pct = parseInt(document.getElementById('rPercentSlider').value, 10) / 100;
@@ -1760,69 +2132,60 @@
       }
 
       const canvas = document.createElement('canvas');
-      canvas.width = targetW;
-      canvas.height = targetH;
+      canvas.width = targetW; canvas.height = targetH;
       const ctx = canvas.getContext('2d');
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      if (mime === 'image/jpeg') {
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, targetW, targetH);
-      }
+      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+      if (mime === 'image/jpeg') { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, targetW, targetH); }
       ctx.drawImage(img, 0, 0, targetW, targetH);
 
       let outBlob = null;
       if (resizerMode === 'targetkb') {
         const maxBytes = (parseInt(document.getElementById('rTargetKbInput').value, 10) || 200) * 1024;
         const effectiveMime = mime === 'image/png' ? 'image/jpeg' : mime;
-        // Binary search quality 0.05..0.98
         let low = 0.05, high = 0.98;
         for (let iter = 0; iter < 7; iter++) {
           const mid = (low + high) / 2;
           const b = await new Promise(r => canvas.toBlob(r, effectiveMime, mid));
           outBlob = b;
-          if (b.size > maxBytes) high = mid;
-          else low = mid;
+          if (b.size > maxBytes) high = mid; else low = mid;
         }
-        // If even at lowest quality still larger than maxBytes, scale dimensions down proportionally
         if (outBlob.size > maxBytes) {
-          const scaleFactor = Math.sqrt(maxBytes / outBlob.size) * 0.9;
-          targetW = Math.max(40, Math.round(targetW * scaleFactor));
-          targetH = Math.max(40, Math.round(targetH * scaleFactor));
-          canvas.width = targetW;
-          canvas.height = targetH;
+          const sc = Math.sqrt(maxBytes / outBlob.size) * 0.9;
+          targetW = Math.max(40, Math.round(targetW * sc));
+          targetH = Math.max(40, Math.round(targetH * sc));
+          canvas.width = targetW; canvas.height = targetH;
           ctx.drawImage(img, 0, 0, targetW, targetH);
           outBlob = await new Promise(r => canvas.toBlob(r, effectiveMime, 0.75));
         }
       } else {
-        outBlob = await new Promise(r => canvas.toBlob(r, mime, 0.92));
+        outBlob = await new Promise(r => canvas.toBlob(r, mime, resizerMode === 'cleanonly' ? 0.98 : 0.92));
       }
 
       appMemory.resizerBlob = outBlob;
-      const previewUrl = URL.createObjectURL(outBlob);
+      const previewUrl = createTrackedBlobUrl(outBlob);
       const pImg = document.getElementById('rPreviewImg');
-      pImg.onload = () => URL.revokeObjectURL(previewUrl);
+      pImg.onload = () => revokeTrackedBlobUrl(previewUrl);
       pImg.src = previewUrl;
 
       document.getElementById('rNewDimText').textContent = `${targetW} × ${targetH} px`;
-      document.getElementById('rNewSizeText').textContent = `${(outBlob.size / 1024).toFixed(1)} KB`;
+      document.getElementById('rNewSizeText').textContent = `${(outBlob.size / 1024).toFixed(1)} KB • ปลอด GPS/EXIF 100%`;
       document.getElementById('resizerResultBox').classList.remove('hidden');
-      showToast('ย่อขนาดภาพและลบข้อมูล GPS เรียบร้อย!', 'success');
+      showToast('ล้างข้อมูล GPS/EXIF และประมวลผลภาพเรียบร้อย!', 'success');
     });
 
     document.getElementById('btnResizerDownload').addEventListener('click', () => {
       if (!appMemory.resizerBlob) return;
       const ext = appMemory.resizerBlob.type.split('/')[1].replace('jpeg', 'jpg');
-      triggerDownloadBlob(appMemory.resizerBlob, `${resizerFileName}_resized.${ext}`);
+      triggerDownloadBlob(appMemory.resizerBlob, `${resizerFileName}_nogps.${ext}`);
     });
     document.getElementById('btnResizerShare').addEventListener('click', () => {
       if (!appMemory.resizerBlob) return;
       const ext = appMemory.resizerBlob.type.split('/')[1].replace('jpeg', 'jpg');
-      triggerShareBlob(appMemory.resizerBlob, `${resizerFileName}_resized.${ext}`, appMemory.resizerBlob.type);
+      triggerShareBlob(appMemory.resizerBlob, `${resizerFileName}_nogps.${ext}`, appMemory.resizerBlob.type);
     });
 
     // =========================================================================
-    // 4. MODULE 4: UNIVERSAL FILE CONVERTER (IMAGE <-> PDF <-> WORD)
+    // 5. MODULE 5: UNIVERSAL FILE CONVERTER (IMAGE <-> PDF <-> WORD)
     // =========================================================================
     let convMode = 'img2img';
     const convFileInput = document.getElementById('convFileInput');
@@ -1831,63 +2194,40 @@
       img2img: {
         title: 'แปลงสกุลไฟล์รูปภาพ (JPG / PNG / WEBP / BMP)',
         sub: 'เลือกได้หลายรูปพร้อมกัน',
-        accept: 'image/*',
-        multiple: true,
-        options: [
-          { val: 'png', label: 'PNG (โปร่งใส ชัดสุด)' },
-          { val: 'jpeg', label: 'JPG / JPEG' },
-          { val: 'webp', label: 'WEBP' },
-          { val: 'bmp', label: 'BMP' }
-        ]
+        accept: 'image/*', multiple: true,
+        options: [{ val: 'png', label: 'PNG (โปร่งใส ชัดสุด)' }, { val: 'jpeg', label: 'JPG / JPEG' }, { val: 'webp', label: 'WEBP' }, { val: 'bmp', label: 'BMP' }]
       },
       img2pdf: {
         title: 'รวมไฟล์รูปภาพหลายรูปเป็น PDF เดียว',
         sub: 'เลือกรูปภาพ JPG, PNG, WEBP ได้ไม่จำกัด',
-        accept: 'image/*',
-        multiple: true,
+        accept: 'image/*', multiple: true,
         options: [{ val: 'pdf', label: 'PDF เอกสารรวมหน้า' }]
       },
       pdf2img: {
         title: 'แปลงไฟล์ PDF เป็นรูปภาพ หรือ Word (.docx)',
         sub: 'เลือกไฟล์ .pdf จากมือถือของคุณ',
-        accept: 'application/pdf',
-        multiple: false,
-        options: [
-          { val: 'png', label: 'รูปภาพ PNG (ทุกหน้า)' },
-          { val: 'jpeg', label: 'รูปภาพ JPG (ทุกหน้า)' },
-          { val: 'docx', label: 'ไฟล์ Word (.docx)' }
-        ]
+        accept: 'application/pdf', multiple: false,
+        options: [{ val: 'png', label: 'รูปภาพ PNG (ทุกหน้า)' }, { val: 'jpeg', label: 'รูปภาพ JPG (ทุกหน้า)' }, { val: 'docx', label: 'ไฟล์ Word (.docx)' }]
       },
       word2pdf: {
         title: 'แปลงไฟล์ Word (.docx) เป็น PDF หรือรูปภาพ',
         sub: 'เลือกไฟล์เอกสาร .docx',
-        accept: '.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        multiple: false,
-        options: [
-          { val: 'pdf', label: 'ไฟล์ PDF' },
-          { val: 'png', label: 'รูปภาพ PNG' }
-        ]
+        accept: '.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document', multiple: false,
+        options: [{ val: 'pdf', label: 'ไฟล์ PDF' }, { val: 'png', label: 'รูปภาพ PNG' }]
       }
     };
 
     document.querySelectorAll('.conv-mode-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         convMode = btn.dataset.conv;
-        document.querySelectorAll('.conv-mode-btn').forEach(b => {
-          b.className = 'conv-mode-btn p-3 rounded-2xl border border-white/10 bg-white/5 text-left';
-        });
+        document.querySelectorAll('.conv-mode-btn').forEach(b => b.className = 'conv-mode-btn p-3 rounded-2xl border border-white/10 bg-white/5 text-left');
         btn.className = 'conv-mode-btn p-3 rounded-2xl border border-indigo-500 bg-indigo-600/25 text-left';
-
         const cfg = convConfigs[convMode];
         document.getElementById('convTitle').textContent = cfg.title;
         document.getElementById('convSubtitle').textContent = cfg.sub;
-        convFileInput.accept = cfg.accept;
-        convFileInput.multiple = cfg.multiple;
-        appMemory.convFiles = [];
-        document.getElementById('convOutputList').innerHTML = '';
-
-        const sel = document.getElementById('convTargetSelect');
-        sel.innerHTML = cfg.options.map(o => `<option value="${o.val}">${o.label}</option>`).join('');
+        convFileInput.accept = cfg.accept; convFileInput.multiple = cfg.multiple;
+        appMemory.convFiles = []; document.getElementById('convOutputList').innerHTML = '';
+        document.getElementById('convTargetSelect').innerHTML = cfg.options.map(o => `<option value="${o.val}">${o.label}</option>`).join('');
       });
     });
 
@@ -1895,9 +2235,7 @@
     convFileInput.addEventListener('change', (e) => {
       appMemory.convFiles = Array.from(e.target.files || []);
       convFileInput.value = '';
-      if (appMemory.convFiles.length) {
-        showToast(`เลือกไฟล์แล้ว ${appMemory.convFiles.length} ไฟล์ กดปุ่ม "เริ่มแปลงไฟล์" ได้เลย`, 'info');
-      }
+      if (appMemory.convFiles.length) showToast(`เลือกไฟล์แล้ว ${appMemory.convFiles.length} ไฟล์ กดปุ่ม "เริ่มแปลงไฟล์" ได้เลย`, 'info');
     });
 
     function appendConvResultItem(filename, blob, mime) {
@@ -1923,20 +2261,13 @@
       await loadScriptOnce('https://unpkg.com/docx@8.5.0/build/index.umd.js');
       const { Document, Packer, Paragraph, TextRun } = window.docx;
       const doc = new Document({
-        sections: [{
-          children: paragraphs.map(text => new Paragraph({
-            children: [new TextRun({ text, font: 'TH Sarabun New', size: 32 })]
-          }))
-        }]
+        sections: [{ children: paragraphs.map(text => new Paragraph({ children: [new TextRun({ text, font: 'TH Sarabun New', size: 32 })] })) }]
       });
       return await Packer.toBlob(doc);
     }
 
     document.getElementById('btnConvExecute').addEventListener('click', async () => {
-      if (!appMemory.convFiles.length) {
-        showToast('กรุณาเลือกไฟล์ต้นฉบับก่อน', 'error');
-        return;
-      }
+      if (!appMemory.convFiles.length) { showToast('กรุณาเลือกไฟล์ต้นฉบับก่อน', 'error'); return; }
       const targetFmt = document.getElementById('convTargetSelect').value;
       const outList = document.getElementById('convOutputList');
       outList.innerHTML = '<div class="text-xs text-indigo-300 animate-pulse">กำลังแปลงไฟล์ในอุปกรณ์ของคุณ...</div>';
@@ -1951,17 +2282,10 @@
             const ctx = c.getContext('2d');
             if (targetFmt === 'jpeg') { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, c.width, c.height); }
             ctx.drawImage(img, 0, 0);
-
             let blob, mime;
-            if (targetFmt === 'bmp') {
-              blob = encodeCanvasToBmp(c); mime = 'image/bmp';
-            } else {
-              mime = `image/${targetFmt}`;
-              blob = await new Promise(r => c.toBlob(r, mime, 0.96));
-            }
-            const ext = targetFmt === 'jpeg' ? 'jpg' : targetFmt;
-            const base = f.name.replace(/\.[^/.]+$/, '');
-            appendConvResultItem(`${base}.${ext}`, blob, mime);
+            if (targetFmt === 'bmp') { blob = encodeCanvasToBmp(c); mime = 'image/bmp'; }
+            else { mime = `image/${targetFmt}`; blob = await new Promise(r => c.toBlob(r, mime, 0.96)); }
+            appendConvResultItem(`${f.name.replace(/\.[^/.]+$/, '')}.${targetFmt === 'jpeg' ? 'jpg' : targetFmt}`, blob, mime);
           }
         } else if (convMode === 'img2pdf') {
           await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
@@ -1984,21 +2308,16 @@
         } else if (convMode === 'pdf2img') {
           await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
           window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-          const buf = await appMemory.convFiles[0].arrayBuffer();
-          const pdfDoc = await window.pdfjsLib.getDocument({ data: buf }).promise;
+          const pdfDoc = await window.pdfjsLib.getDocument({ data: await appMemory.convFiles[0].arrayBuffer() }).promise;
           outList.innerHTML = '';
-
           if (targetFmt === 'docx') {
             let allLines = [];
             for (let p = 1; p <= pdfDoc.numPages; p++) {
-              const page = await pdfDoc.getPage(p);
-              const content = await page.getTextContent();
-              const pageText = content.items.map(it => it.str).join(' ');
-              allLines.push(`--- หน้าที่ ${p} ---`, pageText);
+              const content = await (await pdfDoc.getPage(p)).getTextContent();
+              allLines.push(`--- หน้าที่ ${p} ---`, content.items.map(it => it.str).join(' '));
             }
             const docBlob = await createDocxBlobFromParagraphs(allLines);
-            const base = appMemory.convFiles[0].name.replace(/\.pdf$/i, '');
-            appendConvResultItem(`${base}.docx`, docBlob, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+            appendConvResultItem(`${appMemory.convFiles[0].name.replace(/\.pdf$/i, '')}.docx`, docBlob, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
           } else {
             for (let p = 1; p <= pdfDoc.numPages; p++) {
               const page = await pdfDoc.getPage(p);
@@ -2007,36 +2326,24 @@
               c.width = vp.width; c.height = vp.height;
               await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
               const mime = `image/${targetFmt}`;
-              const blob = await new Promise(r => c.toBlob(r, mime, 0.95));
-              const ext = targetFmt === 'jpeg' ? 'jpg' : 'png';
-              appendConvResultItem(`Page_${p}.${ext}`, blob, mime);
+              appendConvResultItem(`Page_${p}.${targetFmt === 'jpeg' ? 'jpg' : 'png'}`, await new Promise(r => c.toBlob(r, mime, 0.95)), mime);
             }
           }
         } else if (convMode === 'word2pdf') {
           await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
-          const buf = await appMemory.convFiles[0].arrayBuffer();
-          const res = await window.mammoth.extractRawText({ arrayBuffer: buf });
+          const res = await window.mammoth.extractRawText({ arrayBuffer: await appMemory.convFiles[0].arrayBuffer() });
           const lines = (res.value || 'ไม่มีข้อความในเอกสาร').split('\n');
-
-          // Render clean A4 canvas with Thai font support
           const c = document.createElement('canvas');
           c.width = 1240; c.height = 1754;
           const ctx = c.getContext('2d');
           ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, c.width, c.height);
           ctx.fillStyle = '#0f172a'; ctx.font = '28px Prompt, sans-serif';
           let y = 100;
-          lines.forEach(line => {
-            if (y < 1660) {
-              ctx.fillText(line.slice(0, 75), 80, y);
-              y += 42;
-            }
-          });
-
+          lines.forEach(line => { if (y < 1660) { ctx.fillText(line.slice(0, 75), 80, y); y += 42; } });
           outList.innerHTML = '';
           const base = appMemory.convFiles[0].name.replace(/\.docx$/i, '');
           if (targetFmt === 'png') {
-            const blob = await new Promise(r => c.toBlob(r, 'image/png', 1));
-            appendConvResultItem(`${base}.png`, blob, 'image/png');
+            appendConvResultItem(`${base}.png`, await new Promise(r => c.toBlob(r, 'image/png', 1)), 'image/png');
           } else {
             await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
             const { jsPDF } = window.jspdf;
@@ -2054,7 +2361,7 @@
     });
 
     // =========================================================================
-    // 5. MODULE 5: AI OCR (THAI + ENGLISH TEXT RECOGNITION)
+    // 6. MODULE 6: AI OCR (THAI + ENGLISH TEXT EXTRACTION)
     // =========================================================================
     const ocrFileInput = document.getElementById('ocrFileInput');
     document.getElementById('btnOcrSelect').addEventListener('click', () => ocrFileInput.click());
@@ -2065,9 +2372,9 @@
       ocrFileInput.value = '';
       appMemory.ocrImageFile = file;
 
-      const url = URL.createObjectURL(file);
+      const url = createTrackedBlobUrl(file);
       const pImg = document.getElementById('ocrPreviewImg');
-      pImg.onload = () => URL.revokeObjectURL(url);
+      pImg.onload = () => revokeTrackedBlobUrl(url);
       pImg.src = url;
 
       document.getElementById('ocrWorkArea').classList.remove('hidden');
@@ -2078,12 +2385,9 @@
       try {
         await loadScriptOnce('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js');
         const lang = document.getElementById('ocrLangSelect').value;
-
         const worker = await window.Tesseract.createWorker(lang, 1, {
           logger: m => {
-            if (m.status) {
-              document.getElementById('ocrStatusText').textContent = `สถานะ: ${m.status}`;
-            }
+            if (m.status) document.getElementById('ocrStatusText').textContent = `สถานะ: ${m.status}`;
             if (typeof m.progress === 'number') {
               const pct = Math.round(m.progress * 100);
               document.getElementById('ocrPctText').textContent = `${pct}%`;
@@ -2091,11 +2395,9 @@
             }
           }
         });
-
         const ret = await worker.recognize(file);
         document.getElementById('ocrOutputText').value = ret.data.text.trim();
         await worker.terminate();
-
         progWrap.classList.add('hidden');
         showToast('อ่านข้อความจากรูปภาพเสร็จสมบูรณ์!', 'success');
       } catch (err) {
@@ -2111,34 +2413,16 @@
       document.execCommand('copy');
       showToast('คัดลอกข้อความลงคลิปบอร์ดแล้ว!', 'success');
     });
-
     document.getElementById('btnOcrSaveTxt').addEventListener('click', () => {
-      const text = document.getElementById('ocrOutputText').value;
-      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-      triggerDownloadBlob(blob, 'OCR_Extracted_Text.txt');
+      triggerDownloadBlob(new Blob([document.getElementById('ocrOutputText').value], { type: 'text/plain;charset=utf-8' }), 'OCR_Extracted_Text.txt');
     });
-
     document.getElementById('btnOcrSaveDocx').addEventListener('click', async () => {
-      const text = document.getElementById('ocrOutputText').value;
-      const blob = await createDocxBlobFromParagraphs(text.split('\n'));
-      triggerDownloadBlob(blob, 'OCR_Extracted_Document.docx');
+      triggerDownloadBlob(await createDocxBlobFromParagraphs(document.getElementById('ocrOutputText').value.split('\n')), 'OCR_Extracted_Document.docx');
     });
-
     document.getElementById('btnOcrShare').addEventListener('click', async () => {
       const text = document.getElementById('ocrOutputText').value;
-      if (navigator.share) {
-        await navigator.share({ title: 'ข้อความจากภาพ (OCR)', text });
-      } else {
-        document.getElementById('btnOcrCopy').click();
-      }
-    });
-
-    // Auto-purge RAM when page closes
-    window.addEventListener('pagehide', () => {
-      appMemory.bgOrigImg = null;
-      appMemory.bgMaskCanvas = null;
-      appMemory.bgFinalCanvas = null;
-      appMemory.scanPages = [];
+      if (navigator.share) await navigator.share({ title: 'ข้อความจากภาพ (OCR)', text });
+      else document.getElementById('btnOcrCopy').click();
     });
   </script>
 </body>
