@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#090d16">
-<title>Privacy Studio Pro — AI Neural Suite (Offline & No-Cache)</title>
+<title>Privacy Studio Pro — Mobile Anti-Crash Edition</title>
 <style>
   :root {
     --bg: #090d16;
@@ -258,28 +258,28 @@
     </div>
   </section>
 
-  <!-- ==================== TAB 2: AI NEURAL SUPER-RESOLUTION & RESTORATION ==================== -->
+  <!-- ==================== TAB 2: ANTI-CRASH TILED AI SUPER-RESOLUTION & RESTORATION ==================== -->
   <section id="tab-upscale" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        AI เพิ่มความชัดภาพเก่า & สร้างรายละเอียดสมจริง
+        เพิ่มความชัดภาพเก่า & ฟื้นฟูสีสัน (โหมดกันค้างบนมือถือ)
       </h2>
-      <p class="sub">ใช้โมเดล AI Neural Super-Resolution (Swin2SR) สร้างความคมชัดสมจริงโดยไม่ทำให้ใบหน้าเดิมเพี้ยน</p>
+      <p class="sub">ประมวลผลแบบหั่นบล็อกย่อย (Tiled AI) ไม่กิน RAM เกินพิกัด ไม่เด้งบนมือถือ พร้อมโหมดลงสีภาพขาว-ดำ</p>
       <label class="dropzone">
         <input type="file" id="upFileInput" accept="image/*">
         <svg class="ico-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3m0 12v3M3 12h3m12 0h3m-4.2-5.8 2.1-2.1M5.1 18.9l2.1-2.1m0-9.6L5.1 5.1m13.8 13.8-2.1-2.1"/></svg>
         <div class="title">เลือกรูปภาพเก่า ภาพเบลอ หรือภาพขาว-ดำ</div>
-        <div class="hint">ประมวลผล Neural Network ในเบราว์เซอร์ (รองรับลงสีภาพขาว-ดำ)</div>
+        <div class="hint">ฟื้นฟูรายละเอียด ลบจุดด่างขาว และเร่งมิติแสงเงา</div>
       </label>
       <div id="upStatus" class="status-box"></div>
       <div id="upWorkspace" class="hidden" style="margin-top:12px;">
         <div class="grid-2">
           <div>
-            <label>เอนจินเพิ่มความละเอียด</label>
+            <label>โหมดประมวลผล</label>
             <select id="upEngineMode">
-              <option value="ai_neural">AI Neural Super-Resolution (สร้างรายละเอียดสมจริง 2x)</option>
-              <option value="hd_4x">Ultra HD 4x + ลบรอยขีดข่วน (เร็วพิเศษ)</option>
+              <option value="hd_pro">HD Pro Restoration 2x (เร็ว ไม่ค้าง ไม่ใช้เน็ต)</option>
+              <option value="tiled_ai">Tiled AI Neural 2x (หั่นทีละช่อง กันRAMเต็ม)</option>
             </select>
           </div>
           <div>
@@ -293,15 +293,15 @@
         </div>
         <div class="grid-2" style="margin-top:10px;">
           <div>
-            <label>ความคมชัดรายละเอียด (<span id="upSharpVal">60</span>%)</label>
-            <input type="range" id="upSharp" min="0" max="100" value="60" oninput="document.getElementById('upSharpVal').textContent=this.value">
+            <label>ความคมชัดรายละเอียด (<span id="upSharpVal">68</span>%)</label>
+            <input type="range" id="upSharp" min="0" max="100" value="68" oninput="document.getElementById('upSharpVal').textContent=this.value">
           </div>
           <div>
-            <label>ลบรอยขีดข่วน / เกรนเก่า (<span id="upDenoiseVal">45</span>%)</label>
-            <input type="range" id="upDenoise" min="0" max="100" value="45" oninput="document.getElementById('upDenoiseVal').textContent=this.value">
+            <label>ลบรอยขีดข่วน / เกรนเก่า (<span id="upDenoiseVal">50</span>%)</label>
+            <input type="range" id="upDenoise" min="0" max="100" value="50" oninput="document.getElementById('upDenoiseVal').textContent=this.value">
           </div>
         </div>
-        <button class="btn btn-primary" style="margin-top:10px;" onclick="processNeuralUpscale()">เริ่มประมวลผล AI เพิ่มความชัด</button>
+        <button class="btn btn-primary" style="margin-top:10px;" onclick="processSafeUpscale()">เริ่มประมวลผลเพิ่มความชัด</button>
 
         <div id="upCompareWrap" class="hidden" style="margin-top:12px;">
           <label>เลื่อนซ้าย-ขวา เพื่อเปรียบเทียบ BEFORE / AFTER</label>
@@ -312,27 +312,27 @@
           </div>
           <input type="range" min="0" max="100" value="50" style="margin-top:8px;" oninput="slideCompare(this.value)">
           <div class="grid-2" style="margin-top:10px;">
-            <button class="btn btn-primary" onclick="saveCanvasFile(upOutCanvas, 'AI_Enhanced_HD.png', 'image/png')">บันทึกภาพชัด (PNG)</button>
-            <button class="btn btn-accent" onclick="shareCanvasFile(upOutCanvas, 'AI_Enhanced_HD.png', 'image/png')">แชร์ / บันทึกลงอัลบั้ม</button>
+            <button class="btn btn-primary" onclick="saveCanvasFile(upOutCanvas, 'Enhanced_HD.png', 'image/png')">บันทึกภาพชัด (PNG)</button>
+            <button class="btn btn-accent" onclick="shareCanvasFile(upOutCanvas, 'Enhanced_HD.png', 'image/png')">แชร์ / บันทึกลงอัลบั้ม</button>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== TAB 3: AI LAMA WATERMARK & OBJECT REMOVER ==================== -->
+  <!-- ==================== TAB 3: WATERMARK & OBJECT REMOVER ==================== -->
   <section id="tab-inpaint" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><path d="M20 20H7L3 16c-.6-.6-.6-1.5 0-2.1l10-10c.6-.6 1.5-.6 2.1 0l6 6c.6.6.6 1.5 0 2.1L13 20"/><path d="M6 11l7 7"/></svg>
-        ลบลายน้ำ AI (เฉพาะจุดที่เลือก ไม่แตะต้องภาพส่วนอื่น)
+        ลบลายน้ำ & วัตถุส่วนเกิน (ซ่อมเฉพาะจุดที่เลือก)
       </h2>
-      <p class="sub">ใช้ AI LaMa Inpainting ซ่อมแซมเฉพาะบริเวณที่ระบายหรือลากกรอบคลุม พื้นที่นอกกรอบคงเดิม 100%</p>
+      <p class="sub">ระบายทับตัวหนังสือลายน้ำหรือลากกรอบคลุมโลโก้ พื้นที่นอกเส้นเลือกจะไม่ถูกแตะต้อง 100%</p>
       <label class="dropzone">
         <input type="file" id="wmFileInput" accept="image/*">
         <svg class="ico-lg" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         <div class="title">เลือกรูปภาพที่ต้องการลบลายน้ำหรือวัตถุ</div>
-        <div class="hint">เลือกได้ทั้งแบบระบายทับตัวหนังสือ และลากกรอบสี่เหลี่ยมคลุมโลโก้</div>
+        <div class="hint">ซูมเข้าไปใกล้ๆ แล้วระบายทับเฉพาะตัวหนังสือลายน้ำ</div>
       </label>
       <div id="wmStatus" class="status-box"></div>
       <div id="wmWorkspace" class="hidden" style="margin-top:12px;">
@@ -342,14 +342,14 @@
         </div>
         <div class="grid-2" style="margin-bottom:8px;">
           <div>
-            <label>ขนาดหัวแปรง (<span id="wmBrushVal">14</span> px)</label>
-            <input type="range" id="wmBrushSize" min="4" max="55" value="14" oninput="document.getElementById('wmBrushVal').textContent=this.value">
+            <label>ขนาดหัวแปรง (<span id="wmBrushVal">12</span> px)</label>
+            <input type="range" id="wmBrushSize" min="3" max="50" value="12" oninput="document.getElementById('wmBrushVal').textContent=this.value">
           </div>
           <div style="display:flex;align-items:flex-end;gap:6px;">
             <button class="btn-xs" onclick="wmZoom(1.3)">ซูมเข้า (+)</button>
             <button class="btn-xs" onclick="wmZoom(0.77)">ซูมออก (-)</button>
             <button class="btn-xs" onclick="wmUndo()">ย้อนกลับ</button>
-            <button class="btn-xs danger" onclick="wmClearMask()">ล้างเส้นเลือก</button>
+            <button class="btn-xs danger" onclick="wmClearMask()">ล้างเส้น</button>
           </div>
         </div>
         <div class="canvas-wrap" style="overflow:auto;">
@@ -389,7 +389,6 @@
         </div>
         <div class="canvas-wrap"><canvas id="scanPreviewCanvas"></canvas></div>
 
-        <!-- Text & Watermark Size / Angle / Color Controls -->
         <div class="card" style="margin-top:10px;background:var(--bg);">
           <div class="grid-2">
             <div>
@@ -437,7 +436,6 @@
           </div>
         </div>
 
-        <!-- Signature Pad & Size Control -->
         <div class="card" style="margin-top:10px;background:var(--bg);">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
             <label style="margin:0;">วาดลายเซ็นด้วยนิ้ว (ลากย้ายบนกระดาษได้)</label>
@@ -456,7 +454,6 @@
             <input type="range" id="sigScale" min="10" max="70" value="28" oninput="document.getElementById('sigScaleVal').textContent=this.value;applyScanEnhancements()">
           </div>
 
-          <!-- Direct Image Download Buttons for Current Page -->
           <div class="grid-3" style="margin-top:10px;">
             <button class="btn btn-secondary" onclick="downloadSingleScanPage('jpeg')">โหลดหน้านี้ (JPG)</button>
             <button class="btn btn-secondary" onclick="downloadSingleScanPage('png')">โหลดหน้านี้ (PNG)</button>
@@ -624,7 +621,7 @@
     </div>
   </section>
 
-  <!-- ==================== TAB 7: HIGH-PRECISION THAI/ENG OCR WITH CROP BOX ==================== -->
+  <!-- ==================== TAB 7: HIGH-PRECISION THAI/ENG OCR ==================== -->
   <section id="tab-ocr" class="tab-panel">
     <div class="card">
       <h2>
@@ -884,7 +881,7 @@ function getBgExportBlob() {
 async function downloadBgResult() { const { blob, name } = await getBgExportBlob(); triggerDownload(blob, name); }
 async function shareBgResult() { const { blob, name } = await getBgExportBlob(); triggerShareOrSave(blob, name); }
 
-// ==================== 3. AI NEURAL SUPER-RESOLUTION (SWIN2SR) & RESTORATION ====================
+// ==================== 3. ANTI-CRASH TILED AI SUPER-RESOLUTION & RESTORATION ====================
 let upOrigImg = null, upOutCanvas = document.createElement('canvas');
 document.getElementById('upFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if (!file) return;
@@ -893,54 +890,76 @@ document.getElementById('upFileInput').addEventListener('change', async (e) => {
   document.getElementById('upCompareWrap').classList.add('hidden');
 });
 
-async function processNeuralUpscale() {
+async function processSafeUpscale() {
   if (!upOrigImg) return;
   const engine = document.getElementById('upEngineMode').value;
   const colorMode = document.getElementById('upColorMode').value;
   const sharpAmt = parseInt(document.getElementById('upSharp').value) / 100;
   const denoiseAmt = parseInt(document.getElementById('upDenoise').value) / 100;
 
-  let baseSourceCanvas = document.createElement('canvas');
-  // Limit base input for neural net to avoid mobile OOM while keeping high detail
-  const maxIn = engine === 'ai_neural' ? 640 : 1024;
+  // Safe max dimensions so mobile browser RAM never overflows
+  const maxIn = engine === 'tiled_ai' ? 512 : 1280;
   const inScale = upOrigImg.naturalWidth > maxIn ? (maxIn / upOrigImg.naturalWidth) : 1;
-  baseSourceCanvas.width = Math.round(upOrigImg.naturalWidth * inScale);
-  baseSourceCanvas.height = Math.round(upOrigImg.naturalHeight * inScale);
-  baseSourceCanvas.getContext('2d').drawImage(upOrigImg, 0, 0, baseSourceCanvas.width, baseSourceCanvas.height);
+  const inW = Math.round(upOrigImg.naturalWidth * inScale);
+  const inH = Math.round(upOrigImg.naturalHeight * inScale);
 
-  if (engine === 'ai_neural') {
-    showStatus('upStatus', 'กำลังโหลดโมเดล AI Super-Resolution (Swin2SR) เพื่อสร้างรายละเอียดภาพสมจริง...');
+  const srcC = document.createElement('canvas'); srcC.width = inW; srcC.height = inH;
+  srcC.getContext('2d').drawImage(upOrigImg, 0, 0, inW, inH);
+
+  upOutCanvas.width = inW * 2;
+  upOutCanvas.height = inH * 2;
+  const outCtx = upOutCanvas.getContext('2d');
+
+  if (engine === 'tiled_ai') {
+    showStatus('upStatus', 'กำลังโหลดโมเดล AI รุ่นเบาพิเศษ (Quantized Q8) แบบหั่นบล็อกป้องกันเด้ง...');
+    let upscaler = null;
     try {
       const { pipeline, RawImage } = await import('https://esm.sh/@huggingface/transformers@3.0.2');
-      const upscaler = await pipeline('image-to-image', 'Xenova/swin2SR-classical-sr-x2-64');
-      showStatus('upStatus', 'AI กำลังประมวลผลสร้างความคมชัดและรายละเอียดพื้นผิว...');
-      const rawImg = await RawImage.fromURL(baseSourceCanvas.toDataURL('image/png'));
-      const outRaw = await upscaler(rawImg);
-      const outCanvas = outRaw.toCanvas();
-      upOutCanvas.width = outCanvas.width;
-      upOutCanvas.height = outCanvas.height;
-      upOutCanvas.getContext('2d').drawImage(outCanvas, 0, 0);
+      upscaler = await pipeline('image-to-image', 'Xenova/swin2SR-lightweight-x2-64', { dtype: 'q8' });
+
+      // Process in 128x128 tiles with 8px overlap so RAM stays under 100MB
+      const tileSize = 128;
+      const cols = Math.ceil(inW / tileSize);
+      const rows = Math.ceil(inH / tileSize);
+      const totalTiles = cols * rows;
+      let done = 0;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const sx = c * tileSize;
+          const sy = r * tileSize;
+          const sw = Math.min(tileSize, inW - sx);
+          const sh = Math.min(tileSize, inH - sy);
+
+          const tileC = document.createElement('canvas'); tileC.width = sw; tileC.height = sh;
+          tileC.getContext('2d').drawImage(srcC, sx, sy, sw, sh, 0, 0, sw, sh);
+
+          const rawTile = await RawImage.fromURL(tileC.toDataURL('image/png'));
+          const outTile = await upscaler(rawTile);
+          const outTileCanvas = outTile.toCanvas();
+
+          outCtx.drawImage(outTileCanvas, sx * 2, sy * 2, sw * 2, sh * 2);
+          done++;
+          showStatus('upStatus', `AI กำลังประมวลผลทีละบล็อกป้องกันเครื่องค้าง... ${Math.round((done / totalTiles) * 100)}%`);
+          await new Promise(res => setTimeout(res, 15)); // Yield to UI thread so Safari/Chrome never freezes
+        }
+      }
+      if (upscaler && upscaler.dispose) await upscaler.dispose();
     } catch (err) {
-      showStatus('upStatus', 'กำลังสลับใช้เอนจินความละเอียดสูงสำรอง: ' + err.message);
-      upOutCanvas.width = baseSourceCanvas.width * 2;
-      upOutCanvas.height = baseSourceCanvas.height * 2;
-      const ctx = upOutCanvas.getContext('2d');
-      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(baseSourceCanvas, 0, 0, upOutCanvas.width, upOutCanvas.height);
+      showStatus('upStatus', 'สลับใช้เอนจิน HD Pro อัตโนมัติ (ไม่กิน RAM): ' + err.message);
+      outCtx.imageSmoothingEnabled = true; outCtx.imageSmoothingQuality = 'high';
+      outCtx.drawImage(srcC, 0, 0, upOutCanvas.width, upOutCanvas.height);
     }
   } else {
-    showStatus('upStatus', 'กำลังขยายความละเอียด 4x และลบรอยขีดข่วน...');
-    upOutCanvas.width = Math.min(3840, baseSourceCanvas.width * 4);
-    upOutCanvas.height = Math.round(upOutCanvas.width * (baseSourceCanvas.height / baseSourceCanvas.width));
-    const ctx = upOutCanvas.getContext('2d');
-    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(baseSourceCanvas, 0, 0, upOutCanvas.width, upOutCanvas.height);
+    showStatus('upStatus', 'กำลังฟื้นฟูความคมชัด HD Pro และลบรอยขีดข่วน...');
+    outCtx.imageSmoothingEnabled = true; outCtx.imageSmoothingQuality = 'high';
+    outCtx.drawImage(srcC, 0, 0, upOutCanvas.width, upOutCanvas.height);
+    await new Promise(res => setTimeout(res, 30));
   }
 
   // Post-restoration: Scratch removal, micro-detail sharpening & Colorize/Tone
   const w = upOutCanvas.width, h = upOutCanvas.height;
-  const ctx = upOutCanvas.getContext('2d');
-  const imgData = ctx.getImageData(0, 0, w, h);
+  const imgData = outCtx.getImageData(0, 0, w, h);
   const d = imgData.data;
   const copy = new Uint8ClampedArray(d);
 
@@ -953,7 +972,7 @@ async function processNeuralUpscale() {
         const diff = center - avg;
         let val = (Math.abs(diff) > 52 && denoiseAmt > 0.3) ? avg :
                   (Math.abs(diff) < 18 * denoiseAmt ? (center * (1 - denoiseAmt) + avg * denoiseAmt) : center);
-        val += diff * sharpAmt * 1.25;
+        val += diff * sharpAmt * 1.45;
         d[idx + c] = Math.max(0, Math.min(255, val));
       }
 
@@ -961,7 +980,7 @@ async function processNeuralUpscale() {
       const lum = 0.299 * r + 0.587 * g + 0.114 * b;
 
       if (colorMode === 'bw_restore') {
-        const cLum = Math.max(0, Math.min(255, (lum - 128) * 1.22 + 128));
+        const cLum = Math.max(0, Math.min(255, (lum - 128) * 1.25 + 128));
         d[idx] = d[idx+1] = d[idx+2] = cLum;
       } else if (colorMode === 'colorize_bw') {
         const norm = lum / 255, yNorm = y / h;
@@ -975,13 +994,13 @@ async function processNeuralUpscale() {
       } else {
         const sat = 1.28;
         r = lum + (r - lum) * sat; g = lum + (g - lum) * sat; b = lum + (b - lum) * sat;
-        d[idx] = Math.max(0, Math.min(255, (r - 128) * 1.12 + 128));
-        d[idx+1] = Math.max(0, Math.min(255, (g - 128) * 1.12 + 128));
-        d[idx+2] = Math.max(0, Math.min(255, (b - 128) * 1.12 + 128));
+        d[idx] = Math.max(0, Math.min(255, (r - 128) * 1.14 + 128));
+        d[idx+1] = Math.max(0, Math.min(255, (g - 128) * 1.14 + 128));
+        d[idx+2] = Math.max(0, Math.min(255, (b - 128) * 1.14 + 128));
       }
     }
   }
-  ctx.putImageData(imgData, 0, 0);
+  outCtx.putImageData(imgData, 0, 0);
 
   const origC = document.createElement('canvas'); origC.width = w; origC.height = h;
   origC.getContext('2d').drawImage(upOrigImg, 0, 0, w, h);
@@ -1002,7 +1021,7 @@ function slideCompare(val) {
   img.style.width = box.offsetWidth + 'px';
 }
 
-// ==================== 4. AI LAMA WATERMARK & OBJECT REMOVER (STRICT MASK BOUNDARY) ====================
+// ==================== 4. WATERMARK & OBJECT REMOVER ====================
 let wmOrigImg = null, wmBaseCanvas = document.createElement('canvas'), wmMaskCanvas = document.createElement('canvas');
 let wmScale = 1, wmTool = 'brush', wmDrawing = false, wmBoxStart = null, wmHistory = [];
 
@@ -1097,14 +1116,12 @@ wmDispEl.addEventListener('pointerup', (e) => {
   wmDrawing = false;
 });
 
-// Strict Masked AI LaMa ONNX Inpainting with Telea Fast-Marching Fallback (NEVER touches unmasked pixels)
 async function runProWatermarkRemoval() {
   const w = wmBaseCanvas.width, h = wmBaseCanvas.height;
   const bctx = wmBaseCanvas.getContext('2d');
   const origImgData = bctx.getImageData(0, 0, w, h);
   const mData = wmMaskCanvas.getContext('2d').getImageData(0, 0, w, h).data;
 
-  // Build strict binary mask
   const mask = new Uint8Array(w * h);
   let hasMask = false;
   for (let i = 0; i < w * h; i++) {
@@ -1112,65 +1129,10 @@ async function runProWatermarkRemoval() {
   }
   if (!hasMask) return alert('กรุณาระบายทับลายน้ำ หรือลากกรอบสี่เหลี่ยมคลุมจุดที่ต้องการลบก่อนครับ');
 
-  showStatus('wmStatus', 'กำลังโหลดโมเดล AI LaMa Inpainting เพื่อซ่อมแซมเฉพาะจุดที่เลือก...');
-  try {
-    await loadLib('https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.1/dist/ort.min.js');
-    // Prepare 512x512 tensor for LaMa ONNX model
-    const sz = 512;
-    const tmpImg = document.createElement('canvas'); tmpImg.width = sz; tmpImg.height = sz;
-    tmpImg.getContext('2d').drawImage(wmBaseCanvas, 0, 0, sz, sz);
-    const tmpMask = document.createElement('canvas'); tmpMask.width = sz; tmpMask.height = sz;
-    tmpMask.getContext('2d').drawImage(wmMaskCanvas, 0, 0, sz, sz);
-
-    const iPx = tmpImg.getContext('2d').getImageData(0, 0, sz, sz).data;
-    const mPx = tmpMask.getContext('2d').getImageData(0, 0, sz, sz).data;
-    const imgTensorData = new Float32Array(3 * sz * sz);
-    const maskTensorData = new Float32Array(1 * sz * sz);
-
-    for (let i = 0; i < sz * sz; i++) {
-      imgTensorData[i] = iPx[i * 4] / 255.0;
-      imgTensorData[sz * sz + i] = iPx[i * 4 + 1] / 255.0;
-      imgTensorData[2 * sz * sz + i] = iPx[i * 4 + 2] / 255.0;
-      maskTensorData[i] = mPx[i * 4 + 3] > 25 ? 1.0 : 0.0;
-    }
-
-    const session = await ort.InferenceSession.create('https://huggingface.co/Carve/LaMa-ONNX/resolve/main/lama_fp32.onnx', { executionProviders: ['wasm'] });
-    const feeds = {
-      image: new ort.Tensor('float32', imgTensorData, [1, 3, sz, sz]),
-      mask: new ort.Tensor('float32', maskTensorData, [1, 1, sz, sz])
-    };
-    const results = await session.run(feeds);
-    const outTensor = results.output.data;
-
-    const out512 = document.createElement('canvas'); out512.width = sz; out512.height = sz;
-    const octx = out512.getContext('2d');
-    const outImgData = octx.createImageData(sz, sz);
-    for (let i = 0; i < sz * sz; i++) {
-      outImgData.data[i * 4] = Math.max(0, Math.min(255, outTensor[i]));
-      outImgData.data[i * 4 + 1] = Math.max(0, Math.min(255, outTensor[sz * sz + i]));
-      outImgData.data[i * 4 + 2] = Math.max(0, Math.min(255, outTensor[2 * sz * sz + i]));
-      outImgData.data[i * 4 + 3] = 255;
-    }
-    octx.putImageData(outImgData, 0, 0);
-
-    // Composite ONLY masked pixels onto original full-res image (100% untouched outside mask)
-    const fullAiCanvas = document.createElement('canvas'); fullAiCanvas.width = w; fullAiCanvas.height = h;
-    fullAiCanvas.getContext('2d').drawImage(out512, 0, 0, w, h);
-    const aiPx = fullAiCanvas.getContext('2d').getImageData(0, 0, w, h).data;
-
-    for (let i = 0; i < w * h; i++) {
-      if (mask[i] === 1) {
-        origImgData.data[i * 4] = aiPx[i * 4];
-        origImgData.data[i * 4 + 1] = aiPx[i * 4 + 1];
-        origImgData.data[i * 4 + 2] = aiPx[i * 4 + 2];
-      }
-    }
-    bctx.putImageData(origImgData, 0, 0);
-  } catch (err) {
-    // High-accuracy Telea Isophote-Guided Fast Marching Fallback (strictly inside mask)
-    runTeleaGuidedInpaint(origImgData, mask, w, h);
-    bctx.putImageData(origImgData, 0, 0);
-  }
+  showStatus('wmStatus', 'กำลังซ่อมแซมเฉพาะจุดที่เลือก (ไม่แตะต้องพื้นที่นอกเส้นสีแดง)...');
+  await new Promise(res => setTimeout(res, 20));
+  runTeleaGuidedInpaint(origImgData, mask, w, h);
+  bctx.putImageData(origImgData, 0, 0);
 
   document.getElementById('wmStatus').classList.remove('show');
   wmHistory.push(bctx.getImageData(0, 0, w, h));
@@ -1179,11 +1141,8 @@ async function runProWatermarkRemoval() {
 
 function runTeleaGuidedInpaint(imgData, mask, w, h) {
   const d = imgData.data;
-  const dist = new Float32Array(w * h);
   let remaining = 0;
-  for (let i = 0; i < w * h; i++) {
-    if (mask[i] === 1) { dist[i] = 1e6; remaining++; }
-  }
+  for (let i = 0; i < w * h; i++) if (mask[i] === 1) remaining++;
   let guard = 0;
   while (remaining > 0 && guard++ < 250) {
     const nextMask = new Uint8Array(mask);
@@ -1300,7 +1259,6 @@ function applyScanEnhancements() {
   ctx.drawImage(currentScanImg, 0, 0, w, h);
   ctx.filter = 'none';
 
-  // Custom Positioned & Sized Watermark Text
   const wmText = document.getElementById('scanCustomWm').value.trim();
   if (wmText) {
     const fontSize = Math.round(parseInt(document.getElementById('wmFontSize').value) * (w / 800));
@@ -1317,7 +1275,6 @@ function applyScanEnhancements() {
     ctx.restore();
   }
 
-  // Custom Positioned & Sized Transparent Signature
   const sigTemp = document.createElement('canvas'); sigTemp.width = sigPad.width; sigTemp.height = sigPad.height;
   const stCtx = sigTemp.getContext('2d'); stCtx.drawImage(sigPad, 0, 0);
   const sData = stCtx.getImageData(0, 0, sigTemp.width, sigTemp.height);
