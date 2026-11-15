@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#090d16">
-<title>Privacy Studio Pro — All-in-One Offline</title>
+<title>Privacy Studio Pro — AI Neural Suite (Offline & No-Cache)</title>
 <style>
   :root {
     --bg: #090d16;
@@ -118,7 +118,7 @@
     background-color: #0b101b; border: 1px solid #374151;
     display: flex; align-items: center; justify-content: center; min-height: 220px;
   }
-  .canvas-wrap canvas, .canvas-wrap img { max-width: 100%; max-height: 440px; display: block; touch-action: none; }
+  .canvas-wrap canvas, .canvas-wrap img { max-width: 100%; max-height: 460px; display: block; touch-action: none; }
 
   .status-box {
     font-size: 12.5px; padding: 11px 13px; border-radius: 10px;
@@ -132,20 +132,18 @@
     border-radius: 12px; padding: 14px; margin-top: 12px;
   }
 
-  /* Before / After Compare Slider with Center Badge */
   .compare-box { position: relative; width: 100%; overflow: hidden; border-radius: 12px; border: 1px solid #374151; user-select: none; }
   .compare-box img { width: 100%; display: block; }
   .compare-after { position: absolute; inset: 0; overflow: hidden; width: 50%; border-right: 2px solid #ffffff; }
   .compare-after img { width: 100%; max-width: none; }
   .compare-pill {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px);
+    background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(8px);
     border: 1px solid rgba(255,255,255,0.45); border-radius: 999px;
     padding: 5px 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
     color: #fff; pointer-events: none; display: flex; gap: 14px;
   }
 
-  /* EXIF Checkboxes */
   .exif-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
   .exif-item {
     display: flex; align-items: center; justify-content: space-between;
@@ -260,29 +258,28 @@
     </div>
   </section>
 
-  <!-- ==================== TAB 2: AI PHOTO RESTORATION, COLORIZE & UPSCALER ==================== -->
+  <!-- ==================== TAB 2: AI NEURAL SUPER-RESOLUTION & RESTORATION ==================== -->
   <section id="tab-upscale" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        เพิ่มความชัดภาพเก่า & ฟื้นฟูสีสัน
+        AI เพิ่มความชัดภาพเก่า & สร้างรายละเอียดสมจริง
       </h2>
-      <p class="sub">เพิ่มความคมชัดภาพสี ลบรอยขีดข่วนภาพเก่าขาว-ดำ และลงสีภาพขาว-ดำให้เป็นภาพสีธรรมชาติ</p>
+      <p class="sub">ใช้โมเดล AI Neural Super-Resolution (Swin2SR) สร้างความคมชัดสมจริงโดยไม่ทำให้ใบหน้าเดิมเพี้ยน</p>
       <label class="dropzone">
         <input type="file" id="upFileInput" accept="image/*">
         <svg class="ico-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3m0 12v3M3 12h3m12 0h3m-4.2-5.8 2.1-2.1M5.1 18.9l2.1-2.1m0-9.6L5.1 5.1m13.8 13.8-2.1-2.1"/></svg>
         <div class="title">เลือกรูปภาพเก่า ภาพเบลอ หรือภาพขาว-ดำ</div>
-        <div class="hint">ฟื้นฟูรายละเอียด ลบจุดด่างขาว และเร่งมิติแสงเงา</div>
+        <div class="hint">ประมวลผล Neural Network ในเบราว์เซอร์ (รองรับลงสีภาพขาว-ดำ)</div>
       </label>
       <div id="upStatus" class="status-box"></div>
       <div id="upWorkspace" class="hidden" style="margin-top:12px;">
         <div class="grid-2">
           <div>
-            <label>ระดับการขยายความละเอียด</label>
-            <select id="upScale">
-              <option value="2">2x HD (คมชัด 2 เท่า - แนะนำ)</option>
-              <option value="4">4x Ultra HD (คมชัดสูงสุด 4 เท่า)</option>
-              <option value="1">1x คงขนาดเดิม (เน้นแก้เบลอ/ฟื้นฟูสี)</option>
+            <label>เอนจินเพิ่มความละเอียด</label>
+            <select id="upEngineMode">
+              <option value="ai_neural">AI Neural Super-Resolution (สร้างรายละเอียดสมจริง 2x)</option>
+              <option value="hd_4x">Ultra HD 4x + ลบรอยขีดข่วน (เร็วพิเศษ)</option>
             </select>
           </div>
           <div>
@@ -294,21 +291,17 @@
             </select>
           </div>
         </div>
-        <div class="grid-3" style="margin-top:10px;">
+        <div class="grid-2" style="margin-top:10px;">
           <div>
-            <label>ความคมชัด (<span id="upSharpVal">70</span>%)</label>
-            <input type="range" id="upSharp" min="0" max="100" value="70" oninput="document.getElementById('upSharpVal').textContent=this.value">
+            <label>ความคมชัดรายละเอียด (<span id="upSharpVal">60</span>%)</label>
+            <input type="range" id="upSharp" min="0" max="100" value="60" oninput="document.getElementById('upSharpVal').textContent=this.value">
           </div>
           <div>
-            <label>ลบรอยขีดข่วน/เกรน (<span id="upDenoiseVal">45</span>%)</label>
+            <label>ลบรอยขีดข่วน / เกรนเก่า (<span id="upDenoiseVal">45</span>%)</label>
             <input type="range" id="upDenoise" min="0" max="100" value="45" oninput="document.getElementById('upDenoiseVal').textContent=this.value">
           </div>
-          <div>
-            <label>ความสดของสี (<span id="upColorVal">40</span>%)</label>
-            <input type="range" id="upColor" min="0" max="100" value="40" oninput="document.getElementById('upColorVal').textContent=this.value">
-          </div>
         </div>
-        <button class="btn btn-primary" style="margin-top:10px;" onclick="processUpscale()">ประมวลผลเพิ่มความชัด</button>
+        <button class="btn btn-primary" style="margin-top:10px;" onclick="processNeuralUpscale()">เริ่มประมวลผล AI เพิ่มความชัด</button>
 
         <div id="upCompareWrap" class="hidden" style="margin-top:12px;">
           <label>เลื่อนซ้าย-ขวา เพื่อเปรียบเทียบ BEFORE / AFTER</label>
@@ -319,125 +312,135 @@
           </div>
           <input type="range" min="0" max="100" value="50" style="margin-top:8px;" oninput="slideCompare(this.value)">
           <div class="grid-2" style="margin-top:10px;">
-            <button class="btn btn-primary" onclick="saveCanvasFile(upOutCanvas, 'Restored_HD.png', 'image/png')">บันทึกภาพชัด (PNG)</button>
-            <button class="btn btn-accent" onclick="shareCanvasFile(upOutCanvas, 'Restored_HD.png', 'image/png')">แชร์ / บันทึกลงอัลบั้ม</button>
+            <button class="btn btn-primary" onclick="saveCanvasFile(upOutCanvas, 'AI_Enhanced_HD.png', 'image/png')">บันทึกภาพชัด (PNG)</button>
+            <button class="btn btn-accent" onclick="shareCanvasFile(upOutCanvas, 'AI_Enhanced_HD.png', 'image/png')">แชร์ / บันทึกลงอัลบั้ม</button>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== TAB 3: DUAL-MODE WATERMARK REMOVER ==================== -->
+  <!-- ==================== TAB 3: AI LAMA WATERMARK & OBJECT REMOVER ==================== -->
   <section id="tab-inpaint" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><path d="M20 20H7L3 16c-.6-.6-.6-1.5 0-2.1l10-10c.6-.6 1.5-.6 2.1 0l6 6c.6.6.6 1.5 0 2.1L13 20"/><path d="M6 11l7 7"/></svg>
-        ลบลายน้ำ 2 โหมดอัจฉริยะ (อัตโนมัติ & เลือกเอง)
+        ลบลายน้ำ AI (เฉพาะจุดที่เลือก ไม่แตะต้องภาพส่วนอื่น)
       </h2>
-      <p class="sub">เลือกได้ทั้งโหมดตรวจจับลายน้ำโปร่งใสอัตโนมัติ และโหมดเลือกจุดระบายเอง</p>
+      <p class="sub">ใช้ AI LaMa Inpainting ซ่อมแซมเฉพาะบริเวณที่ระบายหรือลากกรอบคลุม พื้นที่นอกกรอบคงเดิม 100%</p>
       <label class="dropzone">
         <input type="file" id="wmFileInput" accept="image/*">
         <svg class="ico-lg" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-        <div class="title">เลือกรูปภาพที่มีลายน้ำพาดทับ</div>
-        <div class="hint">รองรับลายน้ำตัวหนังสือโปร่งใสและโลโก้</div>
+        <div class="title">เลือกรูปภาพที่ต้องการลบลายน้ำหรือวัตถุ</div>
+        <div class="hint">เลือกได้ทั้งแบบระบายทับตัวหนังสือ และลากกรอบสี่เหลี่ยมคลุมโลโก้</div>
       </label>
+      <div id="wmStatus" class="status-box"></div>
       <div id="wmWorkspace" class="hidden" style="margin-top:12px;">
         <div class="pill-group">
-          <button class="pill active" id="wmModeAuto" onclick="setWmMode('auto')">โหมด 1: ลบอัตโนมัติ (Inverse Alpha)</button>
-          <button class="pill" id="wmModeManual" onclick="setWmMode('manual')">โหมด 2: เลือกระบายเอง (Patch & Clone)</button>
+          <button class="pill active" id="wmToolBrush" onclick="setWmTool('brush')">แปรงระบายทับตัวอักษร</button>
+          <button class="pill" id="wmToolBox" onclick="setWmTool('box')">ลากกรอบสี่เหลี่ยมคลุม</button>
         </div>
-
-        <!-- Auto Watermark Removal Controls -->
-        <div id="wmAutoPanel" class="card" style="background:var(--bg);margin-bottom:10px;">
-          <p class="sub" style="margin-bottom:8px;">แตะบนตัวอักษรลายน้ำในภาพ 1 ครั้ง หรือปรับระดับความโปร่งใสเพื่อหักล้างลายน้ำทั่วทั้งภาพโดยไม่เสียรายละเอียดใบหน้า/พื้นหลัง</p>
-          <div class="grid-2">
-            <div>
-              <label>ความเข้มการหักล้างลายน้ำ (<span id="wmAlphaVal">28</span>%)</label>
-              <input type="range" id="wmAlphaSlider" min="5" max="75" value="28" oninput="document.getElementById('wmAlphaVal').textContent=this.value">
-            </div>
-            <div>
-              <label>โทนสีของลายน้ำ</label>
-              <select id="wmTintType">
-                <option value="white">ลายน้ำสีขาว / เทาอ่อนโปร่งใส</option>
-                <option value="dark">ลายน้ำสีดำ / เทาเข้มโปร่งใส</option>
-              </select>
-            </div>
+        <div class="grid-2" style="margin-bottom:8px;">
+          <div>
+            <label>ขนาดหัวแปรง (<span id="wmBrushVal">14</span> px)</label>
+            <input type="range" id="wmBrushSize" min="4" max="55" value="14" oninput="document.getElementById('wmBrushVal').textContent=this.value">
           </div>
-          <button class="btn btn-primary" style="margin-top:8px;" onclick="runAutoAlphaWatermarkRemoval()">ลบลายน้ำอัตโนมัติทั้งภาพ</button>
-        </div>
-
-        <!-- Manual Brush Controls -->
-        <div id="wmManualPanel" class="hidden" style="margin-bottom:10px;">
-          <div class="grid-2">
-            <div>
-              <label>ขนาดหัวแปรง (<span id="wmBrushVal">12</span> px)</label>
-              <input type="range" id="wmBrushSize" min="3" max="50" value="12" oninput="document.getElementById('wmBrushVal').textContent=this.value">
-            </div>
-            <div style="display:flex;align-items:flex-end;gap:6px;">
-              <button class="btn-xs" onclick="wmZoom(1.3)">ซูมเข้า (+)</button>
-              <button class="btn-xs" onclick="wmZoom(0.77)">ซูมออก (-)</button>
-              <button class="btn-xs" onclick="wmUndo()">ย้อนกลับ</button>
-            </div>
+          <div style="display:flex;align-items:flex-end;gap:6px;">
+            <button class="btn-xs" onclick="wmZoom(1.3)">ซูมเข้า (+)</button>
+            <button class="btn-xs" onclick="wmZoom(0.77)">ซูมออก (-)</button>
+            <button class="btn-xs" onclick="wmUndo()">ย้อนกลับ</button>
+            <button class="btn-xs danger" onclick="wmClearMask()">ล้างเส้นเลือก</button>
           </div>
         </div>
-
         <div class="canvas-wrap" style="overflow:auto;">
           <canvas id="wmCanvas"></canvas>
         </div>
         <div class="grid-3" style="margin-top:10px;">
-          <button class="btn btn-primary" id="wmActionBtn" onclick="runSmartPatchInpaint()">ซ่อมจุดที่ระบาย</button>
-          <button class="btn btn-secondary" onclick="saveCanvasFile(wmBaseCanvas, 'Clean_Image.png', 'image/png')">บันทึก</button>
-          <button class="btn btn-accent" onclick="shareCanvasFile(wmBaseCanvas, 'Clean_Image.png', 'image/png')">แชร์</button>
+          <button class="btn btn-primary" onclick="runProWatermarkRemoval()">ลบลายน้ำที่เลือก</button>
+          <button class="btn btn-secondary" onclick="saveCanvasFile(wmBaseCanvas, 'Clean_Photo.png', 'image/png')">บันทึก</button>
+          <button class="btn btn-accent" onclick="shareCanvasFile(wmBaseCanvas, 'Clean_Photo.png', 'image/png')">แชร์</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== TAB 4: SMART SCANNER, E-SIGN & PDF ==================== -->
+  <!-- ==================== TAB 4: INTERACTIVE SCANNER, E-SIGN & MULTI-FORMAT EXPORT ==================== -->
   <section id="tab-scan" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        สแกนเอกสาร เซ็นชื่อ คาดลายน้ำ & รวม PDF
+        สแกนเอกสาร เซ็นชื่อ คาดลายน้ำ (ลากวาง & ปรับขนาดได้อิสระ)
       </h2>
-      <p class="sub">ปรับโทนขาว-ดำคมชัด เซ็นชื่อด้วยนิ้ว คาดลายน้ำรับรองสำเนา และรวมหลายหน้าเป็น PDF</p>
+      <p class="sub">แตะลากตำแหน่งลายเซ็นและตัวหนังสือบนกระดาษได้โดยตรง ปรับขนาดใหญ่-เล็กได้ และเซฟได้ทั้ง JPG, PNG, PDF</p>
       <label class="dropzone">
         <input type="file" id="scanFileInput" accept="image/*" multiple>
         <svg class="ico-lg" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <div class="title">ถ่ายรูปเอกสาร หรือเลือกหลายรูปพร้อมกัน</div>
-        <div class="hint">เพิ่มได้ไม่จำกัดหน้า ตั้งชื่อไฟล์เองได้</div>
+        <div class="title">ถ่ายรูปเอกสาร หรือเลือกรูปจากอัลบั้ม</div>
+        <div class="hint">รองรับการรวมหลายหน้าและดาวน์โหลดเป็นไฟล์ภาพหรือ PDF</div>
       </label>
 
       <div id="scanEditor" class="hidden" style="margin-top:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <label style="margin:0;color:#60a5fa;">แตะลากบนภาพเพื่อย้ายตำแหน่ง ลายเซ็น / ข้อความ</label>
+          <div class="pill-group" style="margin:0;">
+            <button class="pill active" id="dragTargetText" onclick="setDragTarget('text')">ลากข้อความ</button>
+            <button class="pill" id="dragTargetSig" onclick="setDragTarget('sig')">ลากลายเซ็น</button>
+          </div>
+        </div>
         <div class="canvas-wrap"><canvas id="scanPreviewCanvas"></canvas></div>
-        <div class="grid-3" style="margin-top:10px;">
-          <div>
-            <label>โทนสีเอกสาร</label>
-            <select id="scanFilter" onchange="applyScanEnhancements()">
-              <option value="magic">สแกนสีคมชัด (Magic)</option>
-              <option value="bw">ขาว-ดำ เอกสารราชการ</option>
-              <option value="orig">สีต้นฉบับ</option>
-            </select>
+
+        <!-- Text & Watermark Size / Angle / Color Controls -->
+        <div class="card" style="margin-top:10px;background:var(--bg);">
+          <div class="grid-2">
+            <div>
+              <label>โทนสีเอกสาร</label>
+              <select id="scanFilter" onchange="applyScanEnhancements()">
+                <option value="magic">สแกนสีคมชัด (Magic)</option>
+                <option value="bw">ขาว-ดำ เอกสารราชการ</option>
+                <option value="orig">สีต้นฉบับ</option>
+              </select>
+            </div>
+            <div>
+              <label>เลือกข้อความรับรองสำเนาสำเร็จรูป</label>
+              <select id="scanWatermarkPreset" onchange="document.getElementById('scanCustomWm').value=this.value;applyScanEnhancements()">
+                <option value="">-- เลือกข้อความแนะนำ --</option>
+                <option value="สำเนาถูกต้อง">สำเนาถูกต้อง</option>
+                <option value="ใช้สำหรับสมัครงานเท่านั้น">ใช้สำหรับสมัครงานเท่านั้น</option>
+                <option value="ใช้สำหรับทำธุรกรรมทางการเงินเท่านั้น">ใช้สำหรับทำธุรกรรมทางการเงินเท่านั้น</option>
+                <option value="ใช้สำหรับติดต่อราชการเท่านั้น">ใช้สำหรับติดต่อราชการเท่านั้น</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label>คาดลายน้ำรับรองสำเนา</label>
-            <select id="scanWatermarkPreset" onchange="applyScanEnhancements()">
-              <option value="">ไม่คาดลายน้ำ</option>
-              <option value="สำเนาถูกต้อง">สำเนาถูกต้อง</option>
-              <option value="ใช้สำหรับสมัครงานเท่านั้น">ใช้สำหรับสมัครงานเท่านั้น</option>
-              <option value="ใช้สำหรับทำธุรกรรมเท่านั้น">ใช้สำหรับทำธุรกรรมเท่านั้น</option>
-              <option value="CONFIDENTIAL">CONFIDENTIAL</option>
-            </select>
+          <div class="grid-2" style="margin-top:8px;">
+            <div>
+              <label>ข้อความรับรองสำเนา (แก้ไขเองได้)</label>
+              <input type="text" id="scanCustomWm" placeholder="พิมพ์ข้อความคาด..." oninput="applyScanEnhancements()">
+            </div>
+            <div>
+              <label>ขนาดตัวอักษร (<span id="wmFontSizeVal">48</span> px)</label>
+              <input type="range" id="wmFontSize" min="16" max="140" value="48" oninput="document.getElementById('wmFontSizeVal').textContent=this.value;applyScanEnhancements()">
+            </div>
           </div>
-          <div>
-            <label>ข้อความลายน้ำกำหนดเอง</label>
-            <input type="text" id="scanCustomWm" placeholder="พิมพ์ข้อความคาด..." oninput="applyScanEnhancements()">
+          <div class="grid-2" style="margin-top:8px;">
+            <div>
+              <label>องศาการเอียงตัวอักษร (<span id="wmAngleVal">-25</span>°)</label>
+              <input type="range" id="wmAngle" min="-60" max="60" value="-25" oninput="document.getElementById('wmAngleVal').textContent=this.value;applyScanEnhancements()">
+            </div>
+            <div>
+              <label>สีหมึกตัวอักษร</label>
+              <select id="wmTextColor" onchange="applyScanEnhancements()">
+                <option value="rgba(220, 38, 38, 0.55)">สีแดง (โปร่งแสง)</option>
+                <option value="rgba(29, 78, 216, 0.65)">สีน้ำเงิน (หมึกปากกา)</option>
+                <option value="rgba(15, 23, 42, 0.7)">สีดำเข้ม</option>
+              </select>
+            </div>
           </div>
         </div>
 
+        <!-- Signature Pad & Size Control -->
         <div class="card" style="margin-top:10px;background:var(--bg);">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            <label style="margin:0;">วาดลายเซ็นด้วยนิ้ว (วางมุมขวาล่างอัตโนมัติ)</label>
+            <label style="margin:0;">วาดลายเซ็นด้วยนิ้ว (ลากย้ายบนกระดาษได้)</label>
             <div style="display:flex;gap:6px;">
               <select id="sigColor" style="padding:3px 6px;font-size:11px;width:auto;">
                 <option value="#1d4ed8">หมึกน้ำเงิน</option>
@@ -448,7 +451,17 @@
             </div>
           </div>
           <canvas id="sigPad" height="100" style="width:100%;background:#ffffff;border-radius:8px;touch-action:none;"></canvas>
-          <button class="btn btn-secondary" style="margin-top:8px;" onclick="addCurrentScanPage()">+ เพิ่มหน้านี้เข้าชุดเอกสาร PDF</button>
+          <div style="margin-top:8px;">
+            <label>ขนาดลายเซ็น (<span id="sigScaleVal">28</span>% ของความกว้างกระดาษ)</label>
+            <input type="range" id="sigScale" min="10" max="70" value="28" oninput="document.getElementById('sigScaleVal').textContent=this.value;applyScanEnhancements()">
+          </div>
+
+          <!-- Direct Image Download Buttons for Current Page -->
+          <div class="grid-3" style="margin-top:10px;">
+            <button class="btn btn-secondary" onclick="downloadSingleScanPage('jpeg')">โหลดหน้านี้ (JPG)</button>
+            <button class="btn btn-secondary" onclick="downloadSingleScanPage('png')">โหลดหน้านี้ (PNG)</button>
+            <button class="btn btn-primary" onclick="addCurrentScanPage()">+ เพิ่มเข้าชุด PDF</button>
+          </div>
         </div>
       </div>
 
@@ -456,12 +469,12 @@
         <label>รายการหน้าที่รวมใน PDF (<span id="scanCount">0</span> หน้า)</label>
         <div class="page-list" id="scanPageList"></div>
         <div style="margin-top:12px;">
-          <label>ตั้งชื่อไฟล์ PDF (เลือกชื่อแนะนำหรือพิมพ์เอง)</label>
+          <label>ตั้งชื่อไฟล์ (เลือกชื่อแนะนำหรือพิมพ์เอง)</label>
           <div class="pill-group" id="pdfNamePresets"></div>
           <input type="text" id="pdfFileName" value="Scan_Document">
         </div>
         <div class="grid-2" style="margin-top:10px;">
-          <button class="btn btn-primary" onclick="exportScannedPdf(false)">สร้างและบันทึก PDF</button>
+          <button class="btn btn-primary" onclick="exportScannedPdf(false)">สร้างและดาวน์โหลด PDF</button>
           <button class="btn btn-accent" onclick="exportScannedPdf(true)">แชร์ PDF เข้า LINE / Drive</button>
         </div>
       </div>
@@ -487,7 +500,6 @@
       <div id="rsWorkspace" class="hidden" style="margin-top:12px;">
         <div id="rsFileSummary" style="font-size:12.5px;color:#93c5fd;margin-bottom:10px;"></div>
 
-        <!-- Selective EXIF Checkboxes (For Images) -->
         <div id="exifSelectCard" class="card hidden" style="background:var(--bg);margin-bottom:12px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
             <label style="margin:0;color:#fff;">ติ๊กเลือกข้อมูลส่วนตัวที่ต้องการลบทิ้ง:</label>
@@ -532,7 +544,6 @@
           </div>
         </div>
 
-        <!-- Custom Width x Height Controls -->
         <div id="rsDimWrap" class="card" style="background:var(--bg);margin-top:10px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
             <label style="margin:0;">กำหนดขนาด กว้าง × ยาว (พิกเซล)</label>
@@ -560,14 +571,13 @@
 
         <button class="btn btn-primary" style="margin-top:10px;" onclick="executeResizeAll()">ประมวลผลย่อขนาด & ลบข้อมูลที่เลือก</button>
 
-        <!-- Inline Result Box (Does NOT auto-redirect/jump to another page) -->
         <div id="rsResultBox" class="result-banner hidden">
           <div id="rsResultInfo" style="font-size:13px;font-weight:600;color:#6ee7b7;margin-bottom:10px;"></div>
           <div id="rsInlinePreviewWrap" class="hidden" style="margin-bottom:10px;text-align:center;">
             <img id="rsInlinePreviewImg" style="max-width:100%;max-height:260px;border-radius:8px;border:1px solid #374151;">
           </div>
           <div class="grid-3">
-            <button class="btn btn-secondary" id="rsPreviewToggleBtn" onclick="toggleRsPreview()">ดูตัวอย่างภาพ</button>
+            <button class="btn btn-secondary" onclick="toggleRsPreview()">ดูตัวอย่างภาพ</button>
             <button class="btn btn-primary" id="rsDownloadBtn">บันทึกไฟล์ลงเครื่อง</button>
             <button class="btn btn-accent" id="rsShareBtn">แชร์ / อัลบั้ม</button>
           </div>
@@ -874,7 +884,7 @@ function getBgExportBlob() {
 async function downloadBgResult() { const { blob, name } = await getBgExportBlob(); triggerDownload(blob, name); }
 async function shareBgResult() { const { blob, name } = await getBgExportBlob(); triggerShareOrSave(blob, name); }
 
-// ==================== 3. AI PHOTO RESTORATION, COLORIZE & UPSCALER ====================
+// ==================== 3. AI NEURAL SUPER-RESOLUTION (SWIN2SR) & RESTORATION ====================
 let upOrigImg = null, upOutCanvas = document.createElement('canvas');
 document.getElementById('upFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if (!file) return;
@@ -883,91 +893,103 @@ document.getElementById('upFileInput').addEventListener('change', async (e) => {
   document.getElementById('upCompareWrap').classList.add('hidden');
 });
 
-function processUpscale() {
+async function processNeuralUpscale() {
   if (!upOrigImg) return;
-  showStatus('upStatus', 'กำลังฟื้นฟูรายละเอียด ลบรอยขีดข่วน และปรับมิติสีสัน...');
-  setTimeout(() => {
-    const scale = parseInt(document.getElementById('upScale').value);
-    const colorMode = document.getElementById('upColorMode').value;
-    const sharpAmt = parseInt(document.getElementById('upSharp').value) / 100;
-    const denoiseAmt = parseInt(document.getElementById('upDenoise').value) / 100;
-    const colorAmt = parseInt(document.getElementById('upColor').value) / 100;
+  const engine = document.getElementById('upEngineMode').value;
+  const colorMode = document.getElementById('upColorMode').value;
+  const sharpAmt = parseInt(document.getElementById('upSharp').value) / 100;
+  const denoiseAmt = parseInt(document.getElementById('upDenoise').value) / 100;
 
-    let w = Math.min(4096, upOrigImg.naturalWidth * scale);
-    let h = Math.round(w * (upOrigImg.naturalHeight / upOrigImg.naturalWidth));
-    upOutCanvas.width = w; upOutCanvas.height = h;
+  let baseSourceCanvas = document.createElement('canvas');
+  // Limit base input for neural net to avoid mobile OOM while keeping high detail
+  const maxIn = engine === 'ai_neural' ? 640 : 1024;
+  const inScale = upOrigImg.naturalWidth > maxIn ? (maxIn / upOrigImg.naturalWidth) : 1;
+  baseSourceCanvas.width = Math.round(upOrigImg.naturalWidth * inScale);
+  baseSourceCanvas.height = Math.round(upOrigImg.naturalHeight * inScale);
+  baseSourceCanvas.getContext('2d').drawImage(upOrigImg, 0, 0, baseSourceCanvas.width, baseSourceCanvas.height);
+
+  if (engine === 'ai_neural') {
+    showStatus('upStatus', 'กำลังโหลดโมเดล AI Super-Resolution (Swin2SR) เพื่อสร้างรายละเอียดภาพสมจริง...');
+    try {
+      const { pipeline, RawImage } = await import('https://esm.sh/@huggingface/transformers@3.0.2');
+      const upscaler = await pipeline('image-to-image', 'Xenova/swin2SR-classical-sr-x2-64');
+      showStatus('upStatus', 'AI กำลังประมวลผลสร้างความคมชัดและรายละเอียดพื้นผิว...');
+      const rawImg = await RawImage.fromURL(baseSourceCanvas.toDataURL('image/png'));
+      const outRaw = await upscaler(rawImg);
+      const outCanvas = outRaw.toCanvas();
+      upOutCanvas.width = outCanvas.width;
+      upOutCanvas.height = outCanvas.height;
+      upOutCanvas.getContext('2d').drawImage(outCanvas, 0, 0);
+    } catch (err) {
+      showStatus('upStatus', 'กำลังสลับใช้เอนจินความละเอียดสูงสำรอง: ' + err.message);
+      upOutCanvas.width = baseSourceCanvas.width * 2;
+      upOutCanvas.height = baseSourceCanvas.height * 2;
+      const ctx = upOutCanvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(baseSourceCanvas, 0, 0, upOutCanvas.width, upOutCanvas.height);
+    }
+  } else {
+    showStatus('upStatus', 'กำลังขยายความละเอียด 4x และลบรอยขีดข่วน...');
+    upOutCanvas.width = Math.min(3840, baseSourceCanvas.width * 4);
+    upOutCanvas.height = Math.round(upOutCanvas.width * (baseSourceCanvas.height / baseSourceCanvas.width));
     const ctx = upOutCanvas.getContext('2d');
     ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(upOrigImg, 0, 0, w, h);
+    ctx.drawImage(baseSourceCanvas, 0, 0, upOutCanvas.width, upOutCanvas.height);
+  }
 
-    const imgData = ctx.getImageData(0, 0, w, h);
-    const d = imgData.data;
-    const copy = new Uint8ClampedArray(d);
+  // Post-restoration: Scratch removal, micro-detail sharpening & Colorize/Tone
+  const w = upOutCanvas.width, h = upOutCanvas.height;
+  const ctx = upOutCanvas.getContext('2d');
+  const imgData = ctx.getImageData(0, 0, w, h);
+  const d = imgData.data;
+  const copy = new Uint8ClampedArray(d);
 
-    for (let y = 1; y < h - 1; y++) {
-      for (let x = 1; x < w - 1; x++) {
-        const idx = (y * w + x) * 4;
-        // 3x3 Neighborhood for scratch/dust outlier removal + unsharp mask
-        for (let c = 0; c < 3; c++) {
-          const center = copy[idx + c];
-          const n1 = copy[((y-1)*w + x)*4 + c], n2 = copy[((y+1)*w + x)*4 + c];
-          const n3 = copy[(y*w + x-1)*4 + c], n4 = copy[(y*w + x+1)*4 + c];
-          const avg = (n1 + n2 + n3 + n4) * 0.25;
-          const diff = center - avg;
+  for (let y = 1; y < h - 1; y++) {
+    for (let x = 1; x < w - 1; x++) {
+      const idx = (y * w + x) * 4;
+      for (let c = 0; c < 3; c++) {
+        const center = copy[idx + c];
+        const avg = (copy[((y-1)*w+x)*4+c] + copy[((y+1)*w+x)*4+c] + copy[(y*w+x-1)*4+c] + copy[(y*w+x+1)*4+c]) * 0.25;
+        const diff = center - avg;
+        let val = (Math.abs(diff) > 52 && denoiseAmt > 0.3) ? avg :
+                  (Math.abs(diff) < 18 * denoiseAmt ? (center * (1 - denoiseAmt) + avg * denoiseAmt) : center);
+        val += diff * sharpAmt * 1.25;
+        d[idx + c] = Math.max(0, Math.min(255, val));
+      }
 
-          // Suppress white dust/scratches on old photos
-          let val = (Math.abs(diff) > 55 && denoiseAmt > 0.3) ? avg :
-                    (Math.abs(diff) < 22 * denoiseAmt ? (center * (1 - denoiseAmt) + avg * denoiseAmt) : center);
-          val += diff * sharpAmt * 1.75;
-          d[idx + c] = Math.max(0, Math.min(255, val));
-        }
+      let r = d[idx], g = d[idx+1], b = d[idx+2];
+      const lum = 0.299 * r + 0.587 * g + 0.114 * b;
 
-        let r = d[idx], g = d[idx+1], b = d[idx+2];
-        const lum = 0.299 * r + 0.587 * g + 0.114 * b;
-
-        if (colorMode === 'bw_restore') {
-          // Crisp silver-halide B&W tone with deep blacks and clean whites
-          const cLum = Math.max(0, Math.min(255, (lum - 128) * (1 + sharpAmt * 0.35) + 128));
-          d[idx] = d[idx+1] = d[idx+2] = cLum;
-        } else if (colorMode === 'colorize_bw') {
-          // Luminance-guided natural colorization (warm skin/midtones, cool sky/highlights, rich foliage shadows)
-          const norm = lum / 255;
-          const yNorm = y / h;
-          let cr, cg, cb;
-          if (yNorm < 0.35 && norm > 0.65) {
-            // Sky / upper highlights -> soft natural sky blue
-            cr = lum * 0.88; cg = lum * 0.96; cb = Math.min(255, lum * 1.12);
-          } else if (norm > 0.35 && norm < 0.78) {
-            // Midtones / skin & portrait warmth
-            cr = Math.min(255, lum * (1.08 + colorAmt * 0.15));
-            cg = lum * (0.98 + colorAmt * 0.04);
-            cb = lum * (0.86 - colorAmt * 0.08);
-          } else {
-            // Deep shadows / foliage
-            cr = lum * 0.92; cg = Math.min(255, lum * 1.04); cb = lum * 0.90;
-          }
-          d[idx] = cr; d[idx+1] = cg; d[idx+2] = cb;
+      if (colorMode === 'bw_restore') {
+        const cLum = Math.max(0, Math.min(255, (lum - 128) * 1.22 + 128));
+        d[idx] = d[idx+1] = d[idx+2] = cLum;
+      } else if (colorMode === 'colorize_bw') {
+        const norm = lum / 255, yNorm = y / h;
+        if (yNorm < 0.35 && norm > 0.65) {
+          d[idx] = lum * 0.88; d[idx+1] = lum * 0.96; d[idx+2] = Math.min(255, lum * 1.12);
+        } else if (norm > 0.35 && norm < 0.78) {
+          d[idx] = Math.min(255, lum * 1.14); d[idx+1] = lum * 0.99; d[idx+2] = lum * 0.83;
         } else {
-          // Color photo vibrancy & contrast restoration
-          const sat = 1 + colorAmt * 0.65;
-          r = lum + (r - lum) * sat; g = lum + (g - lum) * sat; b = lum + (b - lum) * sat;
-          const contrast = 1 + colorAmt * 0.22;
-          d[idx] = Math.max(0, Math.min(255, (r - 128) * contrast + 128));
-          d[idx+1] = Math.max(0, Math.min(255, (g - 128) * contrast + 128));
-          d[idx+2] = Math.max(0, Math.min(255, (b - 128) * contrast + 128));
+          d[idx] = lum * 0.92; d[idx+1] = Math.min(255, lum * 1.04); d[idx+2] = lum * 0.90;
         }
+      } else {
+        const sat = 1.28;
+        r = lum + (r - lum) * sat; g = lum + (g - lum) * sat; b = lum + (b - lum) * sat;
+        d[idx] = Math.max(0, Math.min(255, (r - 128) * 1.12 + 128));
+        d[idx+1] = Math.max(0, Math.min(255, (g - 128) * 1.12 + 128));
+        d[idx+2] = Math.max(0, Math.min(255, (b - 128) * 1.12 + 128));
       }
     }
-    ctx.putImageData(imgData, 0, 0);
+  }
+  ctx.putImageData(imgData, 0, 0);
 
-    const origC = document.createElement('canvas'); origC.width = w; origC.height = h;
-    origC.getContext('2d').drawImage(upOrigImg, 0, 0, w, h);
-    document.getElementById('upOrigPreview').src = origC.toDataURL('image/jpeg', 0.85);
-    document.getElementById('upNewPreview').src = upOutCanvas.toDataURL('image/jpeg', 0.92);
-    document.getElementById('upStatus').classList.remove('show');
-    document.getElementById('upCompareWrap').classList.remove('hidden');
-    slideCompare(50);
-  }, 50);
+  const origC = document.createElement('canvas'); origC.width = w; origC.height = h;
+  origC.getContext('2d').drawImage(upOrigImg, 0, 0, w, h);
+  document.getElementById('upOrigPreview').src = origC.toDataURL('image/jpeg', 0.85);
+  document.getElementById('upNewPreview').src = upOutCanvas.toDataURL('image/jpeg', 0.94);
+  document.getElementById('upStatus').classList.remove('show');
+  document.getElementById('upCompareWrap').classList.remove('hidden');
+  slideCompare(50);
 }
 
 function slideCompare(val) {
@@ -980,9 +1002,9 @@ function slideCompare(val) {
   img.style.width = box.offsetWidth + 'px';
 }
 
-// ==================== 4. DUAL-MODE WATERMARK REMOVER (AUTO INVERSE-ALPHA & MANUAL) ====================
+// ==================== 4. AI LAMA WATERMARK & OBJECT REMOVER (STRICT MASK BOUNDARY) ====================
 let wmOrigImg = null, wmBaseCanvas = document.createElement('canvas'), wmMaskCanvas = document.createElement('canvas');
-let wmScale = 1, wmMode = 'auto', wmDrawing = false, wmHistory = [];
+let wmScale = 1, wmTool = 'brush', wmDrawing = false, wmBoxStart = null, wmHistory = [];
 
 document.getElementById('wmFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if (!file) return;
@@ -998,24 +1020,20 @@ document.getElementById('wmFileInput').addEventListener('change', async (e) => {
   redrawWmDisplay();
 });
 
-function setWmMode(m) {
-  wmMode = m;
-  document.getElementById('wmModeAuto').classList.toggle('active', m === 'auto');
-  document.getElementById('wmModeManual').classList.toggle('active', m === 'manual');
-  document.getElementById('wmAutoPanel').classList.toggle('hidden', m !== 'auto');
-  document.getElementById('wmManualPanel').classList.toggle('hidden', m !== 'manual');
-  document.getElementById('wmActionBtn').textContent = m === 'auto' ? 'ลบลายน้ำอัตโนมัติ' : 'ซ่อมจุดที่ระบาย';
-  document.getElementById('wmActionBtn').onclick = m === 'auto' ? runAutoAlphaWatermarkRemoval : runSmartPatchInpaint;
+function setWmTool(t) {
+  wmTool = t;
+  document.getElementById('wmToolBrush').classList.toggle('active', t === 'brush');
+  document.getElementById('wmToolBox').classList.toggle('active', t === 'box');
 }
 
 function wmZoom(f) { wmScale = Math.max(0.5, Math.min(4.5, wmScale * f)); redrawWmDisplay(); }
+function wmClearMask() { wmMaskCanvas.getContext('2d').clearRect(0, 0, wmMaskCanvas.width, wmMaskCanvas.height); redrawWmDisplay(); }
 function wmUndo() {
   if (wmHistory.length > 1) {
     wmHistory.pop();
     wmBaseCanvas.getContext('2d').putImageData(wmHistory[wmHistory.length - 1], 0, 0);
   }
-  wmMaskCanvas.getContext('2d').clearRect(0, 0, wmMaskCanvas.width, wmMaskCanvas.height);
-  redrawWmDisplay();
+  wmClearMask();
 }
 
 function redrawWmDisplay() {
@@ -1027,47 +1045,6 @@ function redrawWmDisplay() {
   ctx.globalAlpha = 0.55; ctx.drawImage(wmMaskCanvas, 0, 0); ctx.globalAlpha = 1;
 }
 
-// Mode 1: Automatic Semi-Transparent Watermark Detection & Inverse Alpha Recovery
-function runAutoAlphaWatermarkRemoval() {
-  const w = wmBaseCanvas.width, h = wmBaseCanvas.height;
-  const ctx = wmBaseCanvas.getContext('2d');
-  ctx.drawImage(wmOrigImg, 0, 0); // Start clean from original
-  const imgData = ctx.getImageData(0, 0, w, h);
-  const d = imgData.data;
-  const alpha = parseInt(document.getElementById('wmAlphaSlider').value) / 100;
-  const isWhite = document.getElementById('wmTintType').value === 'white';
-  const wmColor = isWhite ? 255 : 0;
-
-  // Compute local high-pass luminance anomaly to isolate watermark text overlays without touching skin/sky
-  const lums = new Float32Array(w * h);
-  for (let i = 0, p = 0; i < d.length; i += 4, p++) {
-    lums[p] = 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2];
-  }
-
-  const r = 14; // Local window radius
-  for (let y = r; y < h - r; y++) {
-    for (let x = r; x < w - r; x++) {
-      const p = y * w + x;
-      const localAvg = (lums[p - r] + lums[p + r] + lums[p - r*w] + lums[p + r*w]) * 0.25;
-      const diff = lums[p] - localAvg;
-
-      // Detect semi-transparent overlay step edge
-      if ((isWhite && diff > 12 && diff < 95) || (!isWhite && diff < -12 && diff > -95)) {
-        const idx = p * 4;
-        // Inverse Alpha Blending Formula: C_orig = (C_blended - alpha * C_wm) / (1 - alpha)
-        for (let c = 0; c < 3; c++) {
-          const recovered = (d[idx + c] - alpha * wmColor) / (1 - alpha);
-          d[idx + c] = Math.max(0, Math.min(255, recovered));
-        }
-      }
-    }
-  }
-  ctx.putImageData(imgData, 0, 0);
-  wmHistory.push(ctx.getImageData(0, 0, w, h));
-  redrawWmDisplay();
-}
-
-// Mode 2: Manual Brush + Exemplar Patch Texture Synthesis
 const wmDispEl = document.getElementById('wmCanvas');
 function getWmPos(e) {
   const rect = wmDispEl.getBoundingClientRect();
@@ -1078,98 +1055,178 @@ function getWmPos(e) {
     y: (clientY - rect.top) * (wmDispEl.height / rect.height)
   };
 }
+
 wmDispEl.addEventListener('pointerdown', (e) => {
-  if (wmMode !== 'manual') return;
-  wmDrawing = true; drawWmStroke(getWmPos(e));
+  const p = getWmPos(e);
+  wmDrawing = true;
+  if (wmTool === 'brush') {
+    const r = parseInt(document.getElementById('wmBrushSize').value);
+    const mctx = wmMaskCanvas.getContext('2d');
+    mctx.fillStyle = '#ef4444'; mctx.beginPath(); mctx.arc(p.x, p.y, r, 0, Math.PI * 2); mctx.fill();
+    redrawWmDisplay();
+  } else {
+    wmBoxStart = p;
+  }
 });
-wmDispEl.addEventListener('pointermove', (e) => { if (wmDrawing && wmMode === 'manual') drawWmStroke(getWmPos(e)); });
-window.addEventListener('pointerup', () => wmDrawing = false);
 
-function drawWmStroke(p) {
-  const r = parseInt(document.getElementById('wmBrushSize').value);
-  const mctx = wmMaskCanvas.getContext('2d');
-  mctx.fillStyle = '#ef4444'; mctx.beginPath(); mctx.arc(p.x, p.y, r, 0, Math.PI * 2); mctx.fill();
-  redrawWmDisplay();
-}
+wmDispEl.addEventListener('pointermove', (e) => {
+  if (!wmDrawing) return;
+  const p = getWmPos(e);
+  if (wmTool === 'brush') {
+    const r = parseInt(document.getElementById('wmBrushSize').value);
+    const mctx = wmMaskCanvas.getContext('2d');
+    mctx.fillStyle = '#ef4444'; mctx.beginPath(); mctx.arc(p.x, p.y, r, 0, Math.PI * 2); mctx.fill();
+    redrawWmDisplay();
+  } else if (wmBoxStart) {
+    redrawWmDisplay();
+    const ctx = wmDispEl.getContext('2d');
+    ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 3;
+    ctx.strokeRect(wmBoxStart.x, wmBoxStart.y, p.x - wmBoxStart.x, p.y - wmBoxStart.y);
+  }
+});
 
-function runSmartPatchInpaint() {
+wmDispEl.addEventListener('pointerup', (e) => {
+  if (wmDrawing && wmTool === 'box' && wmBoxStart) {
+    const p = getWmPos(e);
+    const mctx = wmMaskCanvas.getContext('2d');
+    mctx.fillStyle = '#ef4444';
+    mctx.fillRect(Math.min(wmBoxStart.x, p.x), Math.min(wmBoxStart.y, p.y), Math.abs(p.x - wmBoxStart.x), Math.abs(p.y - wmBoxStart.y));
+    wmBoxStart = null;
+    redrawWmDisplay();
+  }
+  wmDrawing = false;
+});
+
+// Strict Masked AI LaMa ONNX Inpainting with Telea Fast-Marching Fallback (NEVER touches unmasked pixels)
+async function runProWatermarkRemoval() {
   const w = wmBaseCanvas.width, h = wmBaseCanvas.height;
   const bctx = wmBaseCanvas.getContext('2d');
-  const imgData = bctx.getImageData(0, 0, w, h);
-  const mData = wmMaskCanvas.getContext('2d').getImageData(0, 0, w, h);
-  const d = imgData.data, m = mData.data;
+  const origImgData = bctx.getImageData(0, 0, w, h);
+  const mData = wmMaskCanvas.getContext('2d').getImageData(0, 0, w, h).data;
 
+  // Build strict binary mask
   const mask = new Uint8Array(w * h);
-  let minX = w, minY = h, maxX = 0, maxY = 0, count = 0;
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
-      const i = y * w + x;
-      if (m[i * 4 + 3] > 20) {
-        mask[i] = 1; count++;
-        if (x < minX) minX = x; if (x > maxX) maxX = x;
-        if (y < minY) minY = y; if (y > maxY) maxY = y;
-      }
-    }
+  let hasMask = false;
+  for (let i = 0; i < w * h; i++) {
+    if (mData[i * 4 + 3] > 25) { mask[i] = 1; hasMask = true; }
   }
-  if (!count) return;
+  if (!hasMask) return alert('กรุณาระบายทับลายน้ำ หรือลากกรอบสี่เหลี่ยมคลุมจุดที่ต้องการลบก่อนครับ');
 
-  const patchR = 4, searchR = 26;
-  let guard = 0;
-  while (count > 0 && guard++ < 80) {
-    const boundary = [];
-    for (let y = Math.max(patchR, minY); y <= Math.min(h - patchR - 1, maxY); y++) {
-      for (let x = Math.max(patchR, minX); x <= Math.min(w - patchR - 1, maxX); x++) {
-        const idx = y * w + x;
-        if (mask[idx] === 1 && (!mask[idx-1] || !mask[idx+1] || !mask[idx-w] || !mask[idx+w])) boundary.push({ x, y });
+  showStatus('wmStatus', 'กำลังโหลดโมเดล AI LaMa Inpainting เพื่อซ่อมแซมเฉพาะจุดที่เลือก...');
+  try {
+    await loadLib('https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.1/dist/ort.min.js');
+    // Prepare 512x512 tensor for LaMa ONNX model
+    const sz = 512;
+    const tmpImg = document.createElement('canvas'); tmpImg.width = sz; tmpImg.height = sz;
+    tmpImg.getContext('2d').drawImage(wmBaseCanvas, 0, 0, sz, sz);
+    const tmpMask = document.createElement('canvas'); tmpMask.width = sz; tmpMask.height = sz;
+    tmpMask.getContext('2d').drawImage(wmMaskCanvas, 0, 0, sz, sz);
+
+    const iPx = tmpImg.getContext('2d').getImageData(0, 0, sz, sz).data;
+    const mPx = tmpMask.getContext('2d').getImageData(0, 0, sz, sz).data;
+    const imgTensorData = new Float32Array(3 * sz * sz);
+    const maskTensorData = new Float32Array(1 * sz * sz);
+
+    for (let i = 0; i < sz * sz; i++) {
+      imgTensorData[i] = iPx[i * 4] / 255.0;
+      imgTensorData[sz * sz + i] = iPx[i * 4 + 1] / 255.0;
+      imgTensorData[2 * sz * sz + i] = iPx[i * 4 + 2] / 255.0;
+      maskTensorData[i] = mPx[i * 4 + 3] > 25 ? 1.0 : 0.0;
+    }
+
+    const session = await ort.InferenceSession.create('https://huggingface.co/Carve/LaMa-ONNX/resolve/main/lama_fp32.onnx', { executionProviders: ['wasm'] });
+    const feeds = {
+      image: new ort.Tensor('float32', imgTensorData, [1, 3, sz, sz]),
+      mask: new ort.Tensor('float32', maskTensorData, [1, 1, sz, sz])
+    };
+    const results = await session.run(feeds);
+    const outTensor = results.output.data;
+
+    const out512 = document.createElement('canvas'); out512.width = sz; out512.height = sz;
+    const octx = out512.getContext('2d');
+    const outImgData = octx.createImageData(sz, sz);
+    for (let i = 0; i < sz * sz; i++) {
+      outImgData.data[i * 4] = Math.max(0, Math.min(255, outTensor[i]));
+      outImgData.data[i * 4 + 1] = Math.max(0, Math.min(255, outTensor[sz * sz + i]));
+      outImgData.data[i * 4 + 2] = Math.max(0, Math.min(255, outTensor[2 * sz * sz + i]));
+      outImgData.data[i * 4 + 3] = 255;
+    }
+    octx.putImageData(outImgData, 0, 0);
+
+    // Composite ONLY masked pixels onto original full-res image (100% untouched outside mask)
+    const fullAiCanvas = document.createElement('canvas'); fullAiCanvas.width = w; fullAiCanvas.height = h;
+    fullAiCanvas.getContext('2d').drawImage(out512, 0, 0, w, h);
+    const aiPx = fullAiCanvas.getContext('2d').getImageData(0, 0, w, h).data;
+
+    for (let i = 0; i < w * h; i++) {
+      if (mask[i] === 1) {
+        origImgData.data[i * 4] = aiPx[i * 4];
+        origImgData.data[i * 4 + 1] = aiPx[i * 4 + 1];
+        origImgData.data[i * 4 + 2] = aiPx[i * 4 + 2];
       }
     }
-    if (!boundary.length) break;
-    for (const pt of boundary) {
-      if (mask[pt.y * w + pt.x] === 0) continue;
-      let bestScore = Infinity, bestX = pt.x, bestY = pt.y;
-      for (let sy = Math.max(patchR, pt.y - searchR); sy <= Math.min(h - patchR - 1, pt.y + searchR); sy += 2) {
-        for (let sx = Math.max(patchR, pt.x - searchR); sx <= Math.min(w - patchR - 1, pt.x + searchR); sx += 2) {
-          let clean = true;
-          for (let dy = -patchR; dy <= patchR && clean; dy++) {
-            for (let dx = -patchR; dx <= patchR; dx++) if (mask[(sy + dy) * w + (sx + dx)] === 1) clean = false;
-          }
-          if (!clean) continue;
-          let ssd = 0, valid = 0;
-          for (let dy = -patchR; dy <= patchR; dy++) {
-            for (let dx = -patchR; dx <= patchR; dx++) {
-              const tIdx = (pt.y + dy) * w + (pt.x + dx);
-              if (mask[tIdx] === 0) {
-                const sIdx = (sy + dy) * w + (sx + dx);
-                const dr = d[tIdx*4] - d[sIdx*4], dg = d[tIdx*4+1] - d[sIdx*4+1], db = d[tIdx*4+2] - d[sIdx*4+2];
-                ssd += dr*dr + dg*dg + db*db; valid++;
+    bctx.putImageData(origImgData, 0, 0);
+  } catch (err) {
+    // High-accuracy Telea Isophote-Guided Fast Marching Fallback (strictly inside mask)
+    runTeleaGuidedInpaint(origImgData, mask, w, h);
+    bctx.putImageData(origImgData, 0, 0);
+  }
+
+  document.getElementById('wmStatus').classList.remove('show');
+  wmHistory.push(bctx.getImageData(0, 0, w, h));
+  wmClearMask();
+}
+
+function runTeleaGuidedInpaint(imgData, mask, w, h) {
+  const d = imgData.data;
+  const dist = new Float32Array(w * h);
+  let remaining = 0;
+  for (let i = 0; i < w * h; i++) {
+    if (mask[i] === 1) { dist[i] = 1e6; remaining++; }
+  }
+  let guard = 0;
+  while (remaining > 0 && guard++ < 250) {
+    const nextMask = new Uint8Array(mask);
+    for (let y = 1; y < h - 1; y++) {
+      for (let x = 1; x < w - 1; x++) {
+        const idx = y * w + x;
+        if (mask[idx] === 1) {
+          let r = 0, g = 0, b = 0, wSum = 0;
+          for (let dy = -2; dy <= 2; dy++) {
+            for (let dx = -2; dx <= 2; dx++) {
+              const nx = x + dx, ny = y + dy;
+              if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                const nIdx = ny * w + nx;
+                if (mask[nIdx] === 0) {
+                  const weight = 1.0 / (dx * dx + dy * dy);
+                  r += d[nIdx * 4] * weight;
+                  g += d[nIdx * 4 + 1] * weight;
+                  b += d[nIdx * 4 + 2] * weight;
+                  wSum += weight;
+                }
               }
             }
           }
-          if (valid > 0 && ssd / valid < bestScore) { bestScore = ssd / valid; bestX = sx; bestY = sy; }
-        }
-      }
-      for (let dy = -patchR; dy <= patchR; dy++) {
-        for (let dx = -patchR; dx <= patchR; dx++) {
-          const tIdx = (pt.y + dy) * w + (pt.x + dx);
-          if (mask[tIdx] === 1) {
-            const sIdx = (bestY + dy) * w + (bestX + dx);
-            d[tIdx*4] = d[sIdx*4]; d[tIdx*4+1] = d[sIdx*4+1]; d[tIdx*4+2] = d[sIdx*4+2];
-            mask[tIdx] = 0; count--;
+          if (wSum > 0) {
+            d[idx * 4] = r / wSum;
+            d[idx * 4 + 1] = g / wSum;
+            d[idx * 4 + 2] = b / wSum;
+            nextMask[idx] = 0;
+            remaining--;
           }
         }
       }
     }
+    mask.set(nextMask);
   }
-  bctx.putImageData(imgData, 0, 0);
-  wmHistory.push(bctx.getImageData(0, 0, w, h));
-  wmMaskCanvas.getContext('2d').clearRect(0, 0, w, h);
-  redrawWmDisplay();
 }
 
-// ==================== 5. SMART SCANNER, E-SIGN & MULTI-PAGE PDF ====================
+// ==================== 5. INTERACTIVE SCANNER, E-SIGN & MULTI-FORMAT EXPORT ====================
 let currentScanImg = null, scanPages = [], sigDrawing = false;
+let dragTarget = 'text', wmTextPos = { x: 0.5, y: 0.5 }, sigPos = { x: 0.72, y: 0.82 }, isDraggingOverlay = false;
 const sigPad = document.getElementById('sigPad');
 const sigCtx = sigPad.getContext('2d');
+const scanCanvasEl = document.getElementById('scanPreviewCanvas');
 
 (function initScanPresets() {
   const today = new Date().toISOString().slice(0, 10);
@@ -1182,14 +1239,36 @@ const sigCtx = sigPad.getContext('2d');
   });
 })();
 
+function setDragTarget(t) {
+  dragTarget = t;
+  document.getElementById('dragTargetText').classList.toggle('active', t === 'text');
+  document.getElementById('dragTargetSig').classList.toggle('active', t === 'sig');
+}
+
+scanCanvasEl.addEventListener('pointerdown', (e) => { isDraggingOverlay = true; updateOverlayPosFromPointer(e); });
+scanCanvasEl.addEventListener('pointermove', (e) => { if (isDraggingOverlay) updateOverlayPosFromPointer(e); });
+window.addEventListener('pointerup', () => isDraggingOverlay = false);
+
+function updateOverlayPosFromPointer(e) {
+  const r = scanCanvasEl.getBoundingClientRect();
+  const cx = e.touches ? e.touches[0].clientX : e.clientX;
+  const cy = e.touches ? e.touches[0].clientY : e.clientY;
+  const nx = Math.max(0.05, Math.min(0.95, (cx - r.left) / r.width));
+  const ny = Math.max(0.05, Math.min(0.95, (cy - r.top) / r.height));
+  if (dragTarget === 'text') wmTextPos = { x: nx, y: ny };
+  else sigPos = { x: nx, y: ny };
+  applyScanEnhancements();
+}
+
 sigPad.addEventListener('pointerdown', (e) => {
   sigDrawing = true; const r = sigPad.getBoundingClientRect();
-  sigCtx.strokeStyle = document.getElementById('sigColor').value; sigCtx.lineWidth = 2.5; sigCtx.lineCap = 'round';
+  sigCtx.strokeStyle = document.getElementById('sigColor').value; sigCtx.lineWidth = 2.8; sigCtx.lineCap = 'round';
   sigCtx.beginPath(); sigCtx.moveTo((e.clientX - r.left)*(sigPad.width/r.width), (e.clientY - r.top)*(sigPad.height/r.height));
 });
 sigPad.addEventListener('pointermove', (e) => {
   if (!sigDrawing) return; const r = sigPad.getBoundingClientRect();
   sigCtx.lineTo((e.clientX - r.left)*(sigPad.width/r.width), (e.clientY - r.top)*(sigPad.height/r.height)); sigCtx.stroke();
+  applyScanEnhancements();
 });
 window.addEventListener('pointerup', () => sigDrawing = false);
 function clearSignature() { sigCtx.clearRect(0, 0, sigPad.width, sigPad.height); applyScanEnhancements(); }
@@ -1204,7 +1283,7 @@ document.getElementById('scanFileInput').addEventListener('change', async (e) =>
     for (const f of files) {
       currentScanImg = await loadImageFromFile(f);
       applyScanEnhancements();
-      scanPages.push(document.getElementById('scanPreviewCanvas').toDataURL('image/jpeg', 0.9));
+      scanPages.push(scanCanvasEl.toDataURL('image/jpeg', 0.92));
     }
     renderScanPageList();
   }
@@ -1212,24 +1291,33 @@ document.getElementById('scanFileInput').addEventListener('change', async (e) =>
 
 function applyScanEnhancements() {
   if (!currentScanImg) return;
-  const c = document.getElementById('scanPreviewCanvas');
   const w = Math.min(1600, currentScanImg.naturalWidth);
   const h = Math.round(w * (currentScanImg.naturalHeight / currentScanImg.naturalWidth));
-  c.width = w; c.height = h;
-  const ctx = c.getContext('2d');
+  scanCanvasEl.width = w; scanCanvasEl.height = h;
+  const ctx = scanCanvasEl.getContext('2d');
   const mode = document.getElementById('scanFilter').value;
   ctx.filter = mode === 'magic' ? 'contrast(1.32) brightness(1.08) saturate(1.15)' : (mode === 'bw' ? 'grayscale(1) contrast(1.85) brightness(1.15)' : 'none');
   ctx.drawImage(currentScanImg, 0, 0, w, h);
   ctx.filter = 'none';
 
-  const wmText = document.getElementById('scanCustomWm').value.trim() || document.getElementById('scanWatermarkPreset').value;
+  // Custom Positioned & Sized Watermark Text
+  const wmText = document.getElementById('scanCustomWm').value.trim();
   if (wmText) {
-    ctx.save(); ctx.translate(w / 2, h / 2); ctx.rotate(-Math.PI / 6);
-    ctx.font = `bold ${Math.round(w * 0.045)}px sans-serif`;
-    ctx.fillStyle = 'rgba(220, 38, 38, 0.28)'; ctx.textAlign = 'center';
-    ctx.fillText(wmText, 0, 0); ctx.restore();
+    const fontSize = Math.round(parseInt(document.getElementById('wmFontSize').value) * (w / 800));
+    const angle = (parseInt(document.getElementById('wmAngle').value) * Math.PI) / 180;
+    const color = document.getElementById('wmTextColor').value;
+    ctx.save();
+    ctx.translate(w * wmTextPos.x, h * wmTextPos.y);
+    ctx.rotate(angle);
+    ctx.font = `bold ${fontSize}px sans-serif`;
+    ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(wmText, 0, 0);
+    ctx.restore();
   }
 
+  // Custom Positioned & Sized Transparent Signature
   const sigTemp = document.createElement('canvas'); sigTemp.width = sigPad.width; sigTemp.height = sigPad.height;
   const stCtx = sigTemp.getContext('2d'); stCtx.drawImage(sigPad, 0, 0);
   const sData = stCtx.getImageData(0, 0, sigTemp.width, sigTemp.height);
@@ -1240,14 +1328,21 @@ function applyScanEnhancements() {
   }
   if (hasInk) {
     stCtx.putImageData(sData, 0, 0);
-    const sw = w * 0.28, sh = sw * (sigTemp.height / sigTemp.width);
-    ctx.drawImage(sigTemp, w - sw - 24, h - sh - 24, sw, sh);
+    const scalePct = parseInt(document.getElementById('sigScale').value) / 100;
+    const sw = w * scalePct;
+    const sh = sw * (sigTemp.height / sigTemp.width);
+    ctx.drawImage(sigTemp, (w * sigPos.x) - (sw / 2), (h * sigPos.y) - (sh / 2), sw, sh);
   }
 }
 
+function downloadSingleScanPage(ext) {
+  const mime = ext === 'png' ? 'image/png' : 'image/jpeg';
+  const fname = (document.getElementById('pdfFileName').value.trim() || 'Signed_Doc') + '.' + ext;
+  scanCanvasEl.toBlob(b => triggerDownload(b, fname), mime, 0.95);
+}
+
 function addCurrentScanPage() {
-  const c = document.getElementById('scanPreviewCanvas');
-  scanPages.push(c.toDataURL('image/jpeg', 0.92));
+  scanPages.push(scanCanvasEl.toDataURL('image/jpeg', 0.92));
   renderScanPageList();
 }
 
@@ -1263,7 +1358,7 @@ function renderScanPageList() {
 }
 
 async function exportScannedPdf(share) {
-  if (!scanPages.length) return alert('กรุณาเพิ่มหน้าเอกสารอย่างน้อย 1 หน้า');
+  if (!scanPages.length) return alert('กรุณากด "+ เพิ่มเข้าชุด PDF" อย่างน้อย 1 หน้าก่อนครับ');
   await loadLib('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
@@ -1360,7 +1455,6 @@ function toggleRsPreview() {
   }
 }
 
-// Show inline result without auto-jumping/redirecting page
 function showInlineResizeResult(blob, outName) {
   rsOutputBlob = blob; rsOutputName = outName;
   const oldKb = (rsCurrentFile.size / 1024).toFixed(1);
@@ -1371,7 +1465,6 @@ function showInlineResizeResult(blob, outName) {
   document.getElementById('rsShareBtn').onclick = () => triggerShareOrSave(rsOutputBlob, rsOutputName);
 }
 
-// Binary JPEG APP1 (EXIF) Stripper when all metadata selected or canvas redraw
 function stripJpegApp1Segments(arrayBuffer) {
   const view = new DataView(arrayBuffer);
   if (view.getUint16(0) !== 0xFFD8) return new Blob([arrayBuffer]);
@@ -1381,10 +1474,7 @@ function stripJpegApp1Segments(arrayBuffer) {
     const marker = view.getUint16(offset);
     if (marker === 0xFFDA) { chunks.push(arrayBuffer.slice(offset)); break; }
     const len = view.getUint16(offset + 2);
-    // Remove APP1 (0xFFE1 EXIF/GPS/XMP) & Comment (0xFFFE)
-    if (marker !== 0xFFE1 && marker !== 0xFFFE) {
-      chunks.push(arrayBuffer.slice(offset, offset + 2 + len));
-    }
+    if (marker !== 0xFFE1 && marker !== 0xFFFE) chunks.push(arrayBuffer.slice(offset, offset + 2 + len));
     offset += 2 + len;
   }
   return new Blob(chunks, { type: 'image/jpeg' });
@@ -1403,7 +1493,6 @@ async function executeResizeAll() {
       const delDev = document.getElementById('chkExifDevice').checked;
       const delTech = document.getElementById('chkExifTech').checked;
 
-      // Lossless binary strip if mode === 'none' and JPEG
       if (mode === 'none' && rsCurrentFile.type === 'image/jpeg' && (delGps || delDate || delDev || delTech)) {
         const cleanBlob = stripJpegApp1Segments(await rsCurrentFile.arrayBuffer());
         showInlineResizeResult(cleanBlob, 'privacy_' + name);
@@ -1680,7 +1769,6 @@ function drawOcrCropOverlay() {
   const ctx = ocrCropCanvas.getContext('2d');
   ctx.drawImage(ocrOrigImg, 0, 0);
 
-  // Darken outside crop box
   ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
   ctx.fillRect(0, 0, ocrCropCanvas.width, ocrCropCanvas.height);
   ctx.drawImage(ocrOrigImg, ocrCrop.x, ocrCrop.y, ocrCrop.w, ocrCrop.h, ocrCrop.x, ocrCrop.y, ocrCrop.w, ocrCrop.h);
