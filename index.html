@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#090d16">
-<title>Privacy Studio Pro — AI LaMa & Swin2SR Suite</title>
+<title>Privacy Studio Pro — Complete Anti-Crash AI Suite</title>
 <style>
   :root {
     --bg: #090d16;
@@ -343,7 +343,6 @@
           <button class="pill" id="wmToolBrush" onclick="setWmTool('brush')">แปรงระบายเอง</button>
         </div>
 
-        <!-- Auto Detect Controls -->
         <div id="wmAutoControls" class="card" style="background:var(--bg);margin-bottom:8px;">
           <div class="grid-2">
             <div>
@@ -356,7 +355,6 @@
           </div>
         </div>
 
-        <!-- Brush & Zoom Controls -->
         <div class="grid-2" style="margin-bottom:8px;">
           <div>
             <label>ขนาดหัวแปรงเก็บรายละเอียด (<span id="wmBrushVal">14</span> px)</label>
@@ -639,19 +637,19 @@
     </div>
   </section>
 
-  <!-- ==================== TAB 7: PRINTED & HANDWRITING AI OCR ==================== -->
+  <!-- ==================== TAB 7: PRINTED & LINE-SLICED HANDWRITING AI OCR ==================== -->
   <section id="tab-ocr" class="tab-panel">
     <div class="card">
       <h2>
         <svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
-        อ่านข้อความเอกสาร & AI อ่านลายมือ (ไทย + อังกฤษ)
+        อ่านข้อความเอกสาร & AI อ่านลายมือ (หั่นบรรทัดกันเด้ง)
       </h2>
-      <p class="sub">ลากกรอบสีเขียวคลุมข้อความหรือบรรทัดลายมือ รองรับทั้งตัวพิมพ์และโมเดล Transformer อ่านลายมือเขียน</p>
+      <p class="sub">ลากกรอบสีเขียวคลุมข้อความหรือหลายบรรทัด ระบบจะหั่นอ่านทีละบรรทัดและคืน RAM ทันที ไม่ค้าง ไม่เด้งบนมือถือ</p>
       <label class="dropzone">
         <input type="file" id="ocrFileInput" accept="image/*">
         <svg class="ico-lg" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
         <div class="title">เลือกรูปภาพเอกสาร แคปหน้าจอ หรือสมุดจดลายมือ</div>
-        <div class="hint">แนะนำให้ลากกรอบสีเขียวคลุมเฉพาะบรรทัดข้อความ</div>
+        <div class="hint">ลากกรอบสีเขียวคลุมเฉพาะส่วนที่มีตัวหนังสือเพื่อความแม่นยำสูงสุด</div>
       </label>
       <div id="ocrStatus" class="status-box"></div>
       <div id="ocrWorkspace" class="hidden" style="margin-top:12px;">
@@ -668,7 +666,7 @@
             <select id="ocrEngineMode">
               <option value="printed_thai">โหมด 1: เอกสารสิ่งพิมพ์ ไทย+อังกฤษ (แม่นยำสูงสุด)</option>
               <option value="handwriting_thai">โหมด 2: ลายมือภาษาไทย & บันทึกเขียนมือ (เสริมเส้นปากกา)</option>
-              <option value="trocr_handwriting">โหมด 3: AI TrOCR อ่านลายมืออังกฤษ/ตัวเลข (Transformer)</option>
+              <option value="trocr_handwriting">โหมด 3: AI TrOCR-Small อ่านลายมืออังกฤษ/ตัวเลข (หั่นทีละบรรทัด)</option>
             </select>
           </div>
           <div>
@@ -899,7 +897,7 @@ function getBgExportBlob() {
 async function downloadBgResult() { const { blob, name } = await getBgExportBlob(); triggerDownload(blob, name); }
 async function shareBgResult() { const { blob, name } = await getBgExportBlob(); triggerShareOrSave(blob, name); }
 
-// ==================== 3. 3-MODE SUPER-RESOLUTION (INCLUDING ANTI-CRASH FULL SWIN2SR) ====================
+// ==================== 3. 3-MODE SUPER-RESOLUTION (ANTI-CRASH SWIN2SR) ====================
 let upOrigImg = null, upOutCanvas = document.createElement('canvas');
 document.getElementById('upFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if (!file) return;
@@ -915,7 +913,6 @@ async function processSafeUpscale() {
   const sharpAmt = parseInt(document.getElementById('upSharp').value) / 100;
   const denoiseAmt = parseInt(document.getElementById('upDenoise').value) / 100;
 
-  // Strict memory-safe input cap for Transformer models (384px for Full Swin2SR, 512px for Lite, 1280px for HD Pro)
   const maxIn = engine === 'swin2sr_full' ? 384 : (engine === 'tiled_lite' ? 512 : 1280);
   const inScale = upOrigImg.naturalWidth > maxIn ? (maxIn / upOrigImg.naturalWidth) : 1;
   const inW = Math.round(upOrigImg.naturalWidth * inScale);
@@ -930,7 +927,7 @@ async function processSafeUpscale() {
 
   if (engine === 'tiled_lite' || engine === 'swin2sr_full') {
     const modelId = engine === 'swin2sr_full' ? 'Xenova/swin2SR-classical-sr-x2-64' : 'Xenova/swin2SR-lightweight-x2-64';
-    const tileSize = engine === 'swin2sr_full' ? 96 : 128; // Smaller 96x96 tiles for Full Swin2SR prevents RAM crash
+    const tileSize = engine === 'swin2sr_full' ? 96 : 128;
     showStatus('upStatus', `กำลังโหลดโมเดล ${engine === 'swin2sr_full' ? 'Swin2SR ตัวเต็ม' : 'Swin2SR Lite'} แบบหั่นบล็อกกันเด้ง...`);
 
     let upscaler = null;
@@ -960,14 +957,15 @@ async function processSafeUpscale() {
           outCtx.drawImage(outTileCanvas, sx * 2, sy * 2, sw * 2, sh * 2);
           done++;
           showStatus('upStatus', `AI กำลังสร้างรายละเอียดทีละบล็อกป้องกัน RAM เต็ม... ${Math.round((done / totalTiles) * 100)}%`);
-          await new Promise(res => setTimeout(res, 25)); // Yield to garbage collector
+          await new Promise(res => setTimeout(res, 25));
         }
       }
-      if (upscaler && upscaler.dispose) await upscaler.dispose();
     } catch (err) {
       showStatus('upStatus', 'สลับใช้เอนจิน HD Pro อัตโนมัติ: ' + err.message);
       outCtx.imageSmoothingEnabled = true; outCtx.imageSmoothingQuality = 'high';
       outCtx.drawImage(srcC, 0, 0, upOutCanvas.width, upOutCanvas.height);
+    } finally {
+      if (upscaler && upscaler.dispose) await upscaler.dispose();
     }
   } else {
     showStatus('upStatus', 'กำลังฟื้นฟูความคมชัด HD Pro และลบรอยขีดข่วน...');
@@ -976,7 +974,6 @@ async function processSafeUpscale() {
     await new Promise(res => setTimeout(res, 30));
   }
 
-  // Post-restoration: Scratch removal, micro-detail sharpening & Colorize/Tone
   const w = upOutCanvas.width, h = upOutCanvas.height;
   const imgData = outCtx.getImageData(0, 0, w, h);
   const d = imgData.data;
@@ -1085,7 +1082,6 @@ function redrawWmDisplay() {
   ctx.globalAlpha = 0.6; ctx.drawImage(wmMaskCanvas, 0, 0); ctx.globalAlpha = 1;
 }
 
-// Auto-Detect Watermark Text/Logos and build Mask for LaMa
 function autoDetectWatermarkMask() {
   const w = wmBaseCanvas.width, h = wmBaseCanvas.height;
   const imgData = wmBaseCanvas.getContext('2d').getImageData(0, 0, w, h).data;
@@ -1103,7 +1099,6 @@ function autoDetectWatermarkMask() {
     sats[p] = max === 0 ? 0 : (max - min) / max;
   }
 
-  // Detect semi-transparent neutral watermark overlays (low saturation + sharp step edge)
   const r = 10;
   const rawMask = new Uint8Array(w * h);
   for (let y = r; y < h - r; y++) {
@@ -1117,7 +1112,6 @@ function autoDetectWatermarkMask() {
     }
   }
 
-  // Dilate mask by 3px so LaMa covers watermark edges cleanly
   for (let y = 3; y < h - 3; y++) {
     for (let x = 3; x < w - 3; x++) {
       let hit = false;
@@ -1193,7 +1187,6 @@ async function runLamaOnnxInpainting() {
   const bctx = wmBaseCanvas.getContext('2d');
   let mData = wmMaskCanvas.getContext('2d').getImageData(0, 0, w, h).data;
 
-  // If in Auto mode and no mask generated yet, auto-detect first!
   let hasMask = false;
   for (let i = 0; i < w * h; i++) if (mData[i * 4 + 3] > 25) { hasMask = true; break; }
   if (!hasMask && wmTool === 'auto') {
@@ -1260,9 +1253,10 @@ async function runLamaOnnxInpainting() {
       }
     }
     bctx.putImageData(origImgData, 0, 0);
-    if (session && session.release) await session.release();
   } catch (err) {
     showStatus('wmStatus', 'เกิดข้อผิดพลาดในการโหลด AI LaMa: ' + err.message);
+  } finally {
+    if (session && session.release) await session.release();
   }
 
   document.getElementById('wmStatus').classList.remove('show');
@@ -1792,7 +1786,7 @@ async function executeUniversalConvert() {
   }
 }
 
-// ==================== 8. PRINTED & HANDWRITING AI OCR (TESSERACT + TROCR HANDWRITTEN) ====================
+// ==================== 8. LINE-SLICED ANTI-CRASH HANDWRITING & PRINTED OCR ====================
 let ocrOrigImg = null, ocrCrop = { x: 0, y: 0, w: 0, h: 0 }, ocrDragging = false, ocrStart = { x: 0, y: 0 };
 const ocrCropCanvas = document.getElementById('ocrCropCanvas');
 
@@ -1848,12 +1842,45 @@ ocrCropCanvas.addEventListener('pointermove', (e) => {
 });
 window.addEventListener('pointerup', () => ocrDragging = false);
 
+// Horizontal Projection Slicer: Splits multi-line handwriting into single-line strips so TrOCR-Small never crashes
+function sliceHandwritingLines(canvas) {
+  const w = canvas.width, h = canvas.height;
+  const d = canvas.getContext('2d').getImageData(0, 0, w, h).data;
+  const rowInk = new Uint32Array(h);
+  for (let y = 0; y < h; y++) {
+    let dark = 0;
+    for (let x = 0; x < w; x++) {
+      const idx = (y * w + x) * 4;
+      const lum = 0.299 * d[idx] + 0.587 * d[idx+1] + 0.114 * d[idx+2];
+      if (lum < 175) dark++;
+    }
+    rowInk[y] = dark;
+  }
+
+  const lines = [];
+  let inLine = false, startY = 0;
+  const minInk = Math.max(2, Math.floor(w * 0.008));
+  for (let y = 0; y < h; y++) {
+    if (!inLine && rowInk[y] >= minInk) {
+      inLine = true; startY = Math.max(0, y - 4);
+    } else if (inLine && rowInk[y] < minInk) {
+      inLine = false;
+      const endY = Math.min(h, y + 4);
+      if (endY - startY >= 12) lines.push({ y1: startY, y2: endY });
+    }
+  }
+  if (inLine && h - startY >= 12) lines.push({ y1: startY, y2: h });
+  return lines.length ? lines : [{ y1: 0, y2: h }];
+}
+
 async function runUniversalOCR() {
   if (!ocrOrigImg) return;
   const engineMode = document.getElementById('ocrEngineMode').value;
   const lang = document.getElementById('ocrLang').value;
 
-  const scale = ocrCrop.w < 1000 ? 2.0 : 1.0;
+  // Pre-flight RAM guard: cap max width to 1200px so mobile never runs out of memory
+  const maxW = 1200;
+  const scale = ocrCrop.w > maxW ? (maxW / ocrCrop.w) : (ocrCrop.w < 700 ? 1.5 : 1.0);
   const c = document.createElement('canvas');
   c.width = Math.round(ocrCrop.w * scale);
   c.height = Math.round(ocrCrop.h * scale);
@@ -1861,26 +1888,39 @@ async function runUniversalOCR() {
   ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(ocrOrigImg, ocrCrop.x, ocrCrop.y, ocrCrop.w, ocrCrop.h, 0, 0, c.width, c.height);
 
-  // Mode 3: Microsoft TrOCR Transformer for English/Numeric Handwriting
+  // Mode 3: Line-Sliced TrOCR-Small Q8 (Anti-Crash English/Numeric Handwriting AI)
   if (engineMode === 'trocr_handwriting') {
-    showStatus('ocrStatus', 'กำลังโหลดโมเดล AI TrOCR (Transformer อ่านลายมือเขียน)...');
+    showStatus('ocrStatus', 'กำลังโหลด AI TrOCR-Small รุ่นเบาพิเศษ (หั่นอ่านทีละบรรทัดกันเด้ง)...');
     let reader = null;
     try {
       const { pipeline } = await import('https://esm.sh/@huggingface/transformers@3.0.2');
-      reader = await pipeline('image-to-text', 'Xenova/trocr-base-handwritten', { dtype: 'q8' });
-      showStatus('ocrStatus', 'AI กำลังถอดความลายมือในกรอบ...');
-      const out = await reader(c.toDataURL('image/png'));
-      document.getElementById('ocrResultText').value = (out && out[0] && out[0].generated_text) ? out[0].generated_text : '';
-      if (reader && reader.dispose) await reader.dispose();
+      reader = await pipeline('image-to-text', 'Xenova/trocr-small-handwritten', { dtype: 'q8' });
+      const lineSlices = sliceHandwritingLines(c);
+      const outLines = [];
+
+      for (let i = 0; i < lineSlices.length; i++) {
+        showStatus('ocrStatus', `AI กำลังอ่านลายมือบรรทัดที่ ${i + 1} / ${lineSlices.length}...`);
+        const slice = lineSlices[i];
+        const lineC = document.createElement('canvas');
+        lineC.width = Math.min(768, c.width);
+        lineC.height = Math.max(24, Math.round((slice.y2 - slice.y1) * (lineC.width / c.width)));
+        lineC.getContext('2d').drawImage(c, 0, slice.y1, c.width, slice.y2 - slice.y1, 0, 0, lineC.width, lineC.height);
+
+        const res = await reader(lineC.toDataURL('image/png'));
+        if (res && res[0] && res[0].generated_text) outLines.push(res[0].generated_text.trim());
+        await new Promise(r => setTimeout(r, 20)); // Yield RAM between lines
+      }
+      document.getElementById('ocrResultText').value = outLines.join('\n');
       document.getElementById('ocrStatus').classList.remove('show');
-      return;
     } catch (err) {
-      showStatus('ocrStatus', 'เกิดข้อผิดพลาดในการโหลด TrOCR: ' + err.message);
-      return;
+      showStatus('ocrStatus', 'เกิดข้อผิดพลาดในการโหลด TrOCR-Small: ' + err.message);
+    } finally {
+      if (reader && reader.dispose) await reader.dispose();
     }
+    return;
   }
 
-  // Modes 1 & 2: Printed Thai/Eng & Handwriting Thai Stroke-Thickening
+  // Modes 1 & 2: Printed Thai/Eng & Thai Handwriting Stroke-Thickening
   showStatus('ocrStatus', 'กำลังโหลดโมเดลภาษาไทย (tessdata_best) และปรับความคมเส้น...');
   await loadLib('https://cdn.jsdelivr.net/npm/tesseract.js@5.0.5/dist/tesseract.min.js');
 
@@ -1909,7 +1949,7 @@ async function runUniversalOCR() {
     bin[p] = grays[p] > (thresh - 8) ? 255 : 0;
   }
 
-  // Morphological Dilation (Stroke Thickening) for Thai Handwriting mode
+  // Stroke Thickening for Thai Handwriting
   if (engineMode === 'handwriting_thai') {
     const thick = new Uint8Array(bin);
     for (let y = 1; y < c.height - 1; y++) {
@@ -1929,23 +1969,27 @@ async function runUniversalOCR() {
   }
   ctx.putImageData(imgData, 0, 0);
 
-  const worker = await Tesseract.createWorker(lang, 1, {
-    langPath: 'https://tessdata.projectnaptha.com/4.0.0_best',
-    logger: m => {
-      if (m.status === 'recognizing text') showStatus('ocrStatus', `กำลังอ่านข้อความ... ${Math.round(m.progress * 100)}%`);
-    }
-  });
-  await worker.setParameters({ tessedit_pageseg_mode: '6' });
-  const { data: { text } } = await worker.recognize(c);
-  await worker.terminate();
+  let worker = null;
+  try {
+    worker = await Tesseract.createWorker(lang, 1, {
+      langPath: 'https://tessdata.projectnaptha.com/4.0.0_best',
+      logger: m => {
+        if (m.status === 'recognizing text') showStatus('ocrStatus', `กำลังอ่านข้อความ... ${Math.round(m.progress * 100)}%`);
+      }
+    });
+    await worker.setParameters({ tessedit_pageseg_mode: '6' });
+    const { data: { text } } = await worker.recognize(c);
 
-  const cleanedThai = text
-    .replace(/([\u0E00-\u0E7F])\s+([\u0E31\u0E34-\u0E3A\u0E47-\u0E4E])/g, '$1$2')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+    const cleanedThai = text
+      .replace(/([\u0E00-\u0E7F])\s+([\u0E31\u0E34-\u0E3A\u0E47-\u0E4E])/g, '$1$2')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
 
-  document.getElementById('ocrResultText').value = cleanedThai;
-  document.getElementById('ocrStatus').classList.remove('show');
+    document.getElementById('ocrResultText').value = cleanedThai;
+    document.getElementById('ocrStatus').classList.remove('show');
+  } finally {
+    if (worker) await worker.terminate();
+  }
 }
 
 function copyOcrText() {
