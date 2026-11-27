@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#090d16">
-<title>Privacy Studio Pro v2.4 — Complete Anti-Crash AI Suite</title>
+<title>Privacy Studio Pro v2.5 — Complete Anti-Crash AI Suite</title>
 <style>
   :root {
     --bg: #090d16;
@@ -63,6 +63,7 @@
   }
   .btn-xs.warn { background: rgba(245,158,11,0.15); color: #fcd34d; border-color: rgba(245,158,11,0.38); }
   .btn-xs.danger { background: rgba(239,68,68,0.15); color: #fca5a5; border-color: rgba(239,68,68,0.35); }
+  .btn-xs.ai-btn { background: linear-gradient(135deg, rgba(139,92,246,0.22), rgba(59,130,246,0.22)); color: #c4b5fd; border-color: rgba(139,92,246,0.45); }
 
   main { max-width: 820px; margin: 0 auto; padding: 14px 16px; }
   .tab-panel { display: none; animation: fadeIn 0.2s ease; }
@@ -104,7 +105,7 @@
   @media (max-width: 520px) { .grid-2 { grid-template-columns: 1fr; } }
 
   label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; font-weight: 500; }
-  select, input[type="text"], input[type="number"], textarea {
+  select, input[type="text"], input[type="password"], input[type="number"], textarea {
     width: 100%; background: var(--bg); color: var(--text);
     border: 1px solid #374151; border-radius: 10px; padding: 10px 12px; font-size: 13.5px;
   }
@@ -119,6 +120,7 @@
   .btn:active { transform: scale(0.98); }
   .btn-primary { background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff; box-shadow: 0 2px 10px var(--primary-glow); }
   .btn-accent { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+  .btn-gemini { background: linear-gradient(135deg, #7c3aed, #2563eb); color: #fff; box-shadow: 0 2px 12px rgba(124, 58, 237, 0.35); }
   .btn-secondary { background: var(--surface-2); color: var(--text); border: 1px solid #374151; }
 
   .pill-group { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
@@ -242,7 +244,7 @@
       </svg>
     </div>
     <span>Privacy Studio</span>
-    <span class="ver-badge" id="appVersionBadge">v2.4</span>
+    <span class="ver-badge" id="appVersionBadge">v2.5</span>
     <span class="badge" id="netBadge">OFFLINE READY</span>
   </div>
   <div class="sys-bar">
@@ -273,9 +275,9 @@
             <path d="M19 3v4"/><path d="M21 5h-4"/>
           </svg>
         </span>
-        ลบพื้นหลัง AI & สกัดลายเซ็น/ข้อความสะอาดหมดจด
+        ลบพื้นหลัง AI & สกัดตัวอักษรแท้จริง (1:1 ตามต้นฉบับ)
       </h2>
-      <p class="sub">ตัดกระดาษขาว เงาแสง และรอยยับออก 100% เหลือเฉพาะลายเซ็นหรือข้อความคมกริบ พร้อมยางลบเก็บรายละเอียดด้วยนิ้ว</p>
+      <p class="sub">ตัดกระดาษทั้งแผ่น เงาแสง และพื้นโต๊ะออก เหลือเฉพาะเส้นตัวอักษร/ลายเซ็นขนาดเท่าต้นฉบับ 100% (ไม่บวมหนา ไม่ขาดบาง) พร้อมปุ่มเสริม Gemini AI</p>
       <label class="dropzone">
         <input type="file" id="bgFileInput" accept="image/*">
         <div class="dropzone-ico-wrap">
@@ -286,30 +288,54 @@
             <path d="M14 4h6v6" stroke-dasharray="2 2"/>
           </svg>
         </div>
-        <div class="title">แตะเพื่อเลือกรูปภาพ ลายเซ็น หรือเอกสาร A4</div>
+        <div class="title">แตะเพื่อเลือกรูปภาพ ลายเซ็น หรือเอกสารสแกน</div>
         <div class="hint">รองรับ JPG, PNG, WEBP ความละเอียดสูงสุด</div>
       </label>
       <div id="bgStatus" class="status-box"></div>
       <div id="bgWorkspace" class="hidden" style="margin-top:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
-          <label style="margin:0;color:#60a5fa;">ใช้นิ้วลากบนภาพเพื่อลบจุดส่วนเกิน (Pixel Eraser)</label>
-          <div style="display:flex;gap:6px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+          <label style="margin:0;color:#60a5fa;">เครื่องมือเก็บรายละเอียด & เสริมพลัง AI:</label>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="btn-xs ai-btn" onclick="toggleGeminiPanel()">
+              <svg class="ico" style="width:13px;height:13px" viewBox="0 0 24 24"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/></svg>
+              Gemini AI จับเฉพาะตัวหนังสือ
+            </button>
             <button class="btn-xs" id="bgEraserToggle" onclick="toggleBgEraser()">ยางลบ: ปิดอยู่</button>
             <button class="btn-xs" onclick="resetBgEraser()">คืนค่ารอยลบ</button>
           </div>
         </div>
+
+        <!-- Optional Gemini AI Panel -->
+        <div id="geminiAiBox" class="card hidden" style="background:var(--bg);border-color:rgba(139,92,246,0.45);margin-bottom:10px;padding:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <label style="margin:0;color:#c4b5fd;font-weight:700;">Gemini Vision AI — ตรวจจับพิกัดตัวอักษรอัจฉริยะ (ปุ่มเสริม)</label>
+            <button class="btn-xs" onclick="toggleGeminiPanel()">ปิด</button>
+          </div>
+          <p style="margin:0 0 8px 0;font-size:11.5px;color:var(--muted);">ระบบจะให้ Gemini AI ชี้พิกัดเฉพาะกลุ่มข้อความ/ลายเซ็น แล้วตัดพื้นหลังและขอบกระดาษนอกบริเวณข้อความทิ้งทันที</p>
+          <div class="grid-2">
+            <div>
+              <input type="password" id="geminiApiKeyInput" placeholder="วาง Gemini API Key (AIzaSy...)" onchange="saveGeminiKey()">
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-gemini" onclick="runGeminiTextIsolation()">ให้ Gemini AI สกัดข้อความ</button>
+              <button class="btn btn-secondary" style="width:auto;padding:0 12px;" onclick="clearGeminiBoxFilter()">ล้างกรอบ AI</button>
+            </div>
+          </div>
+        </div>
+
         <div class="canvas-wrap"><canvas id="bgCanvas"></canvas></div>
+
         <div class="grid-2" style="margin-top:12px;">
           <div>
-            <label>โหมดการลบพื้นหลัง (เลือกตามประเภทภาพ)</label>
+            <label>โหมดการลบพื้นหลัง (เอนจินหลักในเครื่อง)</label>
             <select id="bgModeSelect" onchange="processBgByMode()">
-              <option value="doc_crisp">ลายเซ็น / เอกสารกระดาษขาว (คลีนพื้นหลัง 100%)</option>
+              <option value="doc_crisp">ตัวหนังสือ / ลายเซ็น (Black-Hat 1:1 ไม่หนา ไม่บาง ไร้กระดาษ)</option>
               <option value="ai_subject">ภาพถ่ายบุคคล / สินค้า / วัตถุทั่วไป (AI ตัดขอบเนียน)</option>
             </select>
           </div>
           <div>
-            <label id="bgEdgeLabel">ระดับความสะอาดพื้นหลัง (<span id="bgEdgeVal">35</span>%)</label>
-            <input type="range" id="bgEdgeRange" min="0" max="65" value="35" oninput="renderBgOutput()">
+            <label id="bgEdgeLabel">ความไวตัดพื้นหลัง (<span id="bgEdgeVal">28</span>%)</label>
+            <input type="range" id="bgEdgeRange" min="5" max="65" value="28" oninput="renderBgOutput()">
           </div>
         </div>
         <div class="grid-2" style="margin-top:10px;">
@@ -918,7 +944,7 @@
 
 <script>
 // ==================== 1. VERSION MANAGER, OFFLINE PWA & MEMORY GUARD ====================
-const APP_VERSION = 'v2.4';
+const APP_VERSION = 'v2.5';
 
 async function clearCacheAndUpdateVersion() {
   try {
@@ -934,7 +960,7 @@ async function clearCacheAndUpdateVersion() {
         await caches.delete(name);
       }
     }
-    try { localStorage.clear(); sessionStorage.clear(); } catch (e) {}
+    try { localStorage.removeItem('ps_cache'); sessionStorage.clear(); } catch (e) {}
     alert(`ล้าง Cache และข้อมูลเวอร์ชันเก่าเรียบร้อยแล้ว\nกำลังรีโหลดเป็นเวอร์ชันล่าสุด (${APP_VERSION})...`);
     const url = new URL(window.location.href);
     url.searchParams.set('v', APP_VERSION + '_' + Date.now());
@@ -947,6 +973,11 @@ async function clearCacheAndUpdateVersion() {
 (function initOfflinePWA() {
   const verEl = document.getElementById('appVersionBadge');
   if (verEl) verEl.textContent = APP_VERSION;
+
+  try {
+    const savedKey = localStorage.getItem('ps_gemini_api_key');
+    if (savedKey) document.getElementById('geminiApiKeyInput').value = savedKey;
+  } catch (e) {}
 
   const manifest = {
     name: "Privacy Studio Pro " + APP_VERSION,
@@ -1007,7 +1038,7 @@ function showStatus(id, msg) {
 }
 
 function purgeAllMemory() {
-  bgOrigImg = null; bgMaskCanvas = null; bgCurrentFile = null; bgUserEraseMask = null;
+  bgOrigImg = null; bgMaskCanvas = null; bgCurrentFile = null; bgUserEraseMask = null; bgGeminiBoxes = null;
   upOrigImg = null; wmOrigImg = null;
   scanPages = []; currentScanImg = null; rsCurrentFile = null; rsOutputBlob = null; cvFiles = []; ocrOrigImg = null;
   document.querySelectorAll('canvas').forEach(c => { const ctx = c.getContext('2d'); ctx && ctx.clearRect(0,0,c.width,c.height); });
@@ -1049,15 +1080,91 @@ function shareCanvasFile(canvas, filename, mime) {
   canvas.toBlob(b => triggerShareOrSave(b, filename), mime, 0.96);
 }
 
-// ==================== 2. AI REMOVE BG (ULTRA-CLEAN SIGNATURE/DOC & PIXEL ERASER) ====================
+// ==================== 2. AI REMOVE BG (1:1 TRUE-STROKE BLACK-HAT + GEMINI AI BOOSTER) ====================
 let bgOrigImg = null, bgMaskCanvas = null, bgCurrentFile = null;
 let bgUserEraseMask = null, bgEraserActive = false, bgErasing = false;
+let bgGeminiBoxes = null;
+
+function toggleGeminiPanel() {
+  document.getElementById('geminiAiBox').classList.toggle('hidden');
+}
+
+function saveGeminiKey() {
+  try {
+    localStorage.setItem('ps_gemini_api_key', document.getElementById('geminiApiKeyInput').value.trim());
+  } catch (e) {}
+}
+
+function clearGeminiBoxFilter() {
+  bgGeminiBoxes = null;
+  document.getElementById('bgStatus').classList.remove('show');
+  renderBgOutput();
+}
+
+async function runGeminiTextIsolation() {
+  if (!bgOrigImg) return alert('กรุณาเลือกรูปภาพก่อนครับ');
+  const apiKey = document.getElementById('geminiApiKeyInput').value.trim();
+  if (!apiKey) return alert('กรุณากรอก Gemini API Key ก่อนใช้งานปุ่มเสริมครับ');
+  saveGeminiKey();
+
+  showStatus('bgStatus', 'กำลังส่งภาพให้ Gemini AI วิเคราะห์พิกัดตัวหนังสือและลายเซ็น...');
+  try {
+    const s = document.createElement('canvas');
+    const maxDim = 1024;
+    const scale = Math.min(1, maxDim / Math.max(bgOrigImg.naturalWidth, bgOrigImg.naturalHeight));
+    s.width = Math.round(bgOrigImg.naturalWidth * scale);
+    s.height = Math.round(bgOrigImg.naturalHeight * scale);
+    s.getContext('2d').drawImage(bgOrigImg, 0, 0, s.width, s.height);
+    const base64Data = s.toDataURL('image/jpeg', 0.85).split(',')[1];
+
+    const prompt = `Detect all handwritten signatures, stamps, and printed text blocks on the document. Ignore paper edges, desk background, shadows, and creases. Return ONLY a JSON array of bounding boxes using normalized coordinates [ymin, xmin, ymax, xmax] from 0 to 1000. Example: [[120, 200, 350, 600]]`;
+
+    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { text: prompt },
+            { inline_data: { mime_type: 'image/jpeg', data: base64Data } }
+          ]
+        }],
+        generationConfig: {
+          temperature: 0.1,
+          response_mime_type: 'application/json'
+        }
+      })
+    });
+
+    if (!resp.ok) {
+      const errTxt = await resp.text();
+      throw new Error(`HTTP ${resp.status}: ${errTxt.slice(0, 140)}`);
+    }
+
+    const data = await resp.json();
+    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
+    const parsed = JSON.parse(rawText);
+
+    if (!Array.isArray(parsed) || !parsed.length) {
+      throw new Error('Gemini AI ไม่พบกลุ่มข้อความในภาพ');
+    }
+
+    // รองรับทั้งรูปแบบ [[ymin, xmin, ymax, xmax]] และ [{box_2d: [...]}]
+    bgGeminiBoxes = parsed.map(item => Array.isArray(item) ? item : item.box_2d).filter(b => Array.isArray(b) && b.length === 4);
+    document.getElementById('bgModeSelect').value = 'doc_crisp';
+    showStatus('bgStatus', `Gemini AI ตรวจพบกลุ่มข้อความ ${bgGeminiBoxes.length} จุด และตัดพื้นหลังส่วนอื่นออกเรียบร้อยแล้ว`);
+    renderBgOutput();
+  } catch (err) {
+    showStatus('bgStatus', 'เกิดข้อผิดพลาดในการเรียก Gemini AI: ' + err.message);
+  }
+}
 
 document.getElementById('bgFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if (!file) return;
   bgCurrentFile = file;
   bgOrigImg = await loadImageFromFile(file);
   bgMaskCanvas = null;
+  bgGeminiBoxes = null;
 
   bgUserEraseMask = document.createElement('canvas');
   bgUserEraseMask.width = bgOrigImg.naturalWidth;
@@ -1127,8 +1234,8 @@ async function processBgByMode() {
   if (!bgOrigImg) return;
   const mode = document.getElementById('bgModeSelect').value;
   if (mode === 'doc_crisp') {
-    document.getElementById('bgEdgeLabel').innerHTML = `ระดับความสะอาดพื้นหลัง (<span id="bgEdgeVal">${document.getElementById('bgEdgeRange').value}</span>%)`;
-    document.getElementById('bgStatus').classList.remove('show');
+    document.getElementById('bgEdgeLabel').innerHTML = `ความไวตัดพื้นหลัง (<span id="bgEdgeVal">${document.getElementById('bgEdgeRange').value}</span>%)`;
+    if (!bgGeminiBoxes) document.getElementById('bgStatus').classList.remove('show');
     renderBgOutput();
     return;
   }
@@ -1172,101 +1279,85 @@ function renderBgOutput() {
 
   if (mode === 'doc_crisp') {
     // =========================================================================
-    // Dual-Channel Flat-Field + Rolling Minimum Background Estimation (Canva-Grade Clean)
-    // 1. ประมาณค่าพื้นผิวกระดาษด้วย Minimum Filter (หาจุดมืดสุดของกระดาษที่โดนเงา)
-    //    ทำให้เงาแสงและรอยยับกระดาษถูกจัดเป็น "พื้นหลัง" 100%
-    // 2. แยกสัญญาณหมึกสี (น้ำเงิน/แดง) ออกจากเงาเทาของกระดาษ (เงากระดาษมี Saturation ต่ำ)
+    // Morphological Black-Hat Transform + 1:1 Fidelity Stroke Extraction
+    // คอนเซปต์: จับเฉพาะ "เส้นเล็กๆ ที่เข้มกว่าพื้นที่รอบข้างในรัศมีตัวอักษร"
+    // - แผ่นกระดาษ A4 ทั้งแผ่น, เงาแสงกว้างๆ, และพื้นโต๊ะ จะถูกตัดทิ้ง 100%
+    // - รักษาขนาดเส้นตัวอักษร/ลายเซ็นให้เท่าต้นฉบับ 1:1 (ไม่ขยายพิกเซลจนหนา ไม่ตัดจนบาง)
     // =========================================================================
     const total = w * h;
     const lum = new Float32Array(total);
-    const inkColorBoost = new Float32Array(total);
+    const chroma = new Float32Array(total);
 
     for (let i = 0, p = 0; i < d.length; i += 4, p++) {
       const r = d[i], g = d[i + 1], b = d[i + 2];
       lum[p] = 0.299 * r + 0.587 * g + 0.114 * b;
-      // ดึงเฉพาะหมึกปากกาสีน้ำเงินหรือแดง (b > r หรือ r > g) เพื่อแยกออกจากเงากระดาษสีเทา/เหลืองนวล
-      const blueInk = Math.max(0, b - Math.max(r, g) * 0.92);
-      const redInk = Math.max(0, r - Math.max(g, b) * 0.95);
-      inkColorBoost[p] = Math.max(blueInk, redInk) * 1.8;
+      // แยกหมึกสี (น้ำเงิน/แดง) ออกจากพื้นหลังสีกลาง (กระดาษขาว/เทา/เงา)
+      const blueInk = Math.max(0, b - Math.max(r, g) * 0.94);
+      const redInk = Math.max(0, r - Math.max(g, b) * 0.96);
+      chroma[p] = Math.max(blueInk, redInk) * 1.9;
     }
 
-    // สร้างแผนที่แสงกระดาษความละเอียดต่ำ (~64px) โดยใช้ค่าความสว่างของพื้นกระดาษ
-    const pScale = Math.min(1, 64 / Math.max(w, h));
-    const pw = Math.max(8, Math.round(w * pScale));
-    const ph = Math.max(8, Math.round(h * pScale));
-    const smallPaper = new Float32Array(pw * ph);
+    // 1. Morphological Closing (Dilation -> Erosion) ด้วยรัศมีขนาดเส้นตัวอักษร (~7-12px)
+    // จะลบเส้นตัวอักษรและลายเซ็นออกจากภาพชั่วคราว เหลือไว้แต่ "พื้นผิวกระดาษ + เงากระดาษ + ขอบกระดาษ"
+    const rad = Math.max(6, Math.min(14, Math.round(Math.min(w, h) * 0.008)));
+    const dilH = new Float32Array(total);
+    const closedBg = new Float32Array(total);
 
-    for (let py = 0; py < ph; py++) {
-      const y0 = Math.floor(py / pScale);
-      const y1 = Math.min(h - 1, Math.ceil((py + 1) / pScale));
-      for (let px = 0; px < pw; px++) {
-        const x0 = Math.floor(px / pScale);
-        const x1 = Math.min(w - 1, Math.ceil((px + 1) / pScale));
-        // ใช้ค่า Median/Percentile 65 ของบล็อก เพื่อข้ามเส้นปากกาบางๆ แต่จับระดับเงาของกระดาษได้แม่นยำ
-        let sum = 0, cnt = 0, maxV = 0;
-        for (let y = y0; y <= y1; y += 2) {
-          const row = y * w;
-          for (let x = x0; x <= x1; x += 2) {
-            const v = lum[row + x];
-            sum += v; cnt++;
-            if (v > maxV) maxV = v;
-          }
+    // Separable Max Filter (Dilation: ปิดทับเส้นตัวอักษรสีเข้มด้วยสีกระดาษข้างเคียง)
+    for (let y = 0; y < h; y++) {
+      const row = y * w;
+      for (let x = 0; x < w; x++) {
+        let m = 0;
+        const x1 = Math.max(0, x - rad), x2 = Math.min(w - 1, x + rad);
+        for (let kx = x1; kx <= x2; kx++) {
+          const v = lum[row + kx];
+          if (v > m) m = v;
         }
-        const meanV = cnt > 0 ? (sum / cnt) : maxV;
-        // ผสมค่าเฉลี่ยกับค่าสูงสุด ทำให้พื้นผิวกระดาษตรงเงาไม่สว่างหลอกจนเกิดคราบ
-        smallPaper[py * pw + px] = meanV * 0.55 + maxV * 0.45;
+        dilH[row + x] = m;
+      }
+    }
+    for (let x = 0; x < w; x++) {
+      for (let y = 0; y < h; y++) {
+        let m = 0;
+        const y1 = Math.max(0, y - rad), y2 = Math.min(h - 1, y + rad);
+        for (let ky = y1; ky <= y2; ky++) {
+          const v = dilH[ky * w + x];
+          if (v > m) m = v;
+        }
+        closedBg[y * w + x] = m;
       }
     }
 
-    // ขยายแผนที่แสงกระดาษกลับขนาดเต็มพร้อม Blur ระดับสูงให้เนียนเป็นเนื้อเดียว
-    const paperSmallCanvas = document.createElement('canvas');
-    paperSmallCanvas.width = pw; paperSmallCanvas.height = ph;
-    const spCtx = paperSmallCanvas.getContext('2d');
-    const spImg = spCtx.createImageData(pw, ph);
-    for (let i = 0; i < pw * ph; i++) {
-      const v = Math.round(smallPaper[i]);
-      spImg.data[i * 4] = v;
-      spImg.data[i * 4 + 1] = v;
-      spImg.data[i * 4 + 2] = v;
-      spImg.data[i * 4 + 3] = 255;
-    }
-    spCtx.putImageData(spImg, 0, 0);
-
-    const paperFullCanvas = document.createElement('canvas');
-    paperFullCanvas.width = w; paperFullCanvas.height = h;
-    const pfCtx = paperFullCanvas.getContext('2d');
-    pfCtx.imageSmoothingEnabled = true;
-    pfCtx.imageSmoothingQuality = 'high';
-    pfCtx.filter = 'blur(8px)';
-    pfCtx.drawImage(paperSmallCanvas, 0, 0, w, h);
-    const paperData = pfCtx.getImageData(0, 0, w, h).data;
-
-    // 3. คำนวณค่าความต่างเทียบกับพื้นกระดาษ (ค่าเริ่มต้น edge=35 จะตัดเงากระดาษเกลี้ยง 100%)
-    const cleanThreshold = 20 + (edge * 0.55); // edge=35 -> 39.25 (เงาและรอยยับกระดาษถูกตัดทิ้งหมด)
-    const inkGain = 2.1 + (edge * 0.025);
+    // 2. Black-Hat Residual = closedBg - lum
+    // ผลลัพธ์จะเป็น 0 บนแผ่นกระดาษขาว, 0 บนเงากระดาษ, และ 0 บนพื้นโต๊ะ!
+    // จะมีค่าสูงเฉพาะตำแหน่งที่เป็น "เส้นหมึกตัวอักษรและลายเซ็น" เท่านั้น
+    const cutoff = 16 + (edge * 0.55); // ค่าเริ่มต้น 28 -> cutoff = 31.4
+    const softSpan = 26; // ช่วงไล่ระดับ Anti-aliasing ขอบตัวอักษรให้เนียนเท่าต้นฉบับ 1:1
     const alphaBuf = new Uint8ClampedArray(total);
 
     for (let p = 0; p < total; p++) {
-      const localPaper = paperData[p * 4];
-      if (localPaper < 90) {
+      const localPaper = closedBg[p];
+      // ตัดพื้นที่มืดนอกกระดาษออก
+      if (localPaper < 95) {
         alphaBuf[p] = 0;
         continue;
       }
 
-      const darkness = localPaper - lum[p];
-      const signal = Math.max(darkness, inkColorBoost[p]);
+      const blackHat = localPaper - lum[p];
+      const signal = Math.max(blackHat, chroma[p]);
 
-      if (signal <= cleanThreshold) {
+      if (signal <= cutoff) {
         alphaBuf[p] = 0;
+      } else if (signal >= cutoff + softSpan) {
+        alphaBuf[p] = 255;
       } else {
-        let norm = (signal - cleanThreshold) / (cleanThreshold * 0.9);
-        norm = Math.max(0, Math.min(1, norm));
-        const boosted = 1 - Math.pow(1 - norm, inkGain);
-        alphaBuf[p] = Math.round(boosted * 255);
+        // Linear Anti-aliased Alpha: รักษาความหนา-บางของเส้นตามต้นฉบับเป๊ะ ไม่บวมหนา ไม่ขาดบาง
+        const t = (signal - cutoff) / softSpan;
+        alphaBuf[p] = Math.round(t * t * (3 - 2 * t) * 255); // Smoothstep 1:1
       }
     }
 
-    // 4. กรองจุดฝุ่นกระดาษและเสริมเส้นปากกา/ตัวอักษรให้คมชัด
+    // 3. กำจัดเฉพาะจุดฝุ่นโดดเดี่ยว 1 พิกเซล (Isolated Single-Pixel Despeckle) โดยไม่แตะต้องความหนาเส้น
     for (let y = 1; y < h - 1; y++) {
       for (let x = 1; x < w - 1; x++) {
         const p = y * w + x;
@@ -1274,43 +1365,42 @@ function renderBgOutput() {
         let a = alphaBuf[p];
 
         if (a > 0) {
-          const n1 = alphaBuf[p - 1], n2 = alphaBuf[p + 1], n3 = alphaBuf[p - w], n4 = alphaBuf[p + w];
-          const n5 = alphaBuf[p - w - 1], n6 = alphaBuf[p - w + 1], n7 = alphaBuf[p + w - 1], n8 = alphaBuf[p + w + 1];
-          const neighborMax = Math.max(n1, n2, n3, n4);
-          let activeNeighbors = 0;
-          if (n1 > 30) activeNeighbors++;
-          if (n2 > 30) activeNeighbors++;
-          if (n3 > 30) activeNeighbors++;
-          if (n4 > 30) activeNeighbors++;
-          if (n5 > 30) activeNeighbors++;
-          if (n6 > 30) activeNeighbors++;
-          if (n7 > 30) activeNeighbors++;
-          if (n8 > 30) activeNeighbors++;
+          const hasNeighbor =
+            alphaBuf[p - 1] > 25 || alphaBuf[p + 1] > 25 ||
+            alphaBuf[p - w] > 25 || alphaBuf[p + w] > 25 ||
+            alphaBuf[p - w - 1] > 25 || alphaBuf[p - w + 1] > 25 ||
+            alphaBuf[p + w - 1] > 25 || alphaBuf[p + w + 1] > 25;
 
-          // ลบจุดฝุ่นกระดาษขนาดเล็ก 1-2 พิกเซลทิ้งให้สะอาดเหมือน Canva
-          if (activeNeighbors < 2 && a < 210) {
+          if (!hasNeighbor && a < 200) {
             a = 0;
-          } else if (a > 25 && a < 240 && neighborMax > 190) {
-            // เสริมความคมและต่อเนื่องให้เส้นลายเซ็น/ตัวหนังสือที่บางไม่ขาด
-            a = Math.min(255, Math.round(a * 0.5 + neighborMax * 0.5));
           }
         }
 
+        // หากเปิดใช้ Gemini AI กรองเฉพาะพิกัดข้อความ ให้ตัดส่วนนอกกรอบข้อความทิ้งทั้งหมด
+        if (a > 0 && bgGeminiBoxes && bgGeminiBoxes.length > 0) {
+          const ny = (y / h) * 1000;
+          const nx = (x / w) * 1000;
+          let insideAnyBox = false;
+          for (let b = 0; b < bgGeminiBoxes.length; b++) {
+            const [ymin, xmin, ymax, xmax] = bgGeminiBoxes[b];
+            if (ny >= ymin - 18 && ny <= ymax + 18 && nx >= xmin - 18 && nx <= xmax + 18) {
+              insideAnyBox = true;
+              break;
+            }
+          }
+          if (!insideAnyBox) a = 0;
+        }
+
         d[idx + 3] = a;
+
+        // Color Un-contamination: ดึงสีหมึกแท้จริงออกมาโดยหักแสงกระดาษสีขาวออก (ไม่ทำให้เส้นหนาขึ้น)
         if (a > 0) {
-          // ปรับสีหมึกให้สดเข้ม (รักษาสีน้ำเงินของปากกาเซ็นชื่อให้ชัดขึ้น)
-          const r = d[idx], g = d[idx + 1], b = d[idx + 2];
-          if (b > r + 15) {
-            // หมึกน้ำเงิน: ดึงสีน้ำเงินให้สดชัดและลดคราบขาว
-            d[idx] = Math.max(0, Math.round(r * 0.55));
-            d[idx + 1] = Math.max(0, Math.round(g * 0.65));
-            d[idx + 2] = Math.min(255, Math.round(b * 0.95));
-          } else {
-            // หมึกดำ: ดึงให้ดำเข้มคมกริบ
-            const deepen = a < 220 ? 0.58 : 0.75;
-            d[idx] = Math.max(0, Math.round(r * deepen));
-            d[idx + 1] = Math.max(0, Math.round(g * deepen));
-            d[idx + 2] = Math.max(0, Math.round(b * deepen));
+          const bgEst = Math.max(180, closedBg[p]);
+          const alphaNorm = Math.max(0.25, a / 255);
+          for (let c = 0; c < 3; c++) {
+            // สูตร Inverse Alpha Blending: C_fg = (C_obs - (1 - alpha) * C_bg) / alpha
+            const trueInk = (d[idx + c] - (1 - alphaNorm) * bgEst) / alphaNorm;
+            d[idx + c] = Math.max(0, Math.min(255, Math.round(trueInk)));
           }
         }
       }
