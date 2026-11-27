@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#090d16">
-<title>Privacy Studio Pro v2.5 — Complete Anti-Crash AI Suite</title>
+<title>Privacy Studio Pro v2.6 — Complete Anti-Crash AI Suite</title>
 <style>
   :root {
     --bg: #090d16;
@@ -26,7 +26,7 @@
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body {
     margin: 0;
-    padding: 0 0 calc(112px + env(safe-area-inset-bottom, 20px)) 0;
+    padding: 0 0 calc(84px + env(safe-area-inset-bottom, 12px)) 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Thai", sans-serif;
     background: var(--bg); color: var(--text);
     overflow-x: hidden;
@@ -194,22 +194,22 @@
     color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer;
   }
 
-  /* Floating Safe-Area Bottom Navigation (Optimized for iPhone 15 Pro Max / Safari Bottom Bar) */
+  /* Docked Safe-Area Bottom Navigation (Lowered for comfortable thumb reach) */
   nav.bottom-nav {
     position: fixed;
-    left: max(12px, env(safe-area-inset-left, 12px));
-    right: max(12px, env(safe-area-inset-right, 12px));
-    bottom: calc(14px + env(safe-area-inset-bottom, 16px));
+    left: max(8px, env(safe-area-inset-left, 8px));
+    right: max(8px, env(safe-area-inset-right, 8px));
+    bottom: max(4px, env(safe-area-inset-bottom, 4px));
     z-index: 50;
-    background: rgba(15, 23, 42, 0.94);
+    background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     border: 1px solid rgba(96, 165, 250, 0.25);
-    border-radius: 22px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    border-radius: 18px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    padding: 7px 6px;
+    padding: 6px 4px;
     gap: 2px;
   }
   .nav-btn {
@@ -244,7 +244,7 @@
       </svg>
     </div>
     <span>Privacy Studio</span>
-    <span class="ver-badge" id="appVersionBadge">v2.5</span>
+    <span class="ver-badge" id="appVersionBadge">v2.6</span>
     <span class="badge" id="netBadge">OFFLINE READY</span>
   </div>
   <div class="sys-bar">
@@ -305,22 +305,24 @@
           </div>
         </div>
 
-        <!-- Optional Gemini AI Panel -->
+        <!-- Optional Gemini AI Panel (Persistent Long-Term Key Storage: AQ... / AIza...) -->
         <div id="geminiAiBox" class="card hidden" style="background:var(--bg);border-color:rgba(139,92,246,0.45);margin-bottom:10px;padding:12px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            <label style="margin:0;color:#c4b5fd;font-weight:700;">Gemini Vision AI — ตรวจจับพิกัดตัวอักษรอัจฉริยะ (ปุ่มเสริม)</label>
+            <label style="margin:0;color:#c4b5fd;font-weight:700;">Gemini Vision AI — จดจำ API Key อัตโนมัติ (รองรับ AQ... / AIza...)</label>
             <button class="btn-xs" onclick="toggleGeminiPanel()">ปิด</button>
           </div>
-          <p style="margin:0 0 8px 0;font-size:11.5px;color:var(--muted);">ระบบจะให้ Gemini AI ชี้พิกัดเฉพาะกลุ่มข้อความ/ลายเซ็น แล้วตัดพื้นหลังและขอบกระดาษนอกบริเวณข้อความทิ้งทันที</p>
+          <p style="margin:0 0 8px 0;font-size:11.5px;color:var(--muted);">ระบบจดจำคีย์ไว้ในเครื่องถาวร (ไม่หายแม้กดเคลียร์อัปเดต) ช่วยชี้พิกัดเฉพาะข้อความ/ลายเซ็นและตัดกระดาษออกทั้งหมด</p>
           <div class="grid-2">
-            <div>
-              <input type="password" id="geminiApiKeyInput" placeholder="วาง Gemini API Key (AIzaSy...)" onchange="saveGeminiKey()">
+            <div style="display:flex;gap:6px;">
+              <input type="password" id="geminiApiKeyInput" placeholder="วาง API Key (ขึ้นต้นด้วย AQ... หรือ AIza...)" oninput="saveGeminiKey()" onchange="saveGeminiKey()">
+              <button class="btn-xs" style="white-space:nowrap;" onclick="toggleKeyVisibility()">แสดง</button>
             </div>
             <div style="display:flex;gap:6px;">
               <button class="btn btn-gemini" onclick="runGeminiTextIsolation()">ให้ Gemini AI สกัดข้อความ</button>
               <button class="btn btn-secondary" style="width:auto;padding:0 12px;" onclick="clearGeminiBoxFilter()">ล้างกรอบ AI</button>
             </div>
           </div>
+          <div id="geminiKeySavedBadge" style="font-size:11px;color:#34d399;margin-top:6px;display:none;">✓ บันทึก API Key แบบถาวรในเบราว์เซอร์เรียบร้อยแล้ว</div>
         </div>
 
         <div class="canvas-wrap"><canvas id="bgCanvas"></canvas></div>
@@ -944,7 +946,7 @@
 
 <script>
 // ==================== 1. VERSION MANAGER, OFFLINE PWA & MEMORY GUARD ====================
-const APP_VERSION = 'v2.5';
+const APP_VERSION = 'v2.6';
 
 async function clearCacheAndUpdateVersion() {
   try {
@@ -975,8 +977,12 @@ async function clearCacheAndUpdateVersion() {
   if (verEl) verEl.textContent = APP_VERSION;
 
   try {
-    const savedKey = localStorage.getItem('ps_gemini_api_key');
-    if (savedKey) document.getElementById('geminiApiKeyInput').value = savedKey;
+    const savedKey = getPersistedGeminiKey();
+    if (savedKey) {
+      document.getElementById('geminiApiKeyInput').value = savedKey;
+      const badge = document.getElementById('geminiKeySavedBadge');
+      if (badge) badge.style.display = 'block';
+    }
   } catch (e) {}
 
   const manifest = {
@@ -1089,10 +1095,28 @@ function toggleGeminiPanel() {
   document.getElementById('geminiAiBox').classList.toggle('hidden');
 }
 
-function saveGeminiKey() {
+function getPersistedGeminiKey() {
   try {
-    localStorage.setItem('ps_gemini_api_key', document.getElementById('geminiApiKeyInput').value.trim());
+    const ls = localStorage.getItem('ps_gemini_api_key');
+    if (ls) return ls;
+    const match = document.cookie.match(/(?:^|; )ps_gemini_key=([^;]*)/);
+    return match ? decodeURIComponent(match[1]) : '';
+  } catch (e) { return ''; }
+}
+
+function saveGeminiKey() {
+  const val = document.getElementById('geminiApiKeyInput').value.trim();
+  try {
+    localStorage.setItem('ps_gemini_api_key', val);
+    document.cookie = `ps_gemini_key=${encodeURIComponent(val)}; max-age=31536000; path=/; SameSite=Lax`;
+    const badge = document.getElementById('geminiKeySavedBadge');
+    if (badge) badge.style.display = val ? 'block' : 'none';
   } catch (e) {}
+}
+
+function toggleKeyVisibility() {
+  const inp = document.getElementById('geminiApiKeyInput');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
 }
 
 function clearGeminiBoxFilter() {
@@ -1119,7 +1143,12 @@ async function runGeminiTextIsolation() {
 
     const prompt = `Detect all handwritten signatures, stamps, and printed text blocks on the document. Ignore paper edges, desk background, shadows, and creases. Return ONLY a JSON array of bounding boxes using normalized coordinates [ymin, xmin, ymax, xmax] from 0 to 1000. Example: [[120, 200, 350, 600]]`;
 
-    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`, {
+    const isVertexExpress = apiKey.startsWith('AQ.');
+    const endpoint = isVertexExpress
+      ? `https://aiplatform.googleapis.com/v1/publishers/google/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`
+      : `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+    const resp = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1174,6 +1203,9 @@ document.getElementById('bgFileInput').addEventListener('change', async (e) => {
   document.getElementById('bgModeSelect').value = isDocLike ? 'doc_crisp' : 'ai_subject';
   document.getElementById('bgWorkspace').classList.remove('hidden');
   await processBgByMode();
+  if (isDocLike && getPersistedGeminiKey()) {
+    await runGeminiTextIsolation();
+  }
 });
 
 function toggleBgEraser() {
