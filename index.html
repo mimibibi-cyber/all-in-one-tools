@@ -2,14 +2,14 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#090d16">
-<title>Privacy Studio Pro v2.3 — Complete Anti-Crash AI Suite</title>
+<title>Privacy Studio Pro v2.4 — Complete Anti-Crash AI Suite</title>
 <style>
   :root {
     --bg: #090d16;
@@ -25,7 +25,8 @@
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body {
-    margin: 0; padding: 0 0 88px 0;
+    margin: 0;
+    padding: 0 0 calc(112px + env(safe-area-inset-bottom, 20px)) 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Thai", sans-serif;
     background: var(--bg); color: var(--text);
     overflow-x: hidden;
@@ -37,7 +38,8 @@
     position: sticky; top: 0; z-index: 40;
     background: rgba(9, 13, 22, 0.92); backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap;
   }
   .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14.5px; }
   .logo-box {
@@ -62,7 +64,7 @@
   .btn-xs.warn { background: rgba(245,158,11,0.15); color: #fcd34d; border-color: rgba(245,158,11,0.38); }
   .btn-xs.danger { background: rgba(239,68,68,0.15); color: #fca5a5; border-color: rgba(239,68,68,0.35); }
 
-  main { max-width: 820px; margin: 0 auto; padding: 14px; }
+  main { max-width: 820px; margin: 0 auto; padding: 14px 16px; }
   .tab-panel { display: none; animation: fadeIn 0.2s ease; }
   .tab-panel.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -129,13 +131,20 @@
 
   .canvas-wrap {
     position: relative; width: 100%; overflow: hidden; border-radius: 12px;
+    background-image: linear-gradient(45deg, #e5e7eb 25%, transparent 25%),
+      linear-gradient(-45deg, #e5e7eb 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #e5e7eb 75%),
+      linear-gradient(-45deg, transparent 75%, #e5e7eb 75%);
+    background-size: 18px 18px; background-position: 0 0, 0 9px, 9px -9px, -9px 0;
+    background-color: #ffffff; border: 1px solid #374151;
+    display: flex; align-items: center; justify-content: center; min-height: 220px;
+  }
+  .canvas-wrap.dark-checker {
     background-image: linear-gradient(45deg, #161e2e 25%, transparent 25%),
       linear-gradient(-45deg, #161e2e 25%, transparent 25%),
       linear-gradient(45deg, transparent 75%, #161e2e 75%),
       linear-gradient(-45deg, transparent 75%, #161e2e 75%);
-    background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0;
-    background-color: #0b101b; border: 1px solid #374151;
-    display: flex; align-items: center; justify-content: center; min-height: 220px;
+    background-color: #0b101b;
   }
   .canvas-wrap canvas, .canvas-wrap img { max-width: 100%; max-height: 460px; display: block; touch-action: none; }
 
@@ -183,29 +192,41 @@
     color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer;
   }
 
+  /* Floating Safe-Area Bottom Navigation (Optimized for iPhone 15 Pro Max / Safari Bottom Bar) */
   nav.bottom-nav {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
-    background: rgba(9, 13, 22, 0.96); backdrop-filter: blur(14px);
-    border-top: 1px solid var(--border);
-    display: grid; grid-template-columns: repeat(7, 1fr);
-    padding: 6px 2px env(safe-area-inset-bottom, 6px) 2px;
+    position: fixed;
+    left: max(12px, env(safe-area-inset-left, 12px));
+    right: max(12px, env(safe-area-inset-right, 12px));
+    bottom: calc(14px + env(safe-area-inset-bottom, 16px));
+    z-index: 50;
+    background: rgba(15, 23, 42, 0.94);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(96, 165, 250, 0.25);
+    border-radius: 22px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    padding: 7px 6px;
+    gap: 2px;
   }
   .nav-btn {
     background: none; border: none; color: var(--muted);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 3px; font-size: 10px; font-weight: 600; cursor: pointer; padding: 3px 2px;
+    gap: 3px; font-size: 10px; font-weight: 600; cursor: pointer;
+    padding: 5px 2px; min-height: 48px; border-radius: 14px;
   }
   .nav-ico-wrap {
-    width: 34px; height: 28px; border-radius: 9px;
+    width: 34px; height: 28px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     transition: all 0.2s ease;
   }
   .nav-btn svg.ico { width: 18px; height: 18px; stroke-width: 1.9; }
   .nav-btn.active { color: #60a5fa; }
   .nav-btn.active .nav-ico-wrap {
-    background: rgba(59, 130, 246, 0.16);
-    border: 1px solid rgba(96, 165, 250, 0.32);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+    background: rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(96, 165, 250, 0.38);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
   }
   .hidden { display: none !important; }
 </style>
@@ -221,7 +242,7 @@
       </svg>
     </div>
     <span>Privacy Studio</span>
-    <span class="ver-badge" id="appVersionBadge">v2.3</span>
+    <span class="ver-badge" id="appVersionBadge">v2.4</span>
     <span class="badge" id="netBadge">OFFLINE READY</span>
   </div>
   <div class="sys-bar">
@@ -252,9 +273,9 @@
             <path d="M19 3v4"/><path d="M21 5h-4"/>
           </svg>
         </span>
-        ลบพื้นหลัง AI & เอกสารสแกนความคมชัดสูง
+        ลบพื้นหลัง AI & สกัดลายเซ็น/ข้อความสะอาดหมดจด
       </h2>
-      <p class="sub">ประมวลผลในเครื่อง 100% รองรับทั้งโหมดเอกสารสแกน/ลายเซ็น (รักษาตัวหนังสือให้คมกริบไม่ขาดบาง พร้อมตัดแสงเงากระดาษ) และโหมดภาพถ่ายบุคคล/สินค้า</p>
+      <p class="sub">ตัดกระดาษขาว เงาแสง และรอยยับออก 100% เหลือเฉพาะลายเซ็นหรือข้อความคมกริบ พร้อมยางลบเก็บรายละเอียดด้วยนิ้ว</p>
       <label class="dropzone">
         <input type="file" id="bgFileInput" accept="image/*">
         <div class="dropzone-ico-wrap">
@@ -265,23 +286,30 @@
             <path d="M14 4h6v6" stroke-dasharray="2 2"/>
           </svg>
         </div>
-        <div class="title">แตะเพื่อเลือกรูปภาพ เอกสารสแกน หรือลายเซ็น</div>
+        <div class="title">แตะเพื่อเลือกรูปภาพ ลายเซ็น หรือเอกสาร A4</div>
         <div class="hint">รองรับ JPG, PNG, WEBP ความละเอียดสูงสุด</div>
       </label>
       <div id="bgStatus" class="status-box"></div>
       <div id="bgWorkspace" class="hidden" style="margin-top:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
+          <label style="margin:0;color:#60a5fa;">ใช้นิ้วลากบนภาพเพื่อลบจุดส่วนเกิน (Pixel Eraser)</label>
+          <div style="display:flex;gap:6px;">
+            <button class="btn-xs" id="bgEraserToggle" onclick="toggleBgEraser()">ยางลบ: ปิดอยู่</button>
+            <button class="btn-xs" onclick="resetBgEraser()">คืนค่ารอยลบ</button>
+          </div>
+        </div>
         <div class="canvas-wrap"><canvas id="bgCanvas"></canvas></div>
         <div class="grid-2" style="margin-top:12px;">
           <div>
             <label>โหมดการลบพื้นหลัง (เลือกตามประเภทภาพ)</label>
             <select id="bgModeSelect" onchange="processBgByMode()">
-              <option value="doc_crisp">เอกสารสแกน / ตัวหนังสือ / ลายเซ็น (คมชัด ไม่ขาดบาง)</option>
+              <option value="doc_crisp">ลายเซ็น / เอกสารกระดาษขาว (คลีนพื้นหลัง 100%)</option>
               <option value="ai_subject">ภาพถ่ายบุคคล / สินค้า / วัตถุทั่วไป (AI ตัดขอบเนียน)</option>
             </select>
           </div>
           <div>
-            <label id="bgEdgeLabel">ความเข้มและตัดแสงเงากระดาษ (<span id="bgEdgeVal">32</span>%)</label>
-            <input type="range" id="bgEdgeRange" min="0" max="60" value="32" oninput="renderBgOutput()">
+            <label id="bgEdgeLabel">ระดับความสะอาดพื้นหลัง (<span id="bgEdgeVal">35</span>%)</label>
+            <input type="range" id="bgEdgeRange" min="0" max="65" value="35" oninput="renderBgOutput()">
           </div>
         </div>
         <div class="grid-2" style="margin-top:10px;">
@@ -449,7 +477,7 @@
           </div>
         </div>
 
-        <div class="canvas-wrap" style="overflow:auto;">
+        <div class="canvas-wrap dark-checker" style="overflow:auto;">
           <canvas id="wmCanvas"></canvas>
         </div>
         <div class="grid-3" style="margin-top:10px;">
@@ -498,7 +526,7 @@
             <button class="pill" id="dragTargetSig" onclick="setDragTarget('sig')">ลากลายเซ็น</button>
           </div>
         </div>
-        <div class="canvas-wrap"><canvas id="scanPreviewCanvas"></canvas></div>
+        <div class="canvas-wrap dark-checker"><canvas id="scanPreviewCanvas"></canvas></div>
 
         <div class="card" style="margin-top:10px;background:var(--bg);">
           <div class="grid-2">
@@ -786,7 +814,7 @@
           <label style="margin:0;">ลากนิ้วบนภาพเพื่อครอบกรอบเฉพาะจุดที่ต้องการอ่าน:</label>
           <button class="btn-xs" onclick="resetOcrCrop()">เลือกทั้งภาพ</button>
         </div>
-        <div class="canvas-wrap">
+        <div class="canvas-wrap dark-checker">
           <canvas id="ocrCropCanvas"></canvas>
         </div>
         <div class="grid-2" style="margin-top:10px;">
@@ -822,7 +850,7 @@
   </section>
 </main>
 
-<!-- BOTTOM NAVIGATION -->
+<!-- FLOATING SAFE-AREA BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
   <button class="nav-btn active" onclick="switchTab('bg', this)">
     <div class="nav-ico-wrap">
@@ -890,7 +918,7 @@
 
 <script>
 // ==================== 1. VERSION MANAGER, OFFLINE PWA & MEMORY GUARD ====================
-const APP_VERSION = 'v2.3';
+const APP_VERSION = 'v2.4';
 
 async function clearCacheAndUpdateVersion() {
   try {
@@ -979,7 +1007,8 @@ function showStatus(id, msg) {
 }
 
 function purgeAllMemory() {
-  bgOrigImg = null; bgMaskCanvas = null; bgCurrentFile = null; upOrigImg = null; wmOrigImg = null;
+  bgOrigImg = null; bgMaskCanvas = null; bgCurrentFile = null; bgUserEraseMask = null;
+  upOrigImg = null; wmOrigImg = null;
   scanPages = []; currentScanImg = null; rsCurrentFile = null; rsOutputBlob = null; cvFiles = []; ocrOrigImg = null;
   document.querySelectorAll('canvas').forEach(c => { const ctx = c.getContext('2d'); ctx && ctx.clearRect(0,0,c.width,c.height); });
   document.querySelectorAll('input[type="file"]').forEach(i => i.value = '');
@@ -1020,8 +1049,9 @@ function shareCanvasFile(canvas, filename, mime) {
   canvas.toBlob(b => triggerShareOrSave(b, filename), mime, 0.96);
 }
 
-// ==================== 2. AI REMOVE BG (V1 ENGINE + ANTI-SHADOW PAPER ILLUMINATION) ====================
+// ==================== 2. AI REMOVE BG (ULTRA-CLEAN SIGNATURE/DOC & PIXEL ERASER) ====================
 let bgOrigImg = null, bgMaskCanvas = null, bgCurrentFile = null;
+let bgUserEraseMask = null, bgEraserActive = false, bgErasing = false;
 
 document.getElementById('bgFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; if (!file) return;
@@ -1029,11 +1059,50 @@ document.getElementById('bgFileInput').addEventListener('change', async (e) => {
   bgOrigImg = await loadImageFromFile(file);
   bgMaskCanvas = null;
 
+  bgUserEraseMask = document.createElement('canvas');
+  bgUserEraseMask.width = bgOrigImg.naturalWidth;
+  bgUserEraseMask.height = bgOrigImg.naturalHeight;
+
   const isDocLike = detectDocumentScan(bgOrigImg);
   document.getElementById('bgModeSelect').value = isDocLike ? 'doc_crisp' : 'ai_subject';
   document.getElementById('bgWorkspace').classList.remove('hidden');
   await processBgByMode();
 });
+
+function toggleBgEraser() {
+  bgEraserActive = !bgEraserActive;
+  const btn = document.getElementById('bgEraserToggle');
+  btn.textContent = bgEraserActive ? 'ยางลบ: เปิดใช้งาน (ลากบนภาพ)' : 'ยางลบ: ปิดอยู่';
+  btn.classList.toggle('active', bgEraserActive);
+  btn.style.background = bgEraserActive ? '#2563eb' : '';
+  btn.style.color = bgEraserActive ? '#fff' : '';
+}
+
+function resetBgEraser() {
+  if (!bgUserEraseMask) return;
+  bgUserEraseMask.getContext('2d').clearRect(0, 0, bgUserEraseMask.width, bgUserEraseMask.height);
+  renderBgOutput();
+}
+
+const bgCanvasEl = document.getElementById('bgCanvas');
+function eraseAtPointer(e) {
+  if (!bgEraserActive || !bgUserEraseMask) return;
+  const r = bgCanvasEl.getBoundingClientRect();
+  const cx = e.touches ? e.touches[0].clientX : e.clientX;
+  const cy = e.touches ? e.touches[0].clientY : e.clientY;
+  const x = (cx - r.left) * (bgCanvasEl.width / r.width);
+  const y = (cy - r.top) * (bgCanvasEl.height / r.height);
+  const radius = Math.max(12, Math.round(bgCanvasEl.width * 0.018));
+  const ectx = bgUserEraseMask.getContext('2d');
+  ectx.fillStyle = '#000000';
+  ectx.beginPath();
+  ectx.arc(x, y, radius, 0, Math.PI * 2);
+  ectx.fill();
+  renderBgOutput();
+}
+bgCanvasEl.addEventListener('pointerdown', (e) => { if (bgEraserActive) { bgErasing = true; eraseAtPointer(e); } });
+bgCanvasEl.addEventListener('pointermove', (e) => { if (bgErasing) eraseAtPointer(e); });
+window.addEventListener('pointerup', () => { bgErasing = false; });
 
 function detectDocumentScan(img) {
   const s = document.createElement('canvas');
@@ -1049,16 +1118,16 @@ function detectDocumentScan(img) {
     const r = d[i], g = d[i + 1], b = d[i + 2];
     const lum = 0.299 * r + 0.587 * g + 0.114 * b;
     const spread = Math.max(r, g, b) - Math.min(r, g, b);
-    if (lum > 175 && spread < 40) brightBgPixels++;
+    if (lum > 165 && spread < 45) brightBgPixels++;
   }
-  return (brightBgPixels / total) > 0.48;
+  return (brightBgPixels / total) > 0.45;
 }
 
 async function processBgByMode() {
   if (!bgOrigImg) return;
   const mode = document.getElementById('bgModeSelect').value;
   if (mode === 'doc_crisp') {
-    document.getElementById('bgEdgeLabel').innerHTML = `ความเข้มและตัดแสงเงากระดาษ (<span id="bgEdgeVal">${document.getElementById('bgEdgeRange').value}</span>%)`;
+    document.getElementById('bgEdgeLabel').innerHTML = `ระดับความสะอาดพื้นหลัง (<span id="bgEdgeVal">${document.getElementById('bgEdgeRange').value}</span>%)`;
     document.getElementById('bgStatus').classList.remove('show');
     renderBgOutput();
     return;
@@ -1102,19 +1171,27 @@ function renderBgOutput() {
   const d = origData.data;
 
   if (mode === 'doc_crisp') {
-    // 1. คำนวณความสว่างและความอิ่มตัวสีของแต่ละพิกเซล
+    // =========================================================================
+    // Dual-Channel Flat-Field + Rolling Minimum Background Estimation (Canva-Grade Clean)
+    // 1. ประมาณค่าพื้นผิวกระดาษด้วย Minimum Filter (หาจุดมืดสุดของกระดาษที่โดนเงา)
+    //    ทำให้เงาแสงและรอยยับกระดาษถูกจัดเป็น "พื้นหลัง" 100%
+    // 2. แยกสัญญาณหมึกสี (น้ำเงิน/แดง) ออกจากเงาเทาของกระดาษ (เงากระดาษมี Saturation ต่ำ)
+    // =========================================================================
     const total = w * h;
     const lum = new Float32Array(total);
-    const sat = new Float32Array(total);
+    const inkColorBoost = new Float32Array(total);
+
     for (let i = 0, p = 0; i < d.length; i += 4, p++) {
       const r = d[i], g = d[i + 1], b = d[i + 2];
       lum[p] = 0.299 * r + 0.587 * g + 0.114 * b;
-      sat[p] = Math.max(r, g, b) - Math.min(r, g, b);
+      // ดึงเฉพาะหมึกปากกาสีน้ำเงินหรือแดง (b > r หรือ r > g) เพื่อแยกออกจากเงากระดาษสีเทา/เหลืองนวล
+      const blueInk = Math.max(0, b - Math.max(r, g) * 0.92);
+      const redInk = Math.max(0, r - Math.max(g, b) * 0.95);
+      inkColorBoost[p] = Math.max(blueInk, redInk) * 1.8;
     }
 
-    // 2. สร้างแผนที่พื้นผิวแสงเงากระดาษแบบเรียบเนียน (Smooth Downsampled Paper Illumination Map)
-    // ย่อขนาดลงเหลือ ~96px เพื่อให้แสงเงาบนกระดาษเกลี่ยเข้าหากันเนียนสนิท ไม่มีรอยสี่เหลี่ยม/บล็อก
-    const pScale = Math.min(1, 96 / Math.max(w, h));
+    // สร้างแผนที่แสงกระดาษความละเอียดต่ำ (~64px) โดยใช้ค่าความสว่างของพื้นกระดาษ
+    const pScale = Math.min(1, 64 / Math.max(w, h));
     const pw = Math.max(8, Math.round(w * pScale));
     const ph = Math.max(8, Math.round(h * pScale));
     const smallPaper = new Float32Array(pw * ph);
@@ -1125,21 +1202,23 @@ function renderBgOutput() {
       for (let px = 0; px < pw; px++) {
         const x0 = Math.floor(px / pScale);
         const x1 = Math.min(w - 1, Math.ceil((px + 1) / pScale));
-        // ใช้ค่าเปอร์เซ็นไทล์ที่ 85 (สว่างสุดของเนื้อกระดาษในช่องนั้น) เพื่อข้ามเส้นหมึกตัวหนังสือ
-        let best1 = 0, best2 = 0;
-        for (let y = y0; y <= y1; y++) {
+        // ใช้ค่า Median/Percentile 65 ของบล็อก เพื่อข้ามเส้นปากกาบางๆ แต่จับระดับเงาของกระดาษได้แม่นยำ
+        let sum = 0, cnt = 0, maxV = 0;
+        for (let y = y0; y <= y1; y += 2) {
           const row = y * w;
-          for (let x = x0; x <= x1; x++) {
+          for (let x = x0; x <= x1; x += 2) {
             const v = lum[row + x];
-            if (v > best1) { best2 = best1; best1 = v; }
-            else if (v > best2) { best2 = v; }
+            sum += v; cnt++;
+            if (v > maxV) maxV = v;
           }
         }
-        smallPaper[py * pw + px] = best2 > 0 ? best2 : best1;
+        const meanV = cnt > 0 ? (sum / cnt) : maxV;
+        // ผสมค่าเฉลี่ยกับค่าสูงสุด ทำให้พื้นผิวกระดาษตรงเงาไม่สว่างหลอกจนเกิดคราบ
+        smallPaper[py * pw + px] = meanV * 0.55 + maxV * 0.45;
       }
     }
 
-    // 3. ขยายแผนที่แสงเงากระดาษกลับเป็นขนาดเต็มด้วย Canvas Smooth Blur (กำจัดรอยต่อ 100%)
+    // ขยายแผนที่แสงกระดาษกลับขนาดเต็มพร้อม Blur ระดับสูงให้เนียนเป็นเนื้อเดียว
     const paperSmallCanvas = document.createElement('canvas');
     paperSmallCanvas.width = pw; paperSmallCanvas.height = ph;
     const spCtx = paperSmallCanvas.getContext('2d');
@@ -1158,39 +1237,36 @@ function renderBgOutput() {
     const pfCtx = paperFullCanvas.getContext('2d');
     pfCtx.imageSmoothingEnabled = true;
     pfCtx.imageSmoothingQuality = 'high';
-    pfCtx.filter = 'blur(4px)';
+    pfCtx.filter = 'blur(8px)';
     pfCtx.drawImage(paperSmallCanvas, 0, 0, w, h);
     const paperData = pfCtx.getImageData(0, 0, w, h).data;
 
-    // 4. สกัดหมึกตัวหนังสือและออบเจกต์ออกจากเงากระดาษ (รักษาโครงสร้างตัวอักษรคมชัดเหมือน v1 แต่ไร้เงา)
-    const shadowMargin = 22 + (edge * 0.42); // ตัดเงากระดาษอ่อนๆ ออกให้หมด
-    const inkGain = 1.85 + (edge * 0.025);
+    // 3. คำนวณค่าความต่างเทียบกับพื้นกระดาษ (ค่าเริ่มต้น edge=35 จะตัดเงากระดาษเกลี้ยง 100%)
+    const cleanThreshold = 20 + (edge * 0.55); // edge=35 -> 39.25 (เงาและรอยยับกระดาษถูกตัดทิ้งหมด)
+    const inkGain = 2.1 + (edge * 0.025);
     const alphaBuf = new Uint8ClampedArray(total);
 
     for (let p = 0; p < total; p++) {
       const localPaper = paperData[p * 4];
-      // ตัดขอบโต๊ะหรือพื้นหลังมืดสนิทนอกแผ่นกระดาษออก
-      if (localPaper < 95) {
+      if (localPaper < 90) {
         alphaBuf[p] = 0;
         continue;
       }
 
-      // คำนวณความต่างเทียบกับแสงกระดาษณ จุดนั้นๆ (Flat-field)
       const darkness = localPaper - lum[p];
-      const colorInk = Math.max(0, sat[p] - 26) * 1.45;
-      const signal = Math.max(darkness, colorInk);
+      const signal = Math.max(darkness, inkColorBoost[p]);
 
-      if (signal <= shadowMargin) {
+      if (signal <= cleanThreshold) {
         alphaBuf[p] = 0;
       } else {
-        let norm = (signal - shadowMargin) / (shadowMargin * 1.15);
+        let norm = (signal - cleanThreshold) / (cleanThreshold * 0.9);
         norm = Math.max(0, Math.min(1, norm));
         const boosted = 1 - Math.pow(1 - norm, inkGain);
         alphaBuf[p] = Math.round(boosted * 255);
       }
     }
 
-    // 5. Sub-pixel Stroke Reinforcement (สูตรจาก v1: เสริมเส้นตัวหนังสือบางๆ ให้ต่อเนื่องไม่ขาด + ลบจุดฝุ่นเดี่ยว)
+    // 4. กรองจุดฝุ่นกระดาษและเสริมเส้นปากกา/ตัวอักษรให้คมชัด
     for (let y = 1; y < h - 1; y++) {
       for (let x = 1; x < w - 1; x++) {
         const p = y * w + x;
@@ -1199,22 +1275,43 @@ function renderBgOutput() {
 
         if (a > 0) {
           const n1 = alphaBuf[p - 1], n2 = alphaBuf[p + 1], n3 = alphaBuf[p - w], n4 = alphaBuf[p + w];
+          const n5 = alphaBuf[p - w - 1], n6 = alphaBuf[p - w + 1], n7 = alphaBuf[p + w - 1], n8 = alphaBuf[p + w + 1];
           const neighborMax = Math.max(n1, n2, n3, n4);
-          // ถ้าเป็นจุดฝุ่นเดี่ยวๆ ไม่มีพิกเซลข้างเคียงเลย ให้ลบทิ้ง
-          if (neighborMax < 25 && a < 160) {
+          let activeNeighbors = 0;
+          if (n1 > 30) activeNeighbors++;
+          if (n2 > 30) activeNeighbors++;
+          if (n3 > 30) activeNeighbors++;
+          if (n4 > 30) activeNeighbors++;
+          if (n5 > 30) activeNeighbors++;
+          if (n6 > 30) activeNeighbors++;
+          if (n7 > 30) activeNeighbors++;
+          if (n8 > 30) activeNeighbors++;
+
+          // ลบจุดฝุ่นกระดาษขนาดเล็ก 1-2 พิกเซลทิ้งให้สะอาดเหมือน Canva
+          if (activeNeighbors < 2 && a < 210) {
             a = 0;
-          } else if (a > 20 && a < 235 && neighborMax > 195) {
-            // เสริมความต่อเนื่องให้เส้นตัวอักษรที่บางไม่ขาดกลาง
-            a = Math.min(255, Math.round(a * 0.55 + neighborMax * 0.45));
+          } else if (a > 25 && a < 240 && neighborMax > 190) {
+            // เสริมความคมและต่อเนื่องให้เส้นลายเซ็น/ตัวหนังสือที่บางไม่ขาด
+            a = Math.min(255, Math.round(a * 0.5 + neighborMax * 0.5));
           }
         }
 
         d[idx + 3] = a;
         if (a > 0) {
-          const deepen = a < 220 ? 0.68 : 0.84;
-          d[idx] = Math.max(0, Math.round(d[idx] * deepen));
-          d[idx + 1] = Math.max(0, Math.round(d[idx + 1] * deepen));
-          d[idx + 2] = Math.max(0, Math.round(d[idx + 2] * deepen));
+          // ปรับสีหมึกให้สดเข้ม (รักษาสีน้ำเงินของปากกาเซ็นชื่อให้ชัดขึ้น)
+          const r = d[idx], g = d[idx + 1], b = d[idx + 2];
+          if (b > r + 15) {
+            // หมึกน้ำเงิน: ดึงสีน้ำเงินให้สดชัดและลดคราบขาว
+            d[idx] = Math.max(0, Math.round(r * 0.55));
+            d[idx + 1] = Math.max(0, Math.round(g * 0.65));
+            d[idx + 2] = Math.min(255, Math.round(b * 0.95));
+          } else {
+            // หมึกดำ: ดึงให้ดำเข้มคมกริบ
+            const deepen = a < 220 ? 0.58 : 0.75;
+            d[idx] = Math.max(0, Math.round(r * deepen));
+            d[idx + 1] = Math.max(0, Math.round(g * deepen));
+            d[idx + 2] = Math.max(0, Math.round(b * deepen));
+          }
         }
       }
     }
@@ -1227,6 +1324,14 @@ function renderBgOutput() {
       if (a < thresh) a = 0;
       else if (thresh > 0) a = Math.min(255, ((a - thresh) / (255 - thresh)) * 255);
       d[i + 3] = a;
+    }
+  }
+
+  // นำรอยยางลบของผู้ใช้ (Pixel Eraser) มาหักลบออก
+  if (bgUserEraseMask) {
+    const eData = bgUserEraseMask.getContext('2d').getImageData(0, 0, w, h).data;
+    for (let i = 0; i < d.length; i += 4) {
+      if (eData[i + 3] > 20) d[i + 3] = 0;
     }
   }
 
